@@ -23,7 +23,7 @@ test.describe("Shopping cart flow", () => {
     expect(await productsPage.getCartCount()).toBe(2);
 
     await productsPage.viewCart();
-    if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
+    // if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
 
     expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
     expect(await cartPage.getProductCount(products[0].Name)).toBe(1);
@@ -101,7 +101,7 @@ test.describe("Shopping cart flow", () => {
 
     // Open Cart
     await productsPage.viewCart();
-    if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
+    // if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
 
     expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
 

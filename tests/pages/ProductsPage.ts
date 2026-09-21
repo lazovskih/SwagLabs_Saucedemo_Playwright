@@ -44,6 +44,10 @@ export class ProductsPage extends BasePage {
    */
   async addProductToCart(productName: string) {
     await this.getAddToCartButton(productName).click();
+
+    const removeProductButton = this.getRemoveButton(productName);
+    await removeProductButton.waitFor({ state: "attached" });
+    await removeProductButton.waitFor({ state: "visible" });
   }
 
   /**
@@ -73,7 +77,7 @@ export class ProductsPage extends BasePage {
   async viewCart() {
     // 1. Ensure the element is attached to the DOM
     await this.shoppingCartLink.waitFor({ state: "attached" });
-
+    await this.shoppingCartLink.waitFor({ state: "visible", timeout: 5000 });
     // 2. Explicitly scroll the element into view
     await this.shoppingCartLink.scrollIntoViewIfNeeded();
 
@@ -82,8 +86,16 @@ export class ProductsPage extends BasePage {
 
     // await this.shoppingCartLink.click();
     // 3. Dispatch a native JavaScript click event directly on the DOM node
-    await this.shoppingCartLink.evaluate((el: HTMLElement) => el.click());
-
+    // await this.shoppingCartLink.evaluate((el: HTMLElement) => el.click());
+    await this.shoppingCartLink.evaluate((el: HTMLElement) => {
+      el.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        }),
+      );
+    });
     await this.isLoaded();
   }
 }

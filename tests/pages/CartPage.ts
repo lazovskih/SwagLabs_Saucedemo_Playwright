@@ -41,8 +41,39 @@ export class CartPage extends BasePage {
   /**
    * Start checkout
    */
-  async startCheckout() {
+  async startCheckout_OLD() {
+    // REMOVE
     await this.checkoutButton.click();
+    await this.isLoaded();
+  }
+
+  /**
+   * Clicks on cart badge icon to open 'View cart' page
+   */
+  async startCheckout() {
+    // 1. Ensure the element is attached to the DOM
+    await this.checkoutButton.waitFor({ state: "attached" });
+    await this.checkoutButton.waitFor({ state: "visible", timeout: 5000 });
+    // 2. Explicitly scroll the element into view
+    await this.checkoutButton.scrollIntoViewIfNeeded();
+
+    // await this.shoppingCartLink.focus();
+    // await expect(this.shoppingCartLink).toBeVisible();
+
+    // await this.shoppingCartLink.click();
+
+    // 3. Dispatch a native JavaScript click event directly on the DOM node
+    await this.checkoutButton.evaluate((el: HTMLElement) => el.click());
+
+    // await this.checkoutButton.evaluate((el: HTMLElement) => {
+    //   el.dispatchEvent(
+    //     new MouseEvent("click", {
+    //       bubbles: true,
+    //       cancelable: true,
+    //       view: window,
+    //     }),
+    //   );
+    // });
     await this.isLoaded();
   }
 
@@ -58,8 +89,38 @@ export class CartPage extends BasePage {
   /**
    * Continue shopping
    */
-  async continueShopping() {
+  async continueShopping_OLD() {
+    // REMOVE
     this.continueShoppingButton.click();
     this.isLoaded();
+  }
+
+  /**
+   * Continue shopping
+   */
+  async continueShopping() {
+    // REMOVE
+    // 1. Ensure the element is attached to the DOM
+    await this.continueShoppingButton.waitFor({ state: "attached" });
+    await this.continueShoppingButton.waitFor({ state: "visible", timeout: 5000 });
+    // 2. Explicitly scroll the element into view
+    await this.continueShoppingButton.scrollIntoViewIfNeeded();
+
+    // await this.shoppingCartLink.focus();
+    // await expect(this.shoppingCartLink).toBeVisible();
+
+    // await this.shoppingCartLink.click();
+    // 3. Dispatch a native JavaScript click event directly on the DOM node
+    // await this.shoppingCartLink.evaluate((el: HTMLElement) => el.click());
+    await this.continueShoppingButton.evaluate((el: HTMLElement) => {
+      el.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        }),
+      );
+    });
+    await this.isLoaded();
   }
 }

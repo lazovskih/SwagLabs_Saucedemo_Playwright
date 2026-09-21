@@ -56,6 +56,8 @@ export abstract class BasePage {
    * @returns page title text
    */
   async getPageTitle() {
+    await this.pageTitle.waitFor({ state: "attached" });
+    await this.pageTitle.waitFor({ state: "visible" });
     return await this.pageTitle.textContent();
   }
 
