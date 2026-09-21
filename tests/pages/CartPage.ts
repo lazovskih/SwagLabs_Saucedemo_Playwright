@@ -22,20 +22,20 @@ export class CartPage extends BasePage {
   }
 
   /**
-   * Get product count
-   * @param productName
-   * @returns item count on cart page Promise<number>
+   * Gets the number of occurrences of a product in the cart.
+   * @param productName - Name of the product to count.
+   * @returns A promise that resolves to the number of matching cart items.
    */
   async getProductCount(productName: string) {
-    return await this.cartItems.filter({ hasText: productName }).count();
+    return this.cartItems.filter({ hasText: productName }).count();
   }
 
   /**
    * Get item count
-   * @returns Promise<number> item coung on shopping cart icon
+   * @returns A promise that resolves to the number of cart items.
    */
   async getItemCount() {
-    return await this.cartItems.count();
+    return this.cartItems.count();
   }
 
   /**
@@ -48,7 +48,7 @@ export class CartPage extends BasePage {
 
   /**
    * Remove product
-   * @param productName product name text string
+   * @param productName - Name of the product.
    */
   async removeProduct(productName: string) {
     const productId = productName.toLowerCase().replace(/\s+/g, "-");
@@ -59,6 +59,7 @@ export class CartPage extends BasePage {
    * Continue shopping
    */
   async continueShopping() {
-    await this.continueShoppingButton.click();
+    this.continueShoppingButton.click();
+    this.isLoaded();
   }
 }

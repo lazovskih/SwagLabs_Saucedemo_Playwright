@@ -4,12 +4,14 @@ import { CartPage } from "../pages/CartPage";
 import { CheckoutStepOnePage } from "../pages/CheckoutStepOnePage";
 import { CheckoutStepTwoPage } from "../pages/CheckoutStepTwoPage";
 import { loadTestData, ProductData, ShippingData } from "../utilities/dataLoader";
+import { CheckoutComplete } from "tests/pages/CheckoutComplete";
 
 test.describe("Checkout flow", () => {
   let productsPage: ProductsPage;
   let cartPage: CartPage;
   let checkoutStepOnePage: CheckoutStepOnePage;
   let checkoutStepTwoPage: CheckoutStepTwoPage;
+  let checkoutComplete: CheckoutComplete;
   let products: ProductData[];
   let shippingInfo: ShippingData[];
 
@@ -18,6 +20,8 @@ test.describe("Checkout flow", () => {
     cartPage = new CartPage(page);
     checkoutStepOnePage = new CheckoutStepOnePage(page);
     checkoutStepTwoPage = new CheckoutStepTwoPage(page);
+    checkoutComplete = new CheckoutComplete(page);
+
     products = loadTestData<ProductData>("products");
     shippingInfo = loadTestData<ShippingData>("shipping");
 
@@ -47,12 +51,12 @@ test.describe("Checkout flow", () => {
 
     // Finish order
     await checkoutStepTwoPage.finishOrder();
-    expect(await checkoutStepTwoPage.getCompleteHeaderText()).toBe("Thank you for your order!");
+    expect(await checkoutComplete.getCompleteHeaderText()).toBe(checkoutComplete.completeText);
   });
 
   test("Completes checkout and verifies totals for multiple selected products", async ({ page }) => {
     // Add multiple products to cart
-    await productsPage.addProductsToCart([products[1].Name, products[2].Name]);
+    await productsPage.addProductsToCart([products[2].Name, products[1].Name]);
     expect(await productsPage.getCartCount()).toBe(2);
 
     // View cart
@@ -68,22 +72,24 @@ test.describe("Checkout flow", () => {
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight)); // Scroll to bottom to ensure all elements are visible
+
+    // Scroll to bottom to ensure all elements are visible
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
     // Verify checkout step two page title
     expect(await checkoutStepTwoPage.getPageTitle()).toBe(checkoutStepTwoPage.pageTitleText);
 
     // Verify subtotal, tax, and total amounts
     const actualSubtotal = await checkoutStepTwoPage.getSubtotal();
-    const expectedSubtotal = parseFloat((products[1].Price + products[2].Price).toFixed(2));
+    const expectedSubtotal = products[1].Price + products[2].Price;
 
-    expect(actualSubtotal, "Verify subtotal is correct").toEqual(expectedSubtotal);
+    expect(actualSubtotal, "Subtotal is correct").toEqual(expectedSubtotal);
 
     // Calculate expected total based on subtotal and tax, then verify total
-    const actualTax = parseFloat(await checkoutStepTwoPage.getTax());
-    const expectedTotal = parseFloat((expectedSubtotal + actualTax).toFixed(2));
-    const actualTotal = parseFloat(await checkoutStepTwoPage.getTotal());
+    const actualTax = await checkoutStepTwoPage.getTax();
+    const expectedTotal = (expectedSubtotal + actualTax).toFixed(2);
+    const actualTotal = (await checkoutStepTwoPage.getTotal()).toFixed(2);
 
-    expect(actualTotal, "Verify total is correct").toEqual(expectedTotal);
+    expect(actualTotal, "Total is correct").toEqual(expectedTotal);
   });
 });

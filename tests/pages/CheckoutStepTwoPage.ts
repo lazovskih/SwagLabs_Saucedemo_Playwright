@@ -12,11 +12,6 @@ export class CheckoutStepTwoPage extends BasePage {
   private readonly summaryTotal: Locator;
   private readonly finishButton: Locator;
   private readonly cancelLink: Locator;
-
-  // Checkout complete page elements
-  private readonly completeText: Locator;
-  private readonly backHomeButton: Locator;
-
   readonly primaryHeader: Locator;
 
   constructor(page: Page) {
@@ -32,36 +27,30 @@ export class CheckoutStepTwoPage extends BasePage {
     this.summaryTotal = page.locator('[data-test="total-label"]');
     this.finishButton = page.locator('[data-test="finish"]');
     this.cancelLink = page.locator('[data-test="cancel"]');
-
-    // Complete page locators
-    this.completeText = page.locator('[data-test="complete-text"]');
-    this.backHomeButton = page.locator('[data-test="back-home"]');
   }
-  // ===== Step Two: Overview =====
-
   /**
    * Get summary subtotal text
    * @returns
    */
-  async getSubtotal(): Promise<string> {
+  async getSubtotal(): Promise<number> {
     const rawText = await this.summarySubtotal.textContent();
-    return parseCurrencyToNumber(rawText).toString();
+    return parseCurrencyToNumber(rawText);
   }
 
   /**
    * Get summary tax text
    */
-  async getTax(): Promise<string> {
+  async getTax(): Promise<number> {
     const rawText = await this.summaryTax.textContent();
-    return parseCurrencyToNumber(rawText).toString();
+    return parseCurrencyToNumber(rawText);
   }
 
   /**
    * Get summary total text
    */
-  async getTotal(): Promise<string> {
+  async getTotal(): Promise<number> {
     const rawText = await this.summaryTotal.textContent();
-    return parseCurrencyToNumber(rawText).toString();
+    return parseCurrencyToNumber(rawText);
   }
 
   /**
@@ -72,37 +61,10 @@ export class CheckoutStepTwoPage extends BasePage {
   }
 
   /**
-   * Get complete header text
-   */
-  async getCompleteHeader(): Promise<string> {
-    return (await this.completeHeader.textContent()) ?? "";
-  }
-
-  /**
-   * Get complete text
-   */
-  async getCompleteText(): Promise<string> {
-    return (await this.completeText.textContent()) ?? "";
-  }
-
-  /**
-   * Click back home button
-   */
-  async clickBackHome(): Promise<void> {
-    await this.backHomeButton.click();
-  }
-
-  /**
-   * Check if checkout is complete
-   */
-  async isCheckoutComplete(): Promise<boolean> {
-    return await this.completeHeader.isVisible();
-  }
-
-  /**
    * Finish the order by clicking the finish button
    */
   async finishOrder() {
     await this.finishButton.click();
+    await this.isLoaded();
   }
 }

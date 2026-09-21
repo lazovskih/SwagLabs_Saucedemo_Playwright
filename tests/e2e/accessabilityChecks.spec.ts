@@ -6,7 +6,6 @@ import { CheckoutStepOnePage } from "../pages/CheckoutStepOnePage";
 import { CheckoutStepTwoPage } from "../pages/CheckoutStepTwoPage";
 import { loadTestData, ProductData, ShippingData } from "../utilities/dataLoader";
 import { LoginPage } from "tests/pages/LoginPage";
-import { navigateAndVerifyHeader } from "tests/utilities/navigation";
 
 test.describe("Accessibility checks", () => {
   let productsPage: ProductsPage;
@@ -26,21 +25,18 @@ test.describe("Accessibility checks", () => {
     shippingInfo = loadTestData<ShippingData>("shipping");
     loginPage = new LoginPage(page);
 
-    // Navigate directly to the products page using the pre-authenticated state
+    // Navigate to the products page directly using the pre-authenticated session state
     await productsPage.open();
   });
 
   test("Accessibility check: checkout flow", async ({}) => {
-    test.step("product page", async () => {
-      // Navigate directly to the products page using the pre-authenticated state
-      // await productsPage.open(); // TODO: Remove this line if not needed
-
+    test.step("Product page", async () => {
       // Perform accessibility check on the products page
       const accessibilityScanProductPage = await new AxeBuilder({ page: productsPage.page }).analyze();
       expect(accessibilityScanProductPage.violations, "Accessibility violations found: product page").toEqual([]);
     });
 
-    test.step("cart page", async ({}) => {
+    test.step("Cart page", async ({}) => {
       // Add products to cart
       await productsPage.addProductToCart(products[2].Name);
       expect(await productsPage.getCartCount()).toBe(1);
@@ -55,9 +51,6 @@ test.describe("Accessibility checks", () => {
       expect(accessibilityScanCartPage.violations, "Accessibility violations found: cart page").toEqual([]);
     });
     test.step("Checkout page 1", async ({}) => {
-      // Navigate directly to the products page using the pre-authenticated state
-      // await productsPage.open(); // TODO: Remove this line if not needed
-
       // Add products to cart
       await productsPage.addProductToCart(products[2].Name);
       expect(await productsPage.getCartCount()).toBe(1);
@@ -79,9 +72,6 @@ test.describe("Accessibility checks", () => {
     });
 
     test.step("Checkout page 2", async ({}) => {
-      // Navigate directly to the products page using the pre-authenticated state
-      // await productsPage.open(); // TODO: Remove this line if not needed
-
       // Add products to cart
       await productsPage.addProductToCart(products[2].Name);
       expect(await productsPage.getCartCount()).toBe(1);

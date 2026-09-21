@@ -22,41 +22,41 @@ export class ProductsPage extends BasePage {
   /**
    * Get product ID
    * @param productName
-   * @returns Promise<string>
+   * @returns Normalized product id string
    */
   getProductId(productName: string) {
     return productName.toLowerCase().replace(/\s+/g, "-");
   }
 
   /**
-   * Get add to cart button
-   * @param productName
-   * @returns Promise<Locator>
+   * Gets the 'Add to cart' button for a specified product.
+   * @param productName - Name of the product.
+   * @returns A Playwright locator for the product's add-to-cart button.
    */
-  getAddToCartButton(productName: string) {
+  async getAddToCartButton(productName: string) {
     return this.page.locator(`[data-test="add-to-cart-${this.getProductId(productName)}"]`);
   }
 
   /**
-   * Get remove button
-   * @param productName
-   * @returns Promise<Locator>
+   * Gets the 'Remove' button for a specified product.
+   * @param productName - Name of the product.
+   * @returns A Playwright locator for the product's add-to-cart button.
    */
-  getRemoveButton(productName: string) {
+  async getRemoveButton(productName: string) {
     return this.page.locator(`[data-test="remove-${this.getProductId(productName)}"]`);
   }
 
   /**
-   * Add product to cart
-   * @param productName
+   * Clicks 'Add to cart' button for a specified product.
+   * @param productName - Name of the product.
    */
   async addProductToCart(productName: string) {
-    await this.getAddToCartButton(productName).click();
+    await (await this.getAddToCartButton(productName)).click();
   }
 
   /**
-   * Add multiple products to cart
-   * @param productNames
+   * Clicks 'Add to cart' button for a specified products.
+   * @param productNames - Array with names of the product.
    */
   async addProductsToCart(productNames: string[]) {
     for (const name of productNames) {
@@ -66,7 +66,7 @@ export class ProductsPage extends BasePage {
 
   /**
    * Get cart count
-   * @returns Promise<number>
+   * @returns Promise<number> count of the items on the cart badge icon
    */
   async getCartCount() {
     const count = await this.cartBadge.count();
@@ -76,7 +76,7 @@ export class ProductsPage extends BasePage {
   }
 
   /**
-   * View cart
+   * Clicks on cart badge icon to open 'View cart' page
    */
   async viewCart() {
     await this.shoppingCartLink.click();
