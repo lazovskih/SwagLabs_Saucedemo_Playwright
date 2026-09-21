@@ -12,6 +12,7 @@ export class LoginPage extends BasePage {
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
   readonly primaryHeader: Locator;
+
   readonly errorMessageText = "Epic sadface: Username and password do not match any user in this service";
   readonly noAccessMessageText = "Epic sadface: You can only access '/inventory.html' when you are logged in.";
 

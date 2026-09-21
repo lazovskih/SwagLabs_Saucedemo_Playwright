@@ -33,17 +33,17 @@ test.describe("Checkout flow", () => {
     // View cart
     await productsPage.viewCart();
 
-    expect(await cartPage.getPageTitle()).toBe("Your Cart");
+    expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
 
     // Start checkout
     await cartPage.startCheckout();
 
     // Fill shipping information
-    expect(await checkoutStepOnePage.getPageTitle()).toBe("Checkout: Your Information");
+    expect(await checkoutStepOnePage.getPageTitle()).toBe(checkoutStepOnePage.pageTitleText);
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
-    expect(await checkoutStepTwoPage.getPageTitle()).toBe("Checkout: Overview");
+    expect(await checkoutStepTwoPage.getPageTitle()).toBe(checkoutStepTwoPage.pageTitleText);
 
     // Finish order
     await checkoutStepTwoPage.finishOrder();
@@ -74,7 +74,7 @@ test.describe("Checkout flow", () => {
     expect(await checkoutStepTwoPage.getPageTitle()).toBe(checkoutStepTwoPage.pageTitleText);
 
     // Verify subtotal, tax, and total amounts
-    const actualSubtotal = parseFloat(await checkoutStepTwoPage.getSubtotal());
+    const actualSubtotal = await checkoutStepTwoPage.getSubtotal();
     const expectedSubtotal = parseFloat((products[1].Price + products[2].Price).toFixed(2));
 
     expect(actualSubtotal, "Verify subtotal is correct").toEqual(expectedSubtotal);

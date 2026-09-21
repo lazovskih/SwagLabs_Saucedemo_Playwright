@@ -80,12 +80,6 @@ export class ProductsPage extends BasePage {
    */
   async viewCart() {
     await this.shoppingCartLink.click();
-  }
-
-  /**
-   * Wait for login page to load
-   */
-  async isLoaded(): Promise<void> {
-    return await this.page.waitForLoadState();
+    await this.isLoaded();
   }
 }

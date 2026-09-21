@@ -11,7 +11,9 @@ export abstract class BasePage {
   private readonly allItemsMenu: Locator;
   private readonly AboutMenu: Locator;
   private readonly logoutMenu: Locator;
+
   abstract primaryHeader: Locator;
+  readonly completeHeader: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -21,6 +23,7 @@ export abstract class BasePage {
     this.allItemsMenu = page.locator('[data-test="inventory-sidebar-link"]');
     this.AboutMenu = page.locator('[data-test="about-sidebar-link"]');
     this.logoutMenu = page.locator("#logout_sidebar_link");
+    this.completeHeader = page.locator('[data-test="complete-header"]');
   }
 
   async open() {
@@ -30,15 +33,15 @@ export abstract class BasePage {
 
   /**
    * Wait for a page to load
-   * @returns
+   * @returns load state promise<void>
    */
-  async isLoaded() {
-    this.page.waitForLoadState();
+  async isLoaded(): Promise<void> {
+    return await this.page.waitForLoadState("load");
   }
 
   /**
    * Get page title text
-   * @returns Promise<string | null>
+   * @returns page title text
    */
   async getPageTitle() {
     return await this.pageTitle.textContent();
@@ -66,5 +69,12 @@ export abstract class BasePage {
   async clickLogoutMenu(): Promise<void> {
     await this.clickMenuButton();
     await this.logoutMenu.click();
+  }
+
+  /**
+   * Get the complete header text after finishing the order
+   */
+  async getCompleteHeaderText() {
+    return await this.completeHeader.textContent();
   }
 }

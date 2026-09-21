@@ -12,7 +12,6 @@ export class CheckoutStepOnePage extends BasePage {
   readonly postalCodeField: Locator;
   readonly continueButton: Locator;
   readonly finishButton: Locator;
-  readonly completeHeader: Locator;
   readonly primaryHeader: Locator;
 
   constructor(page: Page) {
@@ -22,7 +21,6 @@ export class CheckoutStepOnePage extends BasePage {
     this.postalCodeField = page.locator('[data-test="postalCode"]');
     this.continueButton = page.locator('[data-test="continue"]');
     this.finishButton = page.locator('[data-test="finish"]');
-    this.completeHeader = page.locator('[data-test="complete-header"]');
     this.primaryHeader = page.locator('[data-test="title"]');
   }
 
@@ -56,12 +54,5 @@ export class CheckoutStepOnePage extends BasePage {
 
   async clickContinue() {
     await this.continueButton.click();
-  }
-
-  /**
-   * Wait for login page to load
-   */
-  async isLoaded(): Promise<void> {
-    return await this.page.waitForLoadState();
   }
 }

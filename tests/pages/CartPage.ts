@@ -10,6 +10,7 @@ export class CartPage extends BasePage {
   readonly checkoutButton: Locator;
   readonly continueShoppingButton: Locator;
   readonly primaryHeader: Locator;
+  readonly completeHeader: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,12 +18,13 @@ export class CartPage extends BasePage {
     this.checkoutButton = page.locator('[data-test="checkout"]');
     this.continueShoppingButton = page.locator('[data-test="continue-shopping"]');
     this.primaryHeader = page.locator('[data-test="title"]');
+    this.completeHeader = page.locator('[data-test="title"]');
   }
 
   /**
    * Get product count
    * @param productName
-   * @returns Promise<number>
+   * @returns item count on cart page Promise<number>
    */
   async getProductCount(productName: string) {
     return await this.cartItems.filter({ hasText: productName }).count();
@@ -30,7 +32,7 @@ export class CartPage extends BasePage {
 
   /**
    * Get item count
-   * @returns Promise<number>
+   * @returns Promise<number> item coung on shopping cart icon
    */
   async getItemCount() {
     return await this.cartItems.count();
@@ -41,11 +43,12 @@ export class CartPage extends BasePage {
    */
   async startCheckout() {
     await this.checkoutButton.click();
+    await this.isLoaded();
   }
 
   /**
    * Remove product
-   * @param productName
+   * @param productName product name text string
    */
   async removeProduct(productName: string) {
     const productId = productName.toLowerCase().replace(/\s+/g, "-");
@@ -57,12 +60,5 @@ export class CartPage extends BasePage {
    */
   async continueShopping() {
     await this.continueShoppingButton.click();
-  }
-
-  /**
-   * Wait for login page to load
-   */
-  async isLoaded(): Promise<void> {
-    return await this.page.waitForLoadState();
   }
 }
