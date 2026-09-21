@@ -18,12 +18,14 @@ test.describe("Shopping cart flow", () => {
   });
 
   test("Adds selected products to the cart and verifies cart contents", async ({ page }) => {
+    // Add products to cart
     await productsPage.addProductsToCart([products[0].Name, products[1].Name]);
     expect(await productsPage.getCartCount()).toBe(2);
-    await productsPage.viewCart();
 
-    const cartPage = new CartPage(page);
-    expect(await cartPage.getPageTitle()).toBe("Your Cart");
+    await productsPage.viewCart();
+    if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
+
+    expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
     expect(await cartPage.getProductCount(products[0].Name)).toBe(1);
     expect(await cartPage.getProductCount(products[1].Name)).toBe(1);
     expect(await cartPage.getItemCount()).toBe(2);
@@ -99,6 +101,9 @@ test.describe("Shopping cart flow", () => {
 
     // Open Cart
     await productsPage.viewCart();
+    if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
+
+    expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
 
     // Remove 2 items from the cart
     await cartPage.removeProduct(products[0].Name);

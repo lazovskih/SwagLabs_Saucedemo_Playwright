@@ -7,6 +7,16 @@ export interface CurrencyParseOptions {
   /** Allow negative currency values, e.g., -$5.00 or ($5.00). Defaults to false */
   allowNegative?: boolean;
 }
+
+/**
+ * Get product ID
+ * @param productName
+ * @returns Normalized product id string
+ */
+export function getProductId(productName: string) {
+  return productName.toLowerCase().replace(/\s+/g, "-");
+}
+
 /**
  * Extracts a numeric value by finding the index of the first digit,
  * slicing the number substring to the end of the text, and evaluating

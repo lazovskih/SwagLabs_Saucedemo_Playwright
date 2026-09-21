@@ -16,6 +16,7 @@ export class CheckoutStepOnePage extends BasePage {
 
   constructor(page: Page) {
     super(page);
+    // Initialize locators using data-test attribute
     this.firstNameField = page.locator('[data-test="firstName"]');
     this.lastNameField = page.locator('[data-test="lastName"]');
     this.postalCodeField = page.locator('[data-test="postalCode"]');

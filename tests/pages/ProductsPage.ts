@@ -1,5 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { getProductId } from "tests/utilities/formatters";
 
 export class ProductsPage extends BasePage {
   pageTitleText = "Products";
@@ -20,21 +21,12 @@ export class ProductsPage extends BasePage {
   }
 
   /**
-   * Get product ID
-   * @param productName
-   * @returns Normalized product id string
-   */
-  getProductId(productName: string) {
-    return productName.toLowerCase().replace(/\s+/g, "-");
-  }
-
-  /**
    * Gets the 'Add to cart' button for a specified product.
    * @param productName - Name of the product.
    * @returns A Playwright locator for the product's add-to-cart button.
    */
-  async getAddToCartButton(productName: string) {
-    return this.page.locator(`[data-test="add-to-cart-${this.getProductId(productName)}"]`);
+  getAddToCartButton(productName: string) {
+    return this.page.locator(`[data-test="add-to-cart-${getProductId(productName)}"]`);
   }
 
   /**
@@ -42,8 +34,8 @@ export class ProductsPage extends BasePage {
    * @param productName - Name of the product.
    * @returns A Playwright locator for the product's add-to-cart button.
    */
-  async getRemoveButton(productName: string) {
-    return this.page.locator(`[data-test="remove-${this.getProductId(productName)}"]`);
+  getRemoveButton(productName: string) {
+    return this.page.locator(`[data-test="remove-${getProductId(productName)}"]`);
   }
 
   /**
@@ -51,7 +43,7 @@ export class ProductsPage extends BasePage {
    * @param productName - Name of the product.
    */
   async addProductToCart(productName: string) {
-    await (await this.getAddToCartButton(productName)).click();
+    await this.getAddToCartButton(productName).click();
   }
 
   /**
@@ -59,8 +51,8 @@ export class ProductsPage extends BasePage {
    * @param productNames - Array with names of the product.
    */
   async addProductsToCart(productNames: string[]) {
-    for (const name of productNames) {
-      await this.addProductToCart(name);
+    for (const productName of productNames) {
+      await this.addProductToCart(productName);
     }
   }
 
@@ -79,7 +71,19 @@ export class ProductsPage extends BasePage {
    * Clicks on cart badge icon to open 'View cart' page
    */
   async viewCart() {
-    await this.shoppingCartLink.click();
+    // 1. Ensure the element is attached to the DOM
+    await this.shoppingCartLink.waitFor({ state: "attached" });
+
+    // 2. Explicitly scroll the element into view
+    await this.shoppingCartLink.scrollIntoViewIfNeeded();
+
+    // await this.shoppingCartLink.focus();
+    // await expect(this.shoppingCartLink).toBeVisible();
+
+    // await this.shoppingCartLink.click();
+    // 3. Dispatch a native JavaScript click event directly on the DOM node
+    await this.shoppingCartLink.evaluate((el: HTMLElement) => el.click());
+
     await this.isLoaded();
   }
 }

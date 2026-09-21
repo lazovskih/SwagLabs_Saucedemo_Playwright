@@ -26,9 +26,21 @@ export abstract class BasePage {
     this.completeHeader = page.locator('[data-test="complete-header"]');
   }
 
+  /**
+   * Open page by the page URL
+   * @returns load state promise<void>
+   */
   async open() {
     await this.page.goto(process.env.URL + this.pageUrl, { waitUntil: "domcontentloaded" });
     await this.isLoaded();
+  }
+
+  /**
+   * Confirms page opened
+   * @returns boolean true if page title match the opened page title
+   */
+  async pageIsOpened() {
+    return (await this.getPageTitle()) == this.pageTitleText;
   }
 
   /**

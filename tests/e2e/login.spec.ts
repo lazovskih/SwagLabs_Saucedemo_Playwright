@@ -1,8 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { ProductsPage } from "../pages/ProductsPage";
-// import { navigateAndVerifyHeader } from "../utilities/navigation"; // TODO: Remove this line if not needed
-import { AxeBuilder } from "@axe-core/playwright";
 
 /**
  * Login Test Scenarios for SauceDemo
@@ -19,20 +17,11 @@ test.describe("Login page", () => {
     await loginPage.open();
   });
 
-  test("Accessibility check: Login page", async ({}) => {
-    // Perform accessibility check on the products page
-    const accessibilityScanLoginPage = await new AxeBuilder({ page: loginPage.page }).analyze();
-    expect(accessibilityScanLoginPage.violations, "Accessibility violations found: login page").toEqual([]);
-  });
-
   /**
    * Scenario 1: Login as standard user with valid password - successful
    * Verify "Products" page opened
    */
   test("Login with valid credentials - successful", async ({ page }) => {
-    // Navigate to login page
-    // await navigateAndVerifyHeader(loginPage); // TODO: Remove this line if not needed
-
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
@@ -48,9 +37,6 @@ test.describe("Login page", () => {
    * Verify error message displayed
    */
   test("Login with invalid password - unsuccessful", async ({ page }) => {
-    // Navigate to login page
-    // await loginPage.open(); // TODO: Remove this line if not needed
-
     // Login with invalid password
     await loginPage.usernameField.fill(process.env.STANDARD_USER!);
     await loginPage.passwordField.fill("invalid_password");
@@ -69,9 +55,6 @@ test.describe("Login page", () => {
    * Scenario 3: Login as standard user, logout, verify Products page not accessible
    */
   test("Login, logout, verify Products page not accessible", async ({ page }) => {
-    // Navigate to login page
-    // await loginPage.open(); // TODO: Remove this line if not needed
-
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 

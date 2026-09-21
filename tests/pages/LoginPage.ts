@@ -18,6 +18,7 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
+    // Initialize locators using data-test attribute
     this.usernameField = page.locator('[data-test="username"]');
     this.passwordField = page.locator('[data-test="password"]');
     this.loginButton = page.locator('[data-test="login-button"]');

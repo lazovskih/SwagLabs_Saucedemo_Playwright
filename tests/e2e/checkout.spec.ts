@@ -36,6 +36,7 @@ test.describe("Checkout flow", () => {
 
     // View cart
     await productsPage.viewCart();
+    if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
 
     expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
 
@@ -61,6 +62,7 @@ test.describe("Checkout flow", () => {
 
     // View cart
     await productsPage.viewCart();
+    if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
 
     // Verify cart page title, then start checkout
     expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
