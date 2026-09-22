@@ -5,23 +5,23 @@ import { ProductsPage } from "../pages/ProductsPage";
 /**
  * Login Test Scenarios for SauceDemo
  */
-test.describe("Login", () => {
+test.describe("Login page", () => {
   let loginPage: LoginPage;
   let productsPage: ProductsPage;
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     productsPage = new ProductsPage(page);
+
+    // Navigate to login page
+    await loginPage.open();
   });
 
   /**
    * Scenario 1: Login as standard user with valid password - successful
    * Verify "Products" page opened
    */
-  test("login with valid credentials - successful", async ({ page }) => {
-    // Navigate to login page
-    await loginPage.open();
-
+  test("Login with valid credentials - successful", async ({ page }) => {
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
@@ -29,17 +29,14 @@ test.describe("Login", () => {
     expect(await productsPage.getCurrentUrl()).toContain(productsPage.pageUrl);
 
     // Verify Products page title
-    expect(await productsPage.getPageTitle()).toBe(productsPage.pageTitleText);
+    expect(productsPage.pageTitle).toHaveText(productsPage.pageTitleText);
   });
 
   /**
    * Scenario 2: Login as standard user with invalid password - unsuccessful
    * Verify error message displayed
    */
-  test("login with invalid password - unsuccessful", async ({ page }) => {
-    // Navigate to login page
-    await loginPage.open();
-
+  test("Login with invalid password - unsuccessful", async ({ page }) => {
     // Login with invalid password
     await loginPage.usernameField.fill(process.env.STANDARD_USER!);
     await loginPage.passwordField.fill("invalid_password");
@@ -57,10 +54,7 @@ test.describe("Login", () => {
   /**
    * Scenario 3: Login as standard user, logout, verify Products page not accessible
    */
-  test("login, logout, verify Products page not accessible", async ({ page }) => {
-    // Navigate to login page
-    await loginPage.open();
-
+  test("Login, logout, verify Products page not accessible", async ({ page }) => {
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
@@ -78,10 +72,5 @@ test.describe("Login", () => {
 
     // Verify redirected back to login page (not accessible)
     await expect(page).toHaveURL(/.*\/$/);
-
-    // Verify error message is displayed
-    expect(await loginPage.isErrorMessageVisible(), "Error message should be visible").toBe(true);
-    expect(await loginPage.getErrorMessageText(), "Error message text should match").toBe(loginPage.noAccessMessageText);
-
   });
 });

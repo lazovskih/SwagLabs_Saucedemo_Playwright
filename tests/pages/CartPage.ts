@@ -3,24 +3,28 @@ import { BasePage } from "./BasePage";
 
 export class CartPage extends BasePage {
   pageTitleText = "Your Cart";
-  pageUrl = "/cart.html"; 
-  
+  pageUrl = "/cart.html";
+
   // Page locators
   readonly cartItems: Locator;
   readonly checkoutButton: Locator;
   readonly continueShoppingButton: Locator;
+  readonly primaryHeader: Locator;
+  readonly completeHeader: Locator;
 
   constructor(page: Page) {
     super(page);
     this.cartItems = page.locator(".cart_item");
     this.checkoutButton = page.locator('[data-test="checkout"]');
     this.continueShoppingButton = page.locator('[data-test="continue-shopping"]');
+    this.primaryHeader = page.locator('[data-test="title"]');
+    this.completeHeader = page.locator('[data-test="title"]');
   }
 
   /**
-   * Get product count
-   * @param productName
-   * @returns Promise<number>
+   * Gets the number of occurrences of a product in the cart.
+   * @param productName - Name of the product to count.
+   * @returns A promise that resolves to the number of matching cart items.
    */
   async getProductCount(productName: string) {
     return await this.cartItems.filter({ hasText: productName }).count();
@@ -28,17 +32,17 @@ export class CartPage extends BasePage {
 
   /**
    * Get item count
-   * @returns Promise<number>
+   * @returns A promise that resolves to the number of cart items.
    */
   async getItemCount() {
-    return await this.cartItems.count();
+    return this.cartItems.count();
   }
 
   /**
    * Start checkout
    */
   async startCheckout() {
-    await this.checkoutButton.click();
+    await this.SafeClick(this.checkoutButton);
   }
 
   /**
@@ -54,6 +58,6 @@ export class CartPage extends BasePage {
    * Continue shopping
    */
   async continueShopping() {
-    await this.continueShoppingButton.click();
+    await this.SafeClick(this.continueShoppingButton);
   }
 }

@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { ProductsPage } from "./ProductsPage";
 
@@ -11,15 +11,19 @@ export class LoginPage extends BasePage {
   readonly passwordField: Locator;
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
+  readonly primaryHeader: Locator;
+
   readonly errorMessageText = "Epic sadface: Username and password do not match any user in this service";
   readonly noAccessMessageText = "Epic sadface: You can only access '/inventory.html' when you are logged in.";
 
   constructor(page: Page) {
     super(page);
+    // Initialize locators using data-test attribute
     this.usernameField = page.locator('[data-test="username"]');
     this.passwordField = page.locator('[data-test="password"]');
     this.loginButton = page.locator('[data-test="login-button"]');
     this.errorMessage = page.locator('[data-test="error"]');
+    this.primaryHeader = page.locator("div.login_logo");
   }
 
   /**
@@ -29,7 +33,6 @@ export class LoginPage extends BasePage {
    */
   async login(username: string, password: string) {
     await this.open();
-    await this.page.waitForLoadState();
 
     await this.usernameField.fill(username);
     await this.passwordField.fill(password);
@@ -37,7 +40,7 @@ export class LoginPage extends BasePage {
     await this.loginButton.click();
 
     const productsPage = new ProductsPage(this.page);
-    await productsPage.inventoryItems.first().waitFor();
+    await expect(productsPage.pageTitle).toBeVisible();
   }
 
   /**
@@ -70,5 +73,15 @@ export class LoginPage extends BasePage {
    */
   async clearPassword(): Promise<void> {
     await this.passwordField.clear();
+  }
+
+  /**
+   * Wait for login page to load
+   */
+  async isLoaded(): Promise<void> {
+    // Use web-first assertions for automatic retries and explicit failure messages
+    await expect(this.usernameField).toBeVisible();
+    await expect(this.passwordField).toBeVisible();
+    await expect(this.loginButton).toBeVisible();
   }
 }

@@ -12,16 +12,17 @@ export class CheckoutStepOnePage extends BasePage {
   readonly postalCodeField: Locator;
   readonly continueButton: Locator;
   readonly finishButton: Locator;
-  readonly completeHeader: Locator;
+  readonly primaryHeader: Locator;
 
   constructor(page: Page) {
     super(page);
+    // Initialize locators using data-test attribute
     this.firstNameField = page.locator('[data-test="firstName"]');
     this.lastNameField = page.locator('[data-test="lastName"]');
     this.postalCodeField = page.locator('[data-test="postalCode"]');
     this.continueButton = page.locator('[data-test="continue"]');
     this.finishButton = page.locator('[data-test="finish"]');
-    this.completeHeader = page.locator('[data-test="complete-header"]');
+    this.primaryHeader = page.locator('[data-test="title"]');
   }
 
   /**
@@ -34,7 +35,13 @@ export class CheckoutStepOnePage extends BasePage {
     await this.firstNameField.fill(shippingData.FirstName);
     await this.lastNameField.fill(shippingData.LastName);
     await this.postalCodeField.fill(shippingData.PostalCode);
-    await this.continueButton.click();
+  }
+
+  /**
+   * Continue checkout
+   */
+  async continueCheckout() {
+    await this.SafeClick(this.continueButton);
   }
 
   /**
