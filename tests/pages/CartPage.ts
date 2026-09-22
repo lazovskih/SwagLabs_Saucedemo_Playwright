@@ -55,6 +55,15 @@ export class CartPage extends BasePage {
   }
 
   /**
+   * Remove product
+   * @param productName
+   */
+  async removeProduct(productName: string) {
+    const productId = productName.toLowerCase().replace(/\s+/g, "-");
+    await this.page.locator(`[data-test="remove-${productId}"]`).click();
+  }
+
+  /**
    * Continue shopping
    */
   async continueShopping() {
