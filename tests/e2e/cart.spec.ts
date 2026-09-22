@@ -27,8 +27,12 @@ test.describe("Shopping cart flow", () => {
 
     // Verify cart page title, then start checkout
     expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
+
+    // Verify specific products present on the shopping cart page
     expect(await cartPage.getProductCount(products[0].Name)).toBe(1);
     expect(await cartPage.getProductCount(products[1].Name)).toBe(1);
+
+    // Verify count on the shopping cart badge icon
     expect(await cartPage.getItemCount()).toBe(2);
   });
 

@@ -35,7 +35,6 @@ export class CheckoutStepOnePage extends BasePage {
     await this.firstNameField.fill(shippingData.FirstName);
     await this.lastNameField.fill(shippingData.LastName);
     await this.postalCodeField.fill(shippingData.PostalCode);
-    await this.continueCheckout();
   }
 
   /**

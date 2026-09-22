@@ -27,7 +27,7 @@ export class CartPage extends BasePage {
    * @returns A promise that resolves to the number of matching cart items.
    */
   async getProductCount(productName: string) {
-    return this.cartItems.filter({ hasText: productName }).count();
+    return await this.cartItems.filter({ hasText: productName }).count();
   }
 
   /**

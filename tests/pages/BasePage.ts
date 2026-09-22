@@ -83,20 +83,42 @@ export abstract class BasePage {
   }
 
   /**
+   * Helper method to determine the runtime browser engine.
+   * Returns: 'chromium' | 'firefox' | 'webkit' | undefined (for persistent contexts/CDP)
+   */
+  private getBrowserName(): string | undefined {
+    return this.page.context().browser()?.browserType().name();
+  }
+
+  /**
    * Safe click to make sure button is clickable and the page loaded
    * This method added to support flaky tests on webkit
    * @param locator locator of the button
    */
   async SafeClick(locator: Locator) {
-    // 1. Ensure the element is attached to the DOM
-    await locator.waitFor({ state: "attached", timeout: 3000 });
-    await locator.waitFor({ state: "visible", timeout: 3000 });
+    const isWebKit = this.getBrowserName() === "webkit";
 
-    // 2. Explicitly scroll the element into view
-    await locator.scrollIntoViewIfNeeded();
+    if (isWebKit) {
+      // 1. Ensure the element is attached to the DOM
+      await locator.waitFor({ state: "attached", timeout: 3000 });
+      await locator.waitFor({ state: "visible", timeout: 3000 });
 
-    // 3. Click the button locator
-    await locator.click({ force: true });
+      // 2. Explicitly scroll the element into view
+      await locator.scrollIntoViewIfNeeded();
+
+      // 3. Click the button locator
+      await locator.evaluate((el: HTMLElement) => {
+        el.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          }),
+        );
+      });
+    } else {
+      await locator.click({ force: true }); // TODO update
+    }
 
     // 4. Wait until page is loaded
     await this.isLoaded();

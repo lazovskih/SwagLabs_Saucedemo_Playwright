@@ -46,6 +46,10 @@ test.describe("Checkout flow", () => {
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
+
+    // Click continue checkout
+    await checkoutStepOnePage.continueCheckout();
+
     expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Finish order
@@ -71,11 +75,14 @@ test.describe("Checkout flow", () => {
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
 
-    // Scroll to bottom to ensure all elements are visible
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    // Click continue checkout
+    await checkoutStepOnePage.continueCheckout();
 
     // Verify checkout step two page title
     expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
+
+    // Scroll to bottom to ensure all elements are visible
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
     // Verify subtotal, tax, and total amounts
     const actualSubtotal = await checkoutStepTwoPage.getSubtotal();
