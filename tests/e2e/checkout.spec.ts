@@ -42,8 +42,6 @@ test.describe("Checkout flow", () => {
 
     // Start checkout
     await cartPage.startCheckout();
-
-    // Fill shipping information
     expect(await checkoutStepOnePage.getPageTitle()).toBe(checkoutStepOnePage.pageTitleText);
 
     // Fill shipping information and continue to overview page

@@ -72,7 +72,7 @@ export abstract class BasePage {
   /**
    * Click on menu button
    */
-  async clickMenuButton(): Promise<void> {
+  async clickMenuButton() {
     await this.mainMenuButton.click({ delay: 100, force: true });
     await this.sideMenu.isVisible();
   }
@@ -80,7 +80,7 @@ export abstract class BasePage {
   /**
    * Click on "Logout" menu link
    */
-  async clickLogoutMenu(): Promise<void> {
+  async clickLogoutMenu() {
     await this.clickMenuButton();
     await this.logoutMenu.click();
   }
@@ -90,5 +90,28 @@ export abstract class BasePage {
    */
   async getCompleteHeaderText() {
     return await this.completeHeader.textContent();
+  }
+
+  /**
+   * Clicks on cart badge icon to open 'View cart' page
+   */
+  async clickJS(locator: Locator) {
+    // 1. Ensure the element is attached to the DOM
+    await locator.waitFor({ state: "attached" });
+    await locator.waitFor({ state: "visible", timeout: 1000 });
+
+    // 2. Explicitly scroll the element into view
+    await locator.scrollIntoViewIfNeeded();
+
+    // 3. Dispatch a native JavaScript click event directly on the DOM node
+    await locator.evaluate((el: HTMLElement) => {
+      el.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        }),
+      );
+    });
   }
 }

@@ -70,11 +70,29 @@ export class ProductsPage extends BasePage {
     const text = await this.cartBadge.textContent();
     return text ? Number(text.trim()) : 0;
   }
-
   /**
    * Clicks on cart badge icon to open 'View cart' page
    */
   async viewCart() {
+    // TODO: Remove
+    // 1. Ensure the element is attached to the DOM
+    await this.shoppingCartLink.waitFor({ state: "attached" });
+    await this.shoppingCartLink.waitFor({ state: "visible", timeout: 5000 });
+
+    // 2. Explicitly scroll the element into view
+    await this.shoppingCartLink.scrollIntoViewIfNeeded();
+
+    await this.shoppingCartLink.focus();
+    // await expect(this.shoppingCartLink).toBeVisible();
+
+    await this.shoppingCartLink.click({ force: true });
+    await this.isLoaded();
+  }
+  /**
+   * Clicks on cart badge icon to open 'View cart' page
+   */
+  async viewCart_NEW1() {
+    // TODO: Remove
     // 1. Ensure the element is attached to the DOM
     await this.shoppingCartLink.waitFor({ state: "attached" });
     await this.shoppingCartLink.waitFor({ state: "visible", timeout: 5000 });
@@ -96,6 +114,15 @@ export class ProductsPage extends BasePage {
         }),
       );
     });
+    await this.isLoaded();
+  }
+
+  /**
+   * Clicks on cart badge icon to open 'View cart' page
+   */
+  async viewCart_NEW() {
+    // Use JS to dispatch click event (normal click failed on webKit)
+    await this.clickJS(this.shoppingCartLink);
     await this.isLoaded();
   }
 }
