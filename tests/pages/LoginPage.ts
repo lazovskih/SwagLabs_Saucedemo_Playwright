@@ -40,7 +40,7 @@ export class LoginPage extends BasePage {
     await this.loginButton.click();
 
     const productsPage = new ProductsPage(this.page);
-    await productsPage.inventoryItems.first().waitFor();
+    await expect(productsPage.pageTitle).toBeVisible();
   }
 
   /**

@@ -74,17 +74,6 @@ export class ProductsPage extends BasePage {
    * Clicks on cart badge icon to open 'View cart' page
    */
   async viewCart() {
-    // 1. Ensure the element is attached to the DOM
-    // await this.shoppingCartLink.waitFor({ state: "attached" });
-    // await this.shoppingCartLink.waitFor({ state: "visible", timeout: 5000 });
-
-    // 2. Explicitly scroll the element into view
-    await this.shoppingCartLink.scrollIntoViewIfNeeded();
-
-    await this.shoppingCartLink.focus();
-    // await expect(this.shoppingCartLink).toBeVisible();
-
-    await this.shoppingCartLink.click({ force: true });
-    await this.isLoaded();
+    await this.SafeClick(this.shoppingCartLink);
   }
 }

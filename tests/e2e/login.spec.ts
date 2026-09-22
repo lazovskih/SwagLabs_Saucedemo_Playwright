@@ -29,7 +29,7 @@ test.describe("Login page", () => {
     expect(await productsPage.getCurrentUrl()).toContain(productsPage.pageUrl);
 
     // Verify Products page title
-    expect(await productsPage.getPageTitle()).toBe(productsPage.pageTitleText);
+    expect(productsPage.pageTitle).toHaveText(productsPage.pageTitleText);
   });
 
   /**

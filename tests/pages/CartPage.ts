@@ -42,16 +42,7 @@ export class CartPage extends BasePage {
    * Start checkout
    */
   async startCheckout() {
-    // 1. Ensure the element is attached to the DOM
-    // await this.checkoutButton.waitFor({ state: "attached" });
-    // await this.checkoutButton.waitFor({ state: "visible", timeout: 5000 });
-
-    // 2. Explicitly scroll the element into view
-    await this.checkoutButton.scrollIntoViewIfNeeded();
-
-    // await this.shoppingCartLink.focus();
-    await this.checkoutButton.click();
-    await this.isLoaded();
+    await this.SafeClick(this.checkoutButton);
   }
 
   /**
@@ -67,15 +58,6 @@ export class CartPage extends BasePage {
    * Continue shopping
    */
   async continueShopping() {
-    // 1. Ensure the element is attached to the DOM
-    // await this.continueShoppingButton.waitFor({ state: "attached" });
-    // await this.continueShoppingButton.waitFor({ state: "visible", timeout: 5000 });
-
-    // 2. Explicitly scroll the element into view
-    await this.continueShoppingButton.scrollIntoViewIfNeeded();
-
-    // await this.shoppingCartLink.focus();
-    await this.continueShoppingButton.click();
-    await this.isLoaded();
+    await this.SafeClick(this.continueShoppingButton);
   }
 }

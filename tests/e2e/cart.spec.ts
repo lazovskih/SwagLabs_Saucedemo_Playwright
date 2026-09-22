@@ -17,21 +17,22 @@ test.describe("Shopping cart flow", () => {
     await productsPage.open();
   });
 
-  test("Adds selected products to the cart and verifies cart contents", async ({ page }) => {
+  test("Adds selected products to the cart and verifies cart contents", async () => {
     // Add products to cart
     await productsPage.addProductsToCart([products[0].Name, products[1].Name]);
     expect(await productsPage.getCartCount()).toBe(2);
 
+    // Open shopping cart
     await productsPage.viewCart();
-    // if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
 
-    expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
+    // Verify cart page title, then start checkout
+    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
     expect(await cartPage.getProductCount(products[0].Name)).toBe(1);
     expect(await cartPage.getProductCount(products[1].Name)).toBe(1);
     expect(await cartPage.getItemCount()).toBe(2);
   });
 
-  test("Button changes from 'Add to cart' to 'Remove' when clicked", async ({ page }) => {
+  test("Button changes from 'Add to cart' to 'Remove' when clicked", async () => {
     const productName = products[0].Name;
 
     const addToCartButton = await productsPage.getAddToCartButton(productName);
@@ -49,7 +50,7 @@ test.describe("Shopping cart flow", () => {
     await expect(removeButton).toBeVisible();
   });
 
-  test("Button changes from 'Remove' to 'Add to cart' when clicked", async ({ page }) => {
+  test("Button changes from 'Remove' to 'Add to cart' when clicked", async () => {
     // Loop through all products
     for (const product of products) {
       const addToCartButton = await productsPage.getAddToCartButton(product.Name);
@@ -68,7 +69,7 @@ test.describe("Shopping cart flow", () => {
     }
   });
 
-  test("Cart badge updates quantity correctly when items are added and removed", async ({ page }) => {
+  test("Cart badge updates quantity correctly when items are added and removed", async () => {
     let expectedCount = 0;
 
     // Add all items and verify badge count increments
@@ -95,15 +96,15 @@ test.describe("Shopping cart flow", () => {
     }
   });
 
-  test("Remove button on products page should not be present for items removed from cart", async ({ page }) => {
+  test("Remove button on products page should not be present for items removed from cart", async () => {
     // Add 3 items
     await productsPage.addProductsToCart([products[0].Name, products[1].Name, products[2].Name]);
 
-    // Open Cart
+    // Open shopping cart
     await productsPage.viewCart();
-    // if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
 
-    expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
+    // Verify cart page title, then start checkout
+    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Remove 2 items from the cart
     await cartPage.removeProduct(products[0].Name);

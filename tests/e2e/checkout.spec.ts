@@ -29,24 +29,24 @@ test.describe("Checkout flow", () => {
     await productsPage.open();
   });
 
-  test("Completes checkout for a selected product", async ({}) => {
+  test("Completes checkout for a selected product", async () => {
     // Add products to cart
     await productsPage.addProductToCart(products[2].Name);
     expect(await productsPage.getCartCount()).toBe(1);
 
-    // View cart
+    // Open shopping cart
     await productsPage.viewCart();
-    // if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
 
-    expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
+    // Verify cart page title, then start checkout
+    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Start checkout
     await cartPage.startCheckout();
-    expect(await checkoutStepOnePage.getPageTitle()).toBe(checkoutStepOnePage.pageTitleText);
+    expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
-    expect(await checkoutStepTwoPage.getPageTitle()).toBe(checkoutStepTwoPage.pageTitleText);
+    expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Finish order
     await checkoutStepTwoPage.finishOrder();
@@ -58,16 +58,15 @@ test.describe("Checkout flow", () => {
     await productsPage.addProductsToCart([products[2].Name, products[1].Name]);
     expect(await productsPage.getCartCount()).toBe(2);
 
-    // View cart
+    // Open shopping cart
     await productsPage.viewCart();
-    // if (!(await cartPage.pageIsOpened())) throw Error("Cart page did not open!");
 
     // Verify cart page title, then start checkout
-    expect(await cartPage.getPageTitle()).toBe(cartPage.pageTitleText);
+    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
     await cartPage.startCheckout();
 
     // Verify checkout step one page title
-    expect(await checkoutStepOnePage.getPageTitle()).toBe(checkoutStepOnePage.pageTitleText);
+    expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
@@ -76,7 +75,7 @@ test.describe("Checkout flow", () => {
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
     // Verify checkout step two page title
-    expect(await checkoutStepTwoPage.getPageTitle()).toBe(checkoutStepTwoPage.pageTitleText);
+    expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Verify subtotal, tax, and total amounts
     const actualSubtotal = await checkoutStepTwoPage.getSubtotal();

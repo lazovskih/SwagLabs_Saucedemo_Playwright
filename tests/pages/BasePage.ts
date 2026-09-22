@@ -40,7 +40,7 @@ export abstract class BasePage {
    * @returns boolean true if page title match the opened page title
    */
   async pageIsOpened() {
-    return (await this.getPageTitle()) == this.pageTitleText;
+    return (await this.pageTitle.textContent()) == this.pageTitleText;
   }
 
   /**
@@ -49,16 +49,6 @@ export abstract class BasePage {
    */
   async isLoaded(): Promise<void> {
     return await this.page.waitForLoadState("load");
-  }
-
-  /**
-   * Get page title text
-   * @returns page title text
-   */
-  async getPageTitle() {
-    await this.pageTitle.waitFor({ state: "attached" });
-    await this.pageTitle.waitFor({ state: "visible" });
-    return await this.pageTitle.textContent();
   }
 
   /**
@@ -93,9 +83,11 @@ export abstract class BasePage {
   }
 
   /**
-   * Clicks on cart badge icon to open 'View cart' page
+   * Safe click to make sure button is clickable and the page loaded
+   * This method added to support flaky tests on webkit
+   * @param locator locator of the button
    */
-  async clickJS(locator: Locator) {
+  async SafeClick(locator: Locator) {
     // 1. Ensure the element is attached to the DOM
     await locator.waitFor({ state: "attached" });
     await locator.waitFor({ state: "visible", timeout: 1000 });
@@ -103,15 +95,8 @@ export abstract class BasePage {
     // 2. Explicitly scroll the element into view
     await locator.scrollIntoViewIfNeeded();
 
-    // 3. Dispatch a native JavaScript click event directly on the DOM node
-    await locator.evaluate((el: HTMLElement) => {
-      el.dispatchEvent(
-        new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window,
-        }),
-      );
-    });
+    // 3. Click the button locator
+    await locator.click();
+    await this.isLoaded();
   }
 }
