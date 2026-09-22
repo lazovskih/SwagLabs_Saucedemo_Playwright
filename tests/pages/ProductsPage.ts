@@ -70,6 +70,7 @@ export class ProductsPage extends BasePage {
     const text = await this.cartBadge.textContent();
     return text ? Number(text.trim()) : 0;
   }
+
   /**
    * Clicks on cart badge icon to open 'View cart' page
    */
