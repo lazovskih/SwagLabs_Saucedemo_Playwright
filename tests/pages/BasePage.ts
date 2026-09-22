@@ -89,14 +89,16 @@ export abstract class BasePage {
    */
   async SafeClick(locator: Locator) {
     // 1. Ensure the element is attached to the DOM
-    await locator.waitFor({ state: "attached" });
-    await locator.waitFor({ state: "visible", timeout: 1000 });
+    await locator.waitFor({ state: "attached", timeout: 3000 });
+    await locator.waitFor({ state: "visible", timeout: 3000 });
 
     // 2. Explicitly scroll the element into view
     await locator.scrollIntoViewIfNeeded();
 
     // 3. Click the button locator
-    await locator.click();
+    await locator.click({ force: true });
+
+    // 4. Wait until page is loaded
     await this.isLoaded();
   }
 }

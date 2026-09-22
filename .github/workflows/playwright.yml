@@ -11,7 +11,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
     environment: TEST
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install dependencies
       run: npm ci
     - name: Run Playwright tests
@@ -21,7 +21,7 @@ jobs:
         STANDARD_USER: ${{ secrets.STANDARD_USER }}
         DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
         URL: ${{ vars.URL }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
