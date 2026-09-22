@@ -74,10 +74,9 @@ export class ProductsPage extends BasePage {
    * Clicks on cart badge icon to open 'View cart' page
    */
   async viewCart() {
-    // TODO: Remove
     // 1. Ensure the element is attached to the DOM
-    await this.shoppingCartLink.waitFor({ state: "attached" });
-    await this.shoppingCartLink.waitFor({ state: "visible", timeout: 5000 });
+    // await this.shoppingCartLink.waitFor({ state: "attached" });
+    // await this.shoppingCartLink.waitFor({ state: "visible", timeout: 5000 });
 
     // 2. Explicitly scroll the element into view
     await this.shoppingCartLink.scrollIntoViewIfNeeded();
@@ -86,43 +85,6 @@ export class ProductsPage extends BasePage {
     // await expect(this.shoppingCartLink).toBeVisible();
 
     await this.shoppingCartLink.click({ force: true });
-    await this.isLoaded();
-  }
-  /**
-   * Clicks on cart badge icon to open 'View cart' page
-   */
-  async viewCart_NEW1() {
-    // TODO: Remove
-    // 1. Ensure the element is attached to the DOM
-    await this.shoppingCartLink.waitFor({ state: "attached" });
-    await this.shoppingCartLink.waitFor({ state: "visible", timeout: 5000 });
-    // 2. Explicitly scroll the element into view
-    await this.shoppingCartLink.scrollIntoViewIfNeeded();
-
-    // await this.shoppingCartLink.focus();
-    // await expect(this.shoppingCartLink).toBeVisible();
-
-    // await this.shoppingCartLink.click();
-    // 3. Dispatch a native JavaScript click event directly on the DOM node
-    // await this.shoppingCartLink.evaluate((el: HTMLElement) => el.click());
-    await this.shoppingCartLink.evaluate((el: HTMLElement) => {
-      el.dispatchEvent(
-        new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window,
-        }),
-      );
-    });
-    await this.isLoaded();
-  }
-
-  /**
-   * Clicks on cart badge icon to open 'View cart' page
-   */
-  async viewCart_NEW() {
-    // Use JS to dispatch click event (normal click failed on webKit)
-    await this.clickJS(this.shoppingCartLink);
     await this.isLoaded();
   }
 }

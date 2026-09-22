@@ -42,10 +42,10 @@ export class CartPage extends BasePage {
    * Start checkout
    */
   async startCheckout() {
-    // TODO: remove
     // 1. Ensure the element is attached to the DOM
-    await this.checkoutButton.waitFor({ state: "attached" });
-    await this.checkoutButton.waitFor({ state: "visible", timeout: 5000 });
+    // await this.checkoutButton.waitFor({ state: "attached" });
+    // await this.checkoutButton.waitFor({ state: "visible", timeout: 5000 });
+
     // 2. Explicitly scroll the element into view
     await this.checkoutButton.scrollIntoViewIfNeeded();
 
@@ -55,70 +55,18 @@ export class CartPage extends BasePage {
   }
 
   /**
-   * Clicks on cart badge icon to open 'View cart' page
-   */
-  async startCheckout_NEW2() {
-    // TODO: remove
-    // 1. Ensure the element is attached to the DOM
-    await this.checkoutButton.waitFor({ state: "attached" });
-    await this.checkoutButton.waitFor({ state: "visible", timeout: 5000 });
-    // 2. Explicitly scroll the element into view
-    await this.checkoutButton.scrollIntoViewIfNeeded();
-
-    // await this.shoppingCartLink.focus();
-    // await expect(this.shoppingCartLink).toBeVisible();
-
-    // await this.shoppingCartLink.click();
-
-    // 3. Dispatch a native JavaScript click event directly on the DOM node
-    // await this.checkoutButton.evaluate((el: HTMLElement) => el.click());
-
-    await this.checkoutButton.evaluate((el: HTMLElement) => {
-      el.dispatchEvent(
-        new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window,
-        }),
-      );
-    });
-    await this.isLoaded();
-  }
-
-  /**
-   * Clicks on cart badge icon to open 'View cart' page
-   */
-  async startCheckout_NEW() {
-    // // Use JS to dispatch click event (normal click failed on webKit)
-    await this.clickJS(this.checkoutButton);
-    await this.isLoaded();
-  }
-
-  /**
-   * Remove product
-   * @param productName - Name of the product.
-   */
-  async removeProduct(productName: string) {
-    const productId = productName.toLowerCase().replace(/\s+/g, "-");
-    await this.page.locator(`[data-test="remove-${productId}"]`).click();
-  }
-
-  /**
-   * Continue shopping
-   */
-  async continueShopping_OLD() {
-    // REMOVE
-    this.continueShoppingButton.click();
-    this.isLoaded();
-  }
-
-  /**
    * Continue shopping
    */
   async continueShopping() {
-    // Use JS to dispatch click event (normal click failed on webKit)
-    await this.clickJS(this.continueShoppingButton);
-    await this.isLoaded();
+    // 1. Ensure the element is attached to the DOM
+    // await this.continueShoppingButton.waitFor({ state: "attached" });
+    // await this.continueShoppingButton.waitFor({ state: "visible", timeout: 5000 });
+
+    // 2. Explicitly scroll the element into view
+    await this.continueShoppingButton.scrollIntoViewIfNeeded();
+
+    // await this.shoppingCartLink.focus();
+    await this.continueShoppingButton.click();
     await this.isLoaded();
   }
 }
