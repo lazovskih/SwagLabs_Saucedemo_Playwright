@@ -10,9 +10,9 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@helpers/*": ["test/uttilities/*"],
-      "@fixtures/*": ["test/fixtures/*"],
-      "@pages/*": ["test/pages/*"]
+      "@helpers/*": ["tests/utilities/*"],
+      "@fixtures/*": ["tests/fixtures/*"],
+      "@pages/*": ["tests/pages/*"]
     }
   },
   "include": ["**/*.ts"]

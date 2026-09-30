@@ -11,7 +11,6 @@ export class CheckoutStepOnePage extends BasePage {
   readonly lastNameField: Locator;
   readonly postalCodeField: Locator;
   readonly continueButton: Locator;
-  readonly finishButton: Locator;
   readonly primaryHeader: Locator;
 
   constructor(page: Page) {
@@ -21,7 +20,6 @@ export class CheckoutStepOnePage extends BasePage {
     this.lastNameField = page.locator('[data-test="lastName"]');
     this.postalCodeField = page.locator('[data-test="postalCode"]');
     this.continueButton = page.locator('[data-test="continue"]');
-    this.finishButton = page.locator('[data-test="finish"]');
     this.primaryHeader = page.locator('[data-test="title"]');
   }
 
@@ -45,21 +43,10 @@ export class CheckoutStepOnePage extends BasePage {
   }
 
   /**
-   * Finish order
-   */
-  async finishOrder() {
-    await this.finishButton.click();
-  }
-
-  /**
    * Get complete header text
    * @returns Promise<string | null>
    */
   async getCompleteHeaderText() {
     return await this.completeHeader.textContent();
-  }
-
-  async clickContinue() {
-    await this.continueButton.click();
   }
 }

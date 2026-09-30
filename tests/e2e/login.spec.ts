@@ -26,10 +26,10 @@ test.describe("Login page", () => {
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    expect(await productsPage.getCurrentUrl()).toContain(productsPage.pageUrl);
+   await expect(await productsPage.getCurrentUrl()).toContain(productsPage.pageUrl);
 
     // Verify Products page title
-    expect(productsPage.pageTitle).toHaveText(productsPage.pageTitleText);
+   await expect(productsPage.pageTitle).toHaveText(productsPage.pageTitleText);
   });
 
   /**
@@ -68,7 +68,7 @@ test.describe("Login page", () => {
     await expect(page).toHaveURL(/.*\/$/);
 
     // Try to navigate directly to Products page
-    await page.goto(process.env.URL + productsPage.pageUrl);
+    await page.goto(productsPage.pageUrl);
 
     // Verify redirected back to login page (not accessible)
     await expect(page).toHaveURL(/.*\/$/);

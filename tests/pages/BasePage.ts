@@ -31,7 +31,7 @@ export abstract class BasePage {
    * @returns load state promise<void>
    */
   async open() {
-    await this.page.goto(process.env.URL + this.pageUrl, { waitUntil: "domcontentloaded" });
+    await this.page.goto(this.pageUrl, { waitUntil: "domcontentloaded" });
     await this.isLoaded();
   }
 

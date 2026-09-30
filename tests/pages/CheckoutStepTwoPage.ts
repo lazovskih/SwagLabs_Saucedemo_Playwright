@@ -54,13 +54,6 @@ export class CheckoutStepTwoPage extends BasePage {
   }
 
   /**
-   * Click finish button
-   */
-  async clickFinish(): Promise<void> {
-    await this.finishButton.click();
-  }
-
-  /**
    * Finish the order by clicking the finish button
    */
   async finishOrder() {

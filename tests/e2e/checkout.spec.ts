@@ -38,11 +38,11 @@ test.describe("Checkout flow", () => {
     await productsPage.viewCart();
 
     // Verify cart page title, then start checkout
-    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
+    await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Start checkout
     await cartPage.startCheckout();
-    expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
+    await expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
@@ -50,11 +50,11 @@ test.describe("Checkout flow", () => {
     // Click continue checkout
     await checkoutStepOnePage.continueCheckout();
 
-    expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
+    await expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Finish order
     await checkoutStepTwoPage.finishOrder();
-    expect(await checkoutComplete.getCompleteHeaderText()).toBe(checkoutComplete.completeText);
+    await expect(await checkoutComplete.getCompleteHeaderText()).toBe(checkoutComplete.completeText);
   });
 
   test("Completes checkout and verifies totals for multiple selected products", async ({ page }) => {
@@ -66,11 +66,11 @@ test.describe("Checkout flow", () => {
     await productsPage.viewCart();
 
     // Verify cart page title, then start checkout
-    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
+    await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
     await cartPage.startCheckout();
 
     // Verify checkout step one page title
-    expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
+    await expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
@@ -79,22 +79,22 @@ test.describe("Checkout flow", () => {
     await checkoutStepOnePage.continueCheckout();
 
     // Verify checkout step two page title
-    expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
+    await expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Scroll to bottom to ensure all elements are visible
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    // await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));// TODO: remove scroll
 
     // Verify subtotal, tax, and total amounts
     const actualSubtotal = await checkoutStepTwoPage.getSubtotal();
     const expectedSubtotal = products[1].Price + products[2].Price;
 
-    expect(actualSubtotal, "Subtotal is correct").toEqual(expectedSubtotal);
+    await expect(actualSubtotal, "Subtotal is correct").toEqual(expectedSubtotal);
 
     // Calculate expected total based on subtotal and tax, then verify total
     const actualTax = await checkoutStepTwoPage.getTax();
     const expectedTotal = (expectedSubtotal + actualTax).toFixed(2);
     const actualTotal = (await checkoutStepTwoPage.getTotal()).toFixed(2);
 
-    expect(actualTotal, "Total is correct").toEqual(expectedTotal);
+    await expect(actualTotal, "Total is correct").toEqual(expectedTotal);
   });
 });

@@ -1,5 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { getProductId } from "tests/utilities/formatters";
 
 export class CartPage extends BasePage {
   pageTitleText = "Your Cart";
@@ -50,8 +51,7 @@ export class CartPage extends BasePage {
    * @param productName
    */
   async removeProduct(productName: string) {
-    const productId = productName.toLowerCase().replace(/\s+/g, "-");
-    await this.page.locator(`[data-test="remove-${productId}"]`).click();
+    await this.page.locator(`[data-test="add-to-cart-${getProductId(productName)}"]`).click();
   }
 
   /**

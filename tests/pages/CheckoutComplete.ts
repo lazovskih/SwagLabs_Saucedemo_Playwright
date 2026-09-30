@@ -1,6 +1,5 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { parseCurrencyToNumber } from "../utilities/formatters";
 export class CheckoutComplete extends BasePage {
   pageTitleText = "Checkout: Complete!";
   pageUrl = "/checkout-complete.html";
@@ -30,8 +29,8 @@ export class CheckoutComplete extends BasePage {
   /**
    * Click back home button
    */
-  async clickBackHome(): Promise<void> {
-    this.backHomeButton.click();
+  async clickBackHome() {
+    await this.backHomeButton.click();
   }
 
   /**

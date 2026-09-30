@@ -69,7 +69,7 @@ function checkAndClearStaleLock(): void {
 
 // Extend base test to inject storageState automatically
 export const test = baseTest.extend({
-  storageState: async ({ browser }, use) => {
+  storageState: async ({ browser, baseURL }, use) => {
     // Ensure authentication directory exists
     if (!fs.existsSync(AUTH_DIR)) {
       fs.mkdirSync(AUTH_DIR, { recursive: true });
@@ -114,7 +114,7 @@ export const test = baseTest.extend({
           // Double check if session is valid now (another worker might have completed login while we waited)
           if (!isSessionValid(STATE_FILE)) {
             console.log("[Auth Fixture] Session file missing or expired. Performing fresh login.");
-            const context = await browser.newContext();
+            const context = await browser.newContext({ baseURL: baseURL || process.env.URL });
             const page = await context.newPage();
 
             const loginPage = new LoginPage(page);
@@ -142,7 +142,7 @@ export const test = baseTest.extend({
         // Fallback if we timed out waiting for the lock. We login directly.
         console.warn("[Auth Fixture] Lock acquisition timed out. Falling back to fresh authentication without lock.");
         if (!isSessionValid(STATE_FILE)) {
-          const context = await browser.newContext();
+          const context = await browser.newContext({ baseURL: baseURL || process.env.URL });
           const page = await context.newPage();
           const loginPage = new LoginPage(page);
           await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
