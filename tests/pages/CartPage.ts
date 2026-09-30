@@ -51,7 +51,7 @@ export class CartPage extends BasePage {
    * @param productName
    */
   async removeProduct(productName: string) {
-    await this.page.locator(`[data-test="add-to-cart-${getProductId(productName)}"]`).click();
+    await this.page.locator(`[data-test="remove-${getProductId(productName)}"]`).click();
   }
 
   /**
