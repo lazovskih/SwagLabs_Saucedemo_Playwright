@@ -27,40 +27,41 @@ export abstract class BasePage {
   }
 
   /**
-   * Open page by the page URL
-   * @returns load state promise<void>
+   * Navigates to the page URL and waits for page load completion.
+   * @returns Promise that resolves when navigation and load state are complete.
    */
   async open() {
-    await this.page.goto(process.env.URL + this.pageUrl, { waitUntil: "domcontentloaded" });
+    await this.page.goto(this.pageUrl, { waitUntil: "load" });
     await this.isLoaded();
   }
 
   /**
-   * Confirms page opened
-   * @returns boolean true if page title match the opened page title
+   * Confirms whether the page title matches the expected page title.
+   * @returns Promise resolving to true if page title matches the expected title, false otherwise.
    */
   async pageIsOpened() {
     return (await this.pageTitle.textContent()) == this.pageTitleText;
   }
 
   /**
-   * Wait for a page to load
-   * @returns load state promise<void>
+   * Waits for the page DOMContentLoaded event to fire.
+   * @returns Promise that resolves when DOM content is loaded.
    */
   async isLoaded(): Promise<void> {
-    return await this.page.waitForLoadState("load");
+    return await this.page.waitForLoadState("domcontentloaded");
   }
 
   /**
-   * Get current URL
-   * @returns Promise<string>
+   * Retrieves the current page URL.
+   * @returns Promise resolving to the current URL string.
    */
   async getCurrentUrl() {
     return this.page.url();
   }
 
   /**
-   * Click on menu button
+   * Clicks the main sidebar menu button.
+   * @returns Promise that resolves when the menu button is clicked.
    */
   async clickMenuButton() {
     await this.mainMenuButton.click({ delay: 100, force: true });
@@ -68,7 +69,8 @@ export abstract class BasePage {
   }
 
   /**
-   * Click on "Logout" menu link
+   * Opens the sidebar menu and clicks the "Logout" link.
+   * @returns Promise that resolves when the logout link is clicked.
    */
   async clickLogoutMenu() {
     await this.clickMenuButton();
@@ -76,51 +78,10 @@ export abstract class BasePage {
   }
 
   /**
-   * Get the complete header text after finishing the order
+   * Retrieves the complete header text after finishing an order.
+   * @returns Promise resolving to the header text content, or null if not found.
    */
   async getCompleteHeaderText() {
     return await this.completeHeader.textContent();
-  }
-
-  /**
-   * Helper method to determine the runtime browser engine.
-   * Returns: 'chromium' | 'firefox' | 'webkit' | undefined (for persistent contexts/CDP)
-   */
-  private getBrowserName(): string | undefined {
-    return this.page.context().browser()?.browserType().name();
-  }
-
-  /**
-   * Safe click to make sure button is clickable and the page loaded
-   * This method added to support flaky tests on webkit
-   * @param locator locator of the button
-   */
-  async SafeClick(locator: Locator) {
-    const isWebKit = this.getBrowserName() === "webkit";
-
-    if (isWebKit) {
-      // 1. Ensure the element is attached to the DOM
-      await locator.waitFor({ state: "attached", timeout: 3000 });
-      await locator.waitFor({ state: "visible", timeout: 3000 });
-
-      // 2. Explicitly scroll the element into view
-      await locator.scrollIntoViewIfNeeded();
-
-      // 3. Click the button locator
-      await locator.evaluate((el: HTMLElement) => {
-        el.dispatchEvent(
-          new MouseEvent("click", {
-            bubbles: true,
-            cancelable: true,
-            view: window,
-          }),
-        );
-      });
-    } else {
-      await locator.click({ force: true }); // TODO update
-    }
-
-    // 4. Wait until page is loaded
-    await this.isLoaded();
   }
 }

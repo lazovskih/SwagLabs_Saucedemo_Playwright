@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { getProductId } from "tests/utilities/formatters";
+import { Product } from "@data-types";
 
 export class ProductsPage extends BasePage {
   pageTitleText = "Products";
@@ -21,48 +22,50 @@ export class ProductsPage extends BasePage {
   }
 
   /**
-   * Gets the 'Add to cart' button for a specified product.
-   * @param productName - Name of the product.
-   * @returns A Playwright locator for the product's add-to-cart button.
+   * Gets the 'Add to cart' button locator for a specified product.
+   * @param product - Product data object.
+   * @returns Playwright locator for the product's 'Add to cart' button.
    */
-  getAddToCartButton(productName: string) {
-    return this.page.locator(`[data-test="add-to-cart-${getProductId(productName)}"]`);
+  getAddToCartButton(product: Product) {
+    return this.page.locator(`[data-test="add-to-cart-${getProductId(product)}"]`);
   }
 
   /**
-   * Gets the 'Remove' button for a specified product.
-   * @param productName - Name of the product.
-   * @returns A Playwright locator for the product's add-to-cart button.
+   * Gets the 'Remove' button locator for a specified product.
+   * @param product - Product data object.
+   * @returns Playwright locator for the product's 'Remove' button.
    */
-  getRemoveButton(productName: string) {
-    return this.page.locator(`[data-test="remove-${getProductId(productName)}"]`);
+  getRemoveButton(product: Product) {
+    return this.page.locator(`[data-test="remove-${getProductId(product)}"]`);
   }
 
   /**
-   * Clicks 'Add to cart' button for a specified product.
-   * @param productName - Name of the product.
+   * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
+   * @param product - Product data object to add.
+   * @returns Promise that resolves when the product is added.
    */
-  async addProductToCart(productName: string) {
-    await this.getAddToCartButton(productName).click();
+  async addProductToCart(product: Product) {
+    await this.getAddToCartButton(product).click();
 
-    const removeProductButton = this.getRemoveButton(productName);
+    const removeProductButton = this.getRemoveButton(product);
     await removeProductButton.waitFor({ state: "attached" });
     await removeProductButton.waitFor({ state: "visible" });
   }
 
   /**
-   * Clicks 'Add to cart' button for a specified products.
-   * @param productNames - Array with names of the product.
+   * Sequentially adds multiple products to the shopping cart.
+   * @param products - Array of product data objects to add.
+   * @returns Promise that resolves when all products have been added.
    */
-  async addProductsToCart(productNames: string[]) {
-    for (const productName of productNames) {
-      await this.addProductToCart(productName);
+  async addProductsToCart(products: Product[]) {
+    for (const product of products) {
+      await this.addProductToCart(product);
     }
   }
 
   /**
-   * Get cart count
-   * @returns Promise<number> count of the items on the cart badge icon
+   * Retrieves the numerical count displayed on the shopping cart badge icon.
+   * @returns Promise resolving to the number of items on the cart badge, or 0 if badge is not present.
    */
   async getCartCount() {
     const count = await this.cartBadge.count();
@@ -72,9 +75,10 @@ export class ProductsPage extends BasePage {
   }
 
   /**
-   * Clicks on cart badge icon to open 'View cart' page
+   * Clicks the shopping cart link to navigate to the cart page.
+   * @returns Promise that resolves when the shopping cart link is clicked.
    */
   async viewCart() {
-    await this.SafeClick(this.shoppingCartLink);
+    await this.shoppingCartLink.click();
   }
 }

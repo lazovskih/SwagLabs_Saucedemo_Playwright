@@ -1,10 +1,13 @@
-import { test, expect } from "../fixtures";
+import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
 import { CheckoutStepOnePage } from "../pages/CheckoutStepOnePage";
 import { CheckoutStepTwoPage } from "../pages/CheckoutStepTwoPage";
-import { loadTestData, ProductData, ShippingData } from "../utilities/dataLoader";
-import { CheckoutComplete } from "tests/pages/CheckoutComplete";
+import { CheckoutComplete } from "../pages/CheckoutComplete";
+
+// Import test data
+import products from "../../data/products.json";
+import shippingInfo from "../../data/shipping.json";
 
 test.describe("Checkout flow", () => {
   let productsPage: ProductsPage;
@@ -12,8 +15,6 @@ test.describe("Checkout flow", () => {
   let checkoutStepOnePage: CheckoutStepOnePage;
   let checkoutStepTwoPage: CheckoutStepTwoPage;
   let checkoutComplete: CheckoutComplete;
-  let products: ProductData[];
-  let shippingInfo: ShippingData[];
 
   test.beforeEach(async ({ page }) => {
     productsPage = new ProductsPage(page);
@@ -22,27 +23,24 @@ test.describe("Checkout flow", () => {
     checkoutStepTwoPage = new CheckoutStepTwoPage(page);
     checkoutComplete = new CheckoutComplete(page);
 
-    products = loadTestData<ProductData>("products");
-    shippingInfo = loadTestData<ShippingData>("shipping");
-
     // Navigate directly to the products page using the pre-authenticated state
     await productsPage.open();
   });
 
   test("Completes checkout for a selected product", async () => {
     // Add products to cart
-    await productsPage.addProductToCart(products[2].Name);
+    await productsPage.addProductToCart(products[2]);
     expect(await productsPage.getCartCount()).toBe(1);
 
     // Open shopping cart
     await productsPage.viewCart();
 
     // Verify cart page title, then start checkout
-    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
+    await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Start checkout
     await cartPage.startCheckout();
-    expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
+    await expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
@@ -50,27 +48,27 @@ test.describe("Checkout flow", () => {
     // Click continue checkout
     await checkoutStepOnePage.continueCheckout();
 
-    expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
+    await expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Finish order
     await checkoutStepTwoPage.finishOrder();
-    expect(await checkoutComplete.getCompleteHeaderText()).toBe(checkoutComplete.completeText);
+    await expect(await checkoutComplete.getCompleteHeaderText()).toBe(checkoutComplete.completeText);
   });
 
   test("Completes checkout and verifies totals for multiple selected products", async ({ page }) => {
     // Add multiple products to cart
-    await productsPage.addProductsToCart([products[2].Name, products[1].Name]);
+    await productsPage.addProductsToCart([products[2], products[1]]);
     expect(await productsPage.getCartCount()).toBe(2);
 
     // Open shopping cart
     await productsPage.viewCart();
 
     // Verify cart page title, then start checkout
-    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
+    await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
     await cartPage.startCheckout();
 
     // Verify checkout step one page title
-    expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
+    await expect(checkoutStepOnePage.pageTitle).toHaveText(checkoutStepOnePage.pageTitleText);
 
     // Fill shipping information and continue to overview page
     await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
@@ -79,10 +77,7 @@ test.describe("Checkout flow", () => {
     await checkoutStepOnePage.continueCheckout();
 
     // Verify checkout step two page title
-    expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
-
-    // Scroll to bottom to ensure all elements are visible
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Verify subtotal, tax, and total amounts
     const actualSubtotal = await checkoutStepTwoPage.getSubtotal();

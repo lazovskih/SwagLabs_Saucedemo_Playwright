@@ -1,5 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { getProductId } from "tests/utilities/formatters";
+import { Product } from "@data-types";
 
 export class CartPage extends BasePage {
   pageTitleText = "Your Cart";
@@ -23,41 +25,43 @@ export class CartPage extends BasePage {
 
   /**
    * Gets the number of occurrences of a product in the cart.
-   * @param productName - Name of the product to count.
-   * @returns A promise that resolves to the number of matching cart items.
+   * @param product - Product data object.
+   * @returns Promise resolving to the number of matching cart items.
    */
-  async getProductCount(productName: string) {
-    return await this.cartItems.filter({ hasText: productName }).count();
+  async getProductCount(product: Product) {
+    return await this.cartItems.filter({ hasText: product.Name }).count();
   }
 
   /**
-   * Get item count
-   * @returns A promise that resolves to the number of cart items.
+   * Retrieves the total count of item rows currently displayed in the cart.
+   * @returns Promise resolving to the number of cart items.
    */
   async getItemCount() {
     return this.cartItems.count();
   }
 
   /**
-   * Start checkout
+   * Clicks the checkout button to initiate the checkout flow.
+   * @returns Promise that resolves when the checkout button is clicked.
    */
   async startCheckout() {
-    await this.SafeClick(this.checkoutButton);
+    await this.checkoutButton.click();
   }
 
   /**
-   * Remove product
-   * @param productName
+   * Removes a specific product from the cart by clicking its remove button.
+   * @param product - Product data object to remove.
+   * @returns Promise that resolves when the remove button is clicked.
    */
-  async removeProduct(productName: string) {
-    const productId = productName.toLowerCase().replace(/\s+/g, "-");
-    await this.page.locator(`[data-test="remove-${productId}"]`).click();
+  async removeProduct(product: Product) {
+    await this.page.locator(`[data-test="remove-${getProductId(product)}"]`).click();
   }
 
   /**
-   * Continue shopping
+   * Clicks the continue shopping button to return to the inventory page.
+   * @returns Promise that resolves when the continue shopping button is clicked.
    */
   async continueShopping() {
-    await this.SafeClick(this.continueShoppingButton);
+    await this.continueShoppingButton.click();
   }
 }
