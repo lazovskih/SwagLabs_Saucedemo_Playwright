@@ -49,7 +49,7 @@ Tests are automatically executed on every push and pull request to the `main` / 
 
 ```bash
 git clone https://github.com/lazovskih/SwagLabs_saucedemo.git
-cd online_store_playwright
+cd SwagLabs_saucedemo
 ```
 
 ### 2. Install dependencies
@@ -76,6 +76,7 @@ Add your credentials to `.env`:
 
 ```env
 STANDARD_USER=set_username
+LOCKED_OUT_USER=set_lockedout_username
 DEMO_PASSWORD=set_password
 URL=https://www.saucedemo.com
 ```
@@ -113,6 +114,7 @@ npx playwright test --ui
 ### Run a specific test file
 
 ```bash
+npx playwright test tests/e2e/login.spec.ts
 npx playwright test tests/e2e/cart.spec.ts
 npx playwright test tests/e2e/checkout.spec.ts
 ```
@@ -146,29 +148,39 @@ npx playwright show-report
 ## 📁 Project Structure
 
 ```
-sauselabsdemo/
+Saucedemo_Playwright/
 ├── .github/
 │   └── workflows/
 │       └── playwright.yml          # GitHub Actions CI workflow
 ├── data/
-│   └── products.json               # External test data (products)
+│   ├── products.json               # Product catalog test data
+│   └── shipping.json               # Customer checkout test data
 ├── tests/
-│   ├── e2e/
-│   │   ├── cart.spec.ts            # Cart tests
-│   │   └── checkout.spec.ts        # Checkout flow tests
-│   ├── pages/                      # Page Object Model classes
-│   │   ├── BasePage.ts
-│   │   ├── CartPage.ts
-│   │   ├── CheckoutPage.ts
-│   │   ├── LoginPage.ts
-│   │   └── ProductsPage.ts
-│   └── utilities/
-│       └── dataLoader.ts           # Helper to load test data
-├── playwright.config.ts            # Playwright configuration
-├── package.json
+│   ├── e2e/                        # End-to-end test suites
+│   │   ├── cart.spec.ts            # Shopping cart flow tests
+│   │   ├── checkout.spec.ts        # Checkout and order placement tests
+│   │   └── login.spec.ts           # Authentication & session tests
+│   ├── fixtures/                   # Playwright setup & fixtures
+│   │   ├── auth.setup.ts           # Global authentication setup project
+│   │   └── index.ts                # Merged test and expect fixtures
+│   ├── pages/                      # Page Object Model (POM) classes
+│   │   ├── BasePage.ts             # Base page class with common methods & navigation
+│   │   ├── CartPage.ts             # Shopping cart page object
+│   │   ├── CheckoutComplete.ts     # Order completion confirmation page object
+│   │   ├── CheckoutStepOnePage.ts  # Checkout customer info page object
+│   │   ├── CheckoutStepTwoPage.ts  # Checkout overview & calculation page object
+│   │   ├── LoginPage.ts            # Login page object
+│   │   └── ProductsPage.ts         # Products catalog & inventory page object
+│   ├── types/                      # TypeScript type declarations
+│   │   └── index.ts                # Product and ShippingData interfaces
+│   └── utilities/                  # Helper utilities
+│       └── formatters.ts           # Currency parsing and product ID utilities
+├── playwright.config.ts            # Multi-browser & project dependency config
+├── tsconfig.json                   # TypeScript configuration & path aliases
+├── package.json                    # Project dependencies and npm scripts
 ├── .env                            # Local environment variables (not committed)
 ├── .env.example                    # Environment variable template
-└── README.md
+└── README.md                       # Project documentation
 ```
 
 ---
