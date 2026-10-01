@@ -11,9 +11,9 @@ export interface CurrencyParseOptions {
 }
 
 /**
- * Get product ID
- * @param product as product object
- * @returns Normalized product id string
+ * Generates a normalized product identifier slug from a product object.
+ * @param product - Product data object.
+ * @returns Normalized lowercase hyphen-delimited product ID string.
  */
 export function getProductId(product: Product) {
   return product.Name.toLowerCase().replace(/\s+/g, "-");

@@ -6,7 +6,7 @@ test.use({ storageState: { cookies: [], origins: [] } });
 /**
  * Login Test Scenarios for SauceDemo
  */
-test.describe("Login page", () => {
+test.describe("1. Login page", () => {
   let loginPage: LoginPage;
   let productsPage: ProductsPage;
 
@@ -22,7 +22,7 @@ test.describe("Login page", () => {
    * Scenario 1: Login as standard user with valid password - successful
    * Verify "Products" page opened
    */
-  test("Login with valid credentials - successful", async ({ page }) => {
+  test("1.1. Login with valid credentials - successful", async ({ page }) => {
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
@@ -37,7 +37,7 @@ test.describe("Login page", () => {
    * Scenario 2: Login as standard user with invalid password - unsuccessful
    * Verify error message displayed
    */
-  test("Login with invalid password - unsuccessful", async ({ page }) => {
+  test("1.2. Login with invalid password - unsuccessful", async ({ page }) => {
     // Login with invalid password
     await loginPage.usernameField.fill(process.env.STANDARD_USER!);
     await loginPage.passwordField.fill("invalid_password");
@@ -55,7 +55,7 @@ test.describe("Login page", () => {
   /**
    * Scenario 3: Login as standard user, logout, verify Products page not accessible
    */
-  test("Login, logout, verify Products page not accessible", async ({ page }) => {
+  test("1.3. Login, logout, verify Products page not accessible", async ({ page }) => {
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 

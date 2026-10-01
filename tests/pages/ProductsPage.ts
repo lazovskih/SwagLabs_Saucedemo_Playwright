@@ -22,26 +22,27 @@ export class ProductsPage extends BasePage {
   }
 
   /**
-   * Gets the 'Add to cart' button for a specified product.
-   * @param product as product object
-   * @returns Playwright locator for the product's add-to-cart button
+   * Gets the 'Add to cart' button locator for a specified product.
+   * @param product - Product data object.
+   * @returns Playwright locator for the product's 'Add to cart' button.
    */
   getAddToCartButton(product: Product) {
     return this.page.locator(`[data-test="add-to-cart-${getProductId(product)}"]`);
   }
 
   /**
-   * Gets the 'Remove' button for a specified product.
-   * @param product as product object
-   * @returns Playwright locator for the product's add-to-cart button
+   * Gets the 'Remove' button locator for a specified product.
+   * @param product - Product data object.
+   * @returns Playwright locator for the product's 'Remove' button.
    */
   getRemoveButton(product: Product) {
     return this.page.locator(`[data-test="remove-${getProductId(product)}"]`);
   }
 
   /**
-   * Clicks 'Add to cart' button for a specified product.
-   * @param product as product object
+   * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
+   * @param product - Product data object to add.
+   * @returns Promise that resolves when the product is added.
    */
   async addProductToCart(product: Product) {
     await this.getAddToCartButton(product).click();
@@ -52,8 +53,9 @@ export class ProductsPage extends BasePage {
   }
 
   /**
-   * Clicks 'Add to cart' button for a specified products.
-   * @param products as array with products objects
+   * Sequentially adds multiple products to the shopping cart.
+   * @param products - Array of product data objects to add.
+   * @returns Promise that resolves when all products have been added.
    */
   async addProductsToCart(products: Product[]) {
     for (const product of products) {
@@ -62,8 +64,8 @@ export class ProductsPage extends BasePage {
   }
 
   /**
-   * Get cart count
-   * @returns Promise<number> count of items on the cart badge icon
+   * Retrieves the numerical count displayed on the shopping cart badge icon.
+   * @returns Promise resolving to the number of items on the cart badge, or 0 if badge is not present.
    */
   async getCartCount() {
     const count = await this.cartBadge.count();
@@ -73,7 +75,8 @@ export class ProductsPage extends BasePage {
   }
 
   /**
-   * Clicks on cart badge icon to open 'View cart' page
+   * Clicks the shopping cart link to navigate to the cart page.
+   * @returns Promise that resolves when the shopping cart link is clicked.
    */
   async viewCart() {
     await this.shoppingCartLink.click();

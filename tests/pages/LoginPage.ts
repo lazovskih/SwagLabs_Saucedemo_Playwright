@@ -1,10 +1,10 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { ProductsPage } from "./ProductsPage";
 
 export class LoginPage extends BasePage {
   pageTitleText = "Swag Labs";
-  pageUrl = "/";
+  pageUrl = ""; // Resolves to baseURL, since this is the root (login) page.
 
   // Page locators
   readonly usernameField: Locator;
@@ -27,9 +27,10 @@ export class LoginPage extends BasePage {
   }
 
   /**
-   * Login with username and password
-   * @param username
-   * @param password
+   * Navigates to the login page and submits credentials.
+   * @param username - Username credential.
+   * @param password - Password credential.
+   * @returns Promise that resolves when credentials have been submitted.
    */
   async login(username: string, password: string) {
     await this.open();
@@ -43,44 +44,26 @@ export class LoginPage extends BasePage {
   }
 
   /**
-   * Login as locked out user
+   * Attempts login using locked-out user credentials from environment variables.
+   * @returns Promise that resolves when the login attempt completes.
    */
   async loginAsLockedOutUser() {
     await this.login(process.env.LOCKED_OUT_USER!, process.env.DEMO_PASSWORD!);
   }
 
   /**
-   * Check if error message is visible
+   * Checks if the login error message banner is visible.
+   * @returns Promise resolving to true if error message is visible, false otherwise.
    */
   async isErrorMessageVisible() {
     return await this.errorMessage.isVisible();
   }
 
+  /**
+   * Retrieves the text content from the login error message element.
+   * @returns Promise resolving to the error message text, or null if not present.
+   */
   async getErrorMessageText() {
     return await this.errorMessage.textContent();
-  }
-
-  /**
-   * Clear username field
-   */
-  async clearUsername(): Promise<void> {
-    await this.usernameField.clear();
-  }
-
-  /**
-   * Clear password field
-   */
-  async clearPassword(): Promise<void> {
-    await this.passwordField.clear();
-  }
-
-  /**
-   * Wait for login page to load
-   */
-  async isLoaded(): Promise<void> {
-    // Use web-first assertions for automatic retries and explicit failure messages
-    await expect(this.usernameField).toBeVisible();
-    await expect(this.passwordField).toBeVisible();
-    await expect(this.loginButton).toBeVisible();
   }
 }

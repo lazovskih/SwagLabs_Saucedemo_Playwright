@@ -20,21 +20,24 @@ export class CheckoutComplete extends BasePage {
     this.backHomeButton = page.locator('[data-test="back-home"]');
   }
   /**
-   * Get complete text
+   * Retrieves the order completion description text.
+   * @returns Promise resolving to the completion text content, or null if not found.
    */
   async getCompleteText(): Promise<string | null> {
     return this.completeTextElement.textContent();
   }
 
   /**
-   * Click back home button
+   * Clicks the 'Back Home' button to return to the inventory page.
+   * @returns Promise that resolves when the back home button is clicked.
    */
   async clickBackHome() {
     await this.backHomeButton.click();
   }
 
   /**
-   * Check if checkout is complete
+   * Checks if the checkout complete header is visible.
+   * @returns Promise resolving to true if the complete header is visible, false otherwise.
    */
   async isCheckoutComplete(): Promise<boolean> {
     return this.completeHeader.isVisible();
