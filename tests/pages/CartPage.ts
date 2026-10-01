@@ -11,16 +11,14 @@ export class CartPage extends BasePage {
   readonly cartItems: Locator;
   readonly checkoutButton: Locator;
   readonly continueShoppingButton: Locator;
-  readonly primaryHeader: Locator;
-  readonly completeHeader: Locator;
+  readonly pageTitle: Locator;
 
   constructor(page: Page) {
     super(page);
     this.cartItems = page.locator(".cart_item");
     this.checkoutButton = page.locator('[data-test="checkout"]');
     this.continueShoppingButton = page.locator('[data-test="continue-shopping"]');
-    this.primaryHeader = page.locator('[data-test="title"]');
-    this.completeHeader = page.locator('[data-test="title"]');
+    this.pageTitle = page.locator('[data-test="title"]');
   }
 
   /**

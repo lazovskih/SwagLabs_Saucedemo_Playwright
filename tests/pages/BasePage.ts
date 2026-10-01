@@ -12,9 +12,6 @@ export abstract class BasePage {
   private readonly AboutMenu: Locator;
   private readonly logoutMenu: Locator;
 
-  abstract primaryHeader: Locator;
-  readonly completeHeader: Locator;
-
   constructor(page: Page) {
     this.page = page;
     this.pageTitle = page.locator('[data-test="title"]');
@@ -23,7 +20,6 @@ export abstract class BasePage {
     this.allItemsMenu = page.locator('[data-test="inventory-sidebar-link"]');
     this.AboutMenu = page.locator('[data-test="about-sidebar-link"]');
     this.logoutMenu = page.locator("#logout_sidebar_link");
-    this.completeHeader = page.locator('[data-test="complete-header"]');
   }
 
   /**
@@ -31,24 +27,16 @@ export abstract class BasePage {
    * @returns Promise that resolves when navigation and load state are complete.
    */
   async open() {
-    await this.page.goto(this.pageUrl, { waitUntil: "load" });
+    await this.page.goto(this.pageUrl, { waitUntil: "domcontentloaded" });
     await this.isLoaded();
   }
 
   /**
-   * Confirms whether the page title matches the expected page title.
-   * @returns Promise resolving to true if page title matches the expected title, false otherwise.
-   */
-  async pageIsOpened() {
-    return (await this.pageTitle.textContent()) == this.pageTitleText;
-  }
-
-  /**
-   * Waits for the page DOMContentLoaded event to fire.
+   * Waits for the "load" event to fire.
    * @returns Promise that resolves when DOM content is loaded.
    */
   async isLoaded(): Promise<void> {
-    return await this.page.waitForLoadState("domcontentloaded");
+    return await this.page.waitForLoadState("load");
   }
 
   /**
@@ -75,13 +63,5 @@ export abstract class BasePage {
   async clickLogoutMenu() {
     await this.clickMenuButton();
     await this.logoutMenu.click();
-  }
-
-  /**
-   * Retrieves the complete header text after finishing an order.
-   * @returns Promise resolving to the header text content, or null if not found.
-   */
-  async getCompleteHeaderText() {
-    return await this.completeHeader.textContent();
   }
 }

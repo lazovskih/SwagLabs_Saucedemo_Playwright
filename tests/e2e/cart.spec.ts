@@ -20,7 +20,10 @@ test.describe("2. Shopping cart flow", () => {
   test("2.1 Adds selected products to the cart and verifies cart contents", async () => {
     // Add products to cart
     await productsPage.addProductsToCart([products[0], products[1]]);
-    expect(await productsPage.getCartCount()).toBe(2);
+    // expect(await productsPage.getCartCount()).toBe(2); // TODO: remove
+
+    expect(cartPage.cartItems, "Confirm list of cart items count is valid").toHaveCount(2);
+    await expect(productsPage.cartBadge, "Confirm cart badge count is valid").toHaveText("2");
 
     // Open shopping cart
     await productsPage.viewCart();
@@ -101,7 +104,7 @@ test.describe("2. Shopping cart flow", () => {
   });
 
   test("2.5 Remove button on products page should not be present for items removed from cart", async () => {
-    // Add 3 items
+    // Add product items
     const productsList = [products[0], products[1], products[2], products[3]];
     await productsPage.addProductsToCart(productsList);
 
@@ -109,7 +112,7 @@ test.describe("2. Shopping cart flow", () => {
     await productsPage.viewCart();
 
     // Verify cart page title, then start checkout
-    expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
+    await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Remove 2 items from the cart
     await cartPage.removeProduct(productsList[0]);

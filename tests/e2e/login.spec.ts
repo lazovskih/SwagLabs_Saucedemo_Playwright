@@ -27,10 +27,12 @@ test.describe("1. Login page", () => {
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    expect(await productsPage.getCurrentUrl()).toContain(productsPage.pageUrl);
+    // const pageUrlRegex = `.*${productsPage.pageUrl}`; // TODO: remove regex - use exact URL
+    // await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl); // TODO: remove regex - use exact URL
+    await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
 
     // Verify Products page title
-    await expect(productsPage.pageTitle).toHaveText(productsPage.pageTitleText);
+    await expect(productsPage.pageTitle, "Confirm page title is valid").toHaveText(productsPage.pageTitleText);
   });
 
   /**
@@ -44,9 +46,12 @@ test.describe("1. Login page", () => {
     await page.waitForLoadState();
     await loginPage.loginButton.click();
 
-    // Verify error message is displayed
-    expect(await loginPage.isErrorMessageVisible(), "Error message should be visible").toBe(true);
-    expect(await loginPage.getErrorMessageText(), "Error message text should match").toBe(loginPage.errorMessageText);
+    // Verify error message is displayed // TODO: remove
+    // expect(await loginPage.isErrorMessageVisible(), "Error message should be visible").toBe(true); // TODO: remove
+    // expect(await loginPage.getErrorMessageText(), "Error message text should match").toBe(loginPage.errorMessageText); // TODO: remove
+
+    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
+    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.errorMessageText);
 
     // Verify still on login page
     await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
@@ -60,7 +65,10 @@ test.describe("1. Login page", () => {
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    await expect(page).toHaveURL(/.*inventory.html/);
+    // const pageUrlRegex = `.*${productsPage.pageUrl}`;
+    // await expect(page, "Confirm 'Products' page is displayed").toHaveURL(pageUrlRegex);
+    // const pageUrlRegex = `.*${productsPage.pageUrl}`; // TODO: remove regex - use exact URL
+    await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
 
     // Click logout
     await productsPage.clickLogoutMenu();

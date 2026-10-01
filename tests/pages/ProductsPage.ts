@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { getProductId } from "tests/utilities/formatters";
+import { getProductId } from "@helpers/formatters";
 import { Product } from "@data-types";
 
 export class ProductsPage extends BasePage {
@@ -11,14 +11,14 @@ export class ProductsPage extends BasePage {
   readonly inventoryItems: Locator;
   readonly cartBadge: Locator;
   readonly shoppingCartLink: Locator;
-  readonly primaryHeader: Locator;
+  readonly pageTitle: Locator;
 
   constructor(page: Page) {
     super(page);
     this.inventoryItems = page.locator('[data-test="inventory-item"]');
     this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
     this.shoppingCartLink = page.locator('[data-test="shopping-cart-link"]');
-    this.primaryHeader = page.locator('[data-test="title"]');
+    this.pageTitle = page.locator('[data-test="title"]');
   }
 
   /**
@@ -48,7 +48,6 @@ export class ProductsPage extends BasePage {
     await this.getAddToCartButton(product).click();
 
     const removeProductButton = this.getRemoveButton(product);
-    await removeProductButton.waitFor({ state: "attached" });
     await removeProductButton.waitFor({ state: "visible" });
   }
 

@@ -1,6 +1,5 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { ProductsPage } from "./ProductsPage";
 
 export class LoginPage extends BasePage {
   pageTitleText = "Swag Labs";
@@ -11,7 +10,7 @@ export class LoginPage extends BasePage {
   readonly passwordField: Locator;
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
-  readonly primaryHeader: Locator;
+  readonly pageTitle: Locator;
 
   readonly errorMessageText = "Epic sadface: Username and password do not match any user in this service";
   readonly noAccessMessageText = "Epic sadface: You can only access '/inventory.html' when you are logged in.";
@@ -23,7 +22,7 @@ export class LoginPage extends BasePage {
     this.passwordField = page.locator('[data-test="password"]');
     this.loginButton = page.locator('[data-test="login-button"]');
     this.errorMessage = page.locator('[data-test="error"]');
-    this.primaryHeader = page.locator("div.login_logo");
+    this.pageTitle = page.locator("div.login_logo");
   }
 
   /**
@@ -39,8 +38,6 @@ export class LoginPage extends BasePage {
     await this.passwordField.fill(password);
     await this.page.waitForLoadState();
     await this.loginButton.click();
-
-    const productsPage = new ProductsPage(this.page);
   }
 
   /**
