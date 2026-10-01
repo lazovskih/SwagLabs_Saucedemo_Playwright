@@ -16,5 +16,5 @@
       "@data-types": ["tests/types/index"]
     }
   },
-  "include": ["**/*.ts", "**/*.json", "tests/utilities/dataLoader._s", "tests/fixtures/auth.fixture._s"]
+  "include": ["**/*.ts", "**/*.json"]
 }

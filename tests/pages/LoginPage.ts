@@ -40,7 +40,6 @@ export class LoginPage extends BasePage {
     await this.loginButton.click();
 
     const productsPage = new ProductsPage(this.page);
-    // await expect(productsPage.pageTitle).toBeVisible(); // TODO: remove assertion
   }
 
   /**

@@ -43,13 +43,6 @@ export class CartPage extends BasePage {
   /**
    * Start checkout
    */
-  async startCheckout_OLD() { // TODO: delete
-    await this.SafeClick(this.checkoutButton);
-  }
-
-  /**
-   * Start checkout
-   */
   async startCheckout() {
     await this.checkoutButton.click();
   }
@@ -60,13 +53,6 @@ export class CartPage extends BasePage {
    */
   async removeProduct(product: Product) {
     await this.page.locator(`[data-test="remove-${getProductId(product)}"]`).click();
-  }
-
-  /**
-   * Continue shopping
-   */
-  async continueShopping_OLD() { // TODO: delete
-    await this.SafeClick(this.continueShoppingButton);
   }
 
   /**

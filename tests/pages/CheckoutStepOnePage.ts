@@ -38,13 +38,6 @@ export class CheckoutStepOnePage extends BasePage {
   /**
    * Continue checkout
    */
-  async continueCheckout_OLD() { // TODO: delete
-    await this.SafeClick(this.continueButton);
-  }
-
-  /**
-   * Continue checkout
-   */
   async continueCheckout() {
     await this.continueButton.click();
   }

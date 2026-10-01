@@ -79,20 +79,17 @@ test.describe("Checkout flow", () => {
     // Verify checkout step two page title
     await expect(checkoutStepTwoPage.pageTitle).toHaveText(checkoutStepTwoPage.pageTitleText);
 
-    // Scroll to bottom to ensure all elements are visible
-    // await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));// TODO: remove scroll
-
     // Verify subtotal, tax, and total amounts
     const actualSubtotal = await checkoutStepTwoPage.getSubtotal();
     const expectedSubtotal = products[1].Price + products[2].Price;
 
-    await expect(actualSubtotal, "Subtotal is correct").toEqual(expectedSubtotal);
+    expect(actualSubtotal, "Subtotal is correct").toEqual(expectedSubtotal);
 
     // Calculate expected total based on subtotal and tax, then verify total
     const actualTax = await checkoutStepTwoPage.getTax();
     const expectedTotal = (expectedSubtotal + actualTax).toFixed(2);
     const actualTotal = (await checkoutStepTwoPage.getTotal()).toFixed(2);
 
-    await expect(actualTotal, "Total is correct").toEqual(expectedTotal);
+    expect(actualTotal, "Total is correct").toEqual(expectedTotal);
   });
 });

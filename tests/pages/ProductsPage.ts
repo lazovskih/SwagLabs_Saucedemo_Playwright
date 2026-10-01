@@ -75,13 +75,6 @@ export class ProductsPage extends BasePage {
   /**
    * Clicks on cart badge icon to open 'View cart' page
    */
-  async viewCart_OLD() { // TODO: delete
-    await this.SafeClick(this.shoppingCartLink);
-  }
-
-  /**
-   * Clicks on cart badge icon to open 'View cart' page
-   */
   async viewCart() {
     await this.shoppingCartLink.click();
   }
