@@ -27,8 +27,6 @@ test.describe("1. Login page", () => {
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    // const pageUrlRegex = `.*${productsPage.pageUrl}`; // TODO: remove regex - use exact URL
-    // await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl); // TODO: remove regex - use exact URL
     await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
 
     // Verify Products page title
@@ -46,10 +44,7 @@ test.describe("1. Login page", () => {
     await page.waitForLoadState();
     await loginPage.loginButton.click();
 
-    // Verify error message is displayed // TODO: remove
-    // expect(await loginPage.isErrorMessageVisible(), "Error message should be visible").toBe(true); // TODO: remove
-    // expect(await loginPage.getErrorMessageText(), "Error message text should match").toBe(loginPage.errorMessageText); // TODO: remove
-
+    // Verify error message is displayed 
     await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
     await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.errorMessageText);
 
@@ -65,9 +60,6 @@ test.describe("1. Login page", () => {
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    // const pageUrlRegex = `.*${productsPage.pageUrl}`;
-    // await expect(page, "Confirm 'Products' page is displayed").toHaveURL(pageUrlRegex);
-    // const pageUrlRegex = `.*${productsPage.pageUrl}`; // TODO: remove regex - use exact URL
     await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
 
     // Click logout

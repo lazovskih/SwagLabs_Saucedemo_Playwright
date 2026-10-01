@@ -31,7 +31,6 @@ test.describe("3. Checkout flow", () => {
     // Add products to cart
     const productsList = [products[2]];
     await productsPage.addProductsToCart(productsList);
-    // expect(await productsPage.getCartCount(), "Confirm cart count is valid").toBe(1); // TODO: remove
 
     // Verify cart badge count on 'Products' page
     await expect(productsPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText("1");
@@ -73,7 +72,6 @@ test.describe("3. Checkout flow", () => {
     // Add multiple products to cart
     const productsList = [products[2], products[1]];
     await productsPage.addProductsToCart(productsList);
-    // expect(await productsPage.getCartCount(), "Confirm cart count is valid").toBe(productsList.length); // TODO: remove
 
     expect(cartPage.cartItems, "Confirm list of cart items count is valid").toHaveCount(productsList.length);
     await expect(productsPage.cartBadge, "Confirm cart badge count is valid").toHaveText(productsList.length.toString());

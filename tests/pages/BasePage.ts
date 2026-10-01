@@ -59,7 +59,6 @@ export abstract class BasePage {
   async clickMenuButton() {
     // Implementation that works better for webkit browser and others
     await this.mainMenuButton.click({ delay: 100, force: true });
-    // await this.sideMenu.isVisible(); // TODO: remove
     await this.sideMenu.waitFor({ state: "visible" });
   }
 

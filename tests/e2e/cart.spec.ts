@@ -23,7 +23,6 @@ test.describe("2. Shopping cart flow", () => {
 
     // Add products to cart
     await productsPage.addProductsToCart([products[0], products[1]]);
-    // expect(await productsPage.getCartCount()).toBe(2); // TODO: remove
 
     // Verify cart badge count on 'Products' page
     await expect(productsPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText("2");
