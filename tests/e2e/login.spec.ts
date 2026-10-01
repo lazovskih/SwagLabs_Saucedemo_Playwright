@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { ProductsPage } from "../pages/ProductsPage";
 
+test.use({ storageState: { cookies: [], origins: [] } });
 /**
  * Login Test Scenarios for SauceDemo
  */
@@ -26,10 +27,10 @@ test.describe("Login page", () => {
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-   await expect(await productsPage.getCurrentUrl()).toContain(productsPage.pageUrl);
+    expect(await productsPage.getCurrentUrl()).toContain(productsPage.pageUrl);
 
     // Verify Products page title
-   await expect(productsPage.pageTitle).toHaveText(productsPage.pageTitleText);
+    await expect(productsPage.pageTitle).toHaveText(productsPage.pageTitleText);
   });
 
   /**

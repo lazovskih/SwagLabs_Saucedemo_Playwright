@@ -38,20 +38,36 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // 1. Setup project executes first
+    {
+      name: "setup",
+      testMatch: /.*\.setup\.ts/,
+    },
+
+    // 2. Dependent browser projects execute after 'setup' passes
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "playwright/.auth/user.json",
+      },
+      dependencies: ["setup"],
     },
-
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-      workers: 1,
+      use: {
+        ...devices["Desktop Firefox"],
+        storageState: "playwright/.auth/user.json",
+      },
+      dependencies: ["setup"],
     },
-
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      use: {
+        ...devices["Desktop Safari"],
+        storageState: "playwright/.auth/user.json",
+      },
+      dependencies: ["setup"],
     },
 
     /* Test against mobile viewports. */

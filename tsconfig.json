@@ -4,7 +4,7 @@
     "module": "CommonJS",
     "lib": ["DOM", "ES2020"],
     "strict": true,
-
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["node"],
@@ -15,5 +15,5 @@
       "@pages/*": ["tests/pages/*"]
     }
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "**/*.json", "tests/utilities/dataLoader._s", "tests/fixtures/auth.fixture._s"]
 }

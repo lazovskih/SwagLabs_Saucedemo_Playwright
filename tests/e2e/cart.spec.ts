@@ -1,9 +1,9 @@
-import { test, expect } from "../fixtures";
+import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
-import { loadTestData, ProductData } from "../utilities/dataLoader";
 
-const products = loadTestData<ProductData>("products");
+// Import test data 
+import products from "../../data/products.json";
 
 test.describe("Shopping cart flow", () => {
   let productsPage: ProductsPage;

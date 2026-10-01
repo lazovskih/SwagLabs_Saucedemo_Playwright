@@ -31,7 +31,7 @@ export abstract class BasePage {
    * @returns load state promise<void>
    */
   async open() {
-    await this.page.goto(this.pageUrl, { waitUntil: "domcontentloaded" });
+    await this.page.goto(this.pageUrl, { waitUntil: "load" });
     await this.isLoaded();
   }
 
@@ -48,7 +48,7 @@ export abstract class BasePage {
    * @returns load state promise<void>
    */
   async isLoaded(): Promise<void> {
-    return await this.page.waitForLoadState("load");
+    return await this.page.waitForLoadState("domcontentloaded");
   }
 
   /**

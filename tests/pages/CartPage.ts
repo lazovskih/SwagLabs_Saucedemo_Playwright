@@ -42,8 +42,15 @@ export class CartPage extends BasePage {
   /**
    * Start checkout
    */
-  async startCheckout() {
+  async startCheckout_OLD() { // TODO: delete
     await this.SafeClick(this.checkoutButton);
+  }
+
+  /**
+   * Start checkout
+   */
+  async startCheckout() {
+    await this.checkoutButton.click();
   }
 
   /**

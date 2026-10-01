@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { ShippingData } from "../utilities/dataLoader";
+import { ShippingData } from "../utilities/dataLoader._s";
 
 export class CheckoutStepOnePage extends BasePage {
   pageTitleText = "Checkout: Your Information";
