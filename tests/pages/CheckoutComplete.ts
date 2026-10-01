@@ -9,7 +9,6 @@ export class CheckoutComplete extends BasePage {
   readonly backHomeButton: Locator;
 
   readonly completeHeader: Locator;
-  readonly pageTitle: Locator;
   readonly completeHeaderText = "Thank you for your order!";
   readonly completeText = "Your order has been dispatched, and will arrive just as fast as the pony can get there!";
 
@@ -17,7 +16,6 @@ export class CheckoutComplete extends BasePage {
     super(page);
 
     // Initialize locators using data-test attribute
-    this.pageTitle = page.locator('[data-test="title"]');
     this.completeTextElement = page.locator('[data-test="complete-text"]');
     this.backHomeButton = page.locator('[data-test="back-home"]');
     this.completeHeader = page.locator('[data-test="complete-header"]');

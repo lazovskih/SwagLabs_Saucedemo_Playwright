@@ -11,7 +11,6 @@ export class CheckoutStepOnePage extends BasePage {
   readonly lastNameField: Locator;
   readonly postalCodeField: Locator;
   readonly continueButton: Locator;
-  readonly pageTitle: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -20,7 +19,6 @@ export class CheckoutStepOnePage extends BasePage {
     this.lastNameField = page.locator('[data-test="lastName"]');
     this.postalCodeField = page.locator('[data-test="postalCode"]');
     this.continueButton = page.locator('[data-test="continue"]');
-    this.pageTitle = page.locator('[data-test="title"]');
   }
 
   /**

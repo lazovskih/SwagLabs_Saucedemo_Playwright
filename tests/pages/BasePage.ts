@@ -12,6 +12,9 @@ export abstract class BasePage {
   private readonly AboutMenu: Locator;
   private readonly logoutMenu: Locator;
 
+  readonly cartBadge: Locator;
+  readonly cartLink: Locator;
+
   constructor(page: Page) {
     this.page = page;
     this.pageTitle = page.locator('[data-test="title"]');
@@ -20,6 +23,8 @@ export abstract class BasePage {
     this.allItemsMenu = page.locator('[data-test="inventory-sidebar-link"]');
     this.AboutMenu = page.locator('[data-test="about-sidebar-link"]');
     this.logoutMenu = page.locator("#logout_sidebar_link");
+    this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
+    this.cartLink = page.locator('[data-test="shopping-cart-link"]');
   }
 
   /**
@@ -52,8 +57,10 @@ export abstract class BasePage {
    * @returns Promise that resolves when the menu button is clicked.
    */
   async clickMenuButton() {
+    // Implementation that works better for webkit browser and others
     await this.mainMenuButton.click({ delay: 100, force: true });
-    await this.sideMenu.isVisible();
+    // await this.sideMenu.isVisible(); // TODO: remove
+    await this.sideMenu.waitFor({ state: "visible" });
   }
 
   /**

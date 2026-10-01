@@ -18,15 +18,24 @@ test.describe("2. Shopping cart flow", () => {
   });
 
   test("2.1 Adds selected products to the cart and verifies cart contents", async () => {
+    // Verify cart link on 'Products' page has no numbers when opened first time
+    await expect(productsPage.cartLink, "Confirm cart link is empty on 'Products' page").toHaveText("");
+
     // Add products to cart
     await productsPage.addProductsToCart([products[0], products[1]]);
     // expect(await productsPage.getCartCount()).toBe(2); // TODO: remove
 
-    expect(cartPage.cartItems, "Confirm list of cart items count is valid").toHaveCount(2);
-    await expect(productsPage.cartBadge, "Confirm cart badge count is valid").toHaveText("2");
+    // Verify cart badge count on 'Products' page
+    await expect(productsPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText("2");
 
     // Open shopping cart
     await productsPage.viewCart();
+
+    // Verify cart badge count on 'Shopping Cart' page
+    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText("2");
+
+    // Verify list of cart items count
+    await expect(cartPage.cartItems, "Confirm list of cart items count is valid").toHaveCount(2);
 
     // Verify cart page title, then start checkout
     await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
@@ -101,6 +110,9 @@ test.describe("2. Shopping cart flow", () => {
         await expect(productsPage.cartBadge).toHaveText(expectedCount.toString());
       }
     }
+
+    // Verify cart link on 'Products' page has no numbers when all items are removed
+    await expect(productsPage.cartLink, "Confirm cart link is empty on 'Products' page").toHaveText("");
   });
 
   test("2.5 Remove button on products page should not be present for items removed from cart", async () => {

@@ -8,7 +8,6 @@ setup("authenticate", async ({ page }) => {
     const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
 
-    await loginPage.open();
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     const pageUrlRegex = `.*${productsPage.pageUrl}`;
@@ -16,6 +15,7 @@ setup("authenticate", async ({ page }) => {
     if (currentPageUrl.match(pageUrlRegex)) {
         await page.context().storageState({ path: authFile });
     } else {
-        throw new Error(`Auth setup failed for user ${process.env.STANDARD_USER}. Current URL: ${currentPageUrl}, Expected URL: ${pageUrlRegex}`);
+        throw new Error(`Auth setup failed for user ${process.env.STANDARD_USER}.
+Verify credentials present and valid in .env file or environment variables.`);
     }
 });

@@ -33,14 +33,23 @@ test.describe("3. Checkout flow", () => {
     await productsPage.addProductsToCart(productsList);
     // expect(await productsPage.getCartCount(), "Confirm cart count is valid").toBe(1); // TODO: remove
 
-    expect(cartPage.cartItems, "Confirm list of cart items count is valid").toHaveCount(productsList.length);
-    await expect(productsPage.cartBadge, "Confirm cart badge count is valid").toHaveText(productsList.length.toString());
+    // Verify cart badge count on 'Products' page
+    await expect(productsPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText("1");
+
+    // Verify cart badge count on  'Products' page
+    await expect(productsPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText("1");
 
     // Open shopping cart
     await productsPage.viewCart();
 
+    // Verify cart badge count on 'Shopping Cart' page
+    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText("1");
+
+    // Verify list of cart items count
+    await expect(cartPage.cartItems, "Confirm list of cart items count is valid").toHaveCount(1);
+
     // Verify cart page title, then start checkout
-    await expect(cartPage.pageTitle, "Confirm page title is valid").toHaveText(cartPage.pageTitleText);
+    await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Start checkout
     await cartPage.startCheckout();

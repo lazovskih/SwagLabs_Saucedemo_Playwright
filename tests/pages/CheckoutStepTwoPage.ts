@@ -12,13 +12,9 @@ export class CheckoutStepTwoPage extends BasePage {
   private readonly summaryTotal: Locator;
   private readonly finishButton: Locator;
   private readonly cancelLink: Locator;
-  readonly pageTitle: Locator;
 
   constructor(page: Page) {
     super(page);
-
-    // Initialize locators using data-test attribute - Step One
-    this.pageTitle = page.locator('[data-test="title"]');
 
     // Step Two locators
     this.summaryInfo = page.locator('[data-test="summary-info"]');

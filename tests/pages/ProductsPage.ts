@@ -9,16 +9,12 @@ export class ProductsPage extends BasePage {
 
   // Page locators
   readonly inventoryItems: Locator;
-  readonly cartBadge: Locator;
   readonly shoppingCartLink: Locator;
-  readonly pageTitle: Locator;
 
   constructor(page: Page) {
     super(page);
     this.inventoryItems = page.locator('[data-test="inventory-item"]');
-    this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
     this.shoppingCartLink = page.locator('[data-test="shopping-cart-link"]');
-    this.pageTitle = page.locator('[data-test="title"]');
   }
 
   /**
