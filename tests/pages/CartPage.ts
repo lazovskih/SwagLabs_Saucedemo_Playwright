@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { getProductId } from "tests/utilities/formatters";
+import { Product } from "@data-types";
 
 export class CartPage extends BasePage {
   pageTitleText = "Your Cart";
@@ -24,11 +25,11 @@ export class CartPage extends BasePage {
 
   /**
    * Gets the number of occurrences of a product in the cart.
-   * @param productName - Name of the product to count.
+   * @param product as product object
    * @returns A promise that resolves to the number of matching cart items.
    */
-  async getProductCount(productName: string) {
-    return await this.cartItems.filter({ hasText: productName }).count();
+  async getProductCount(product: Product) {
+    return await this.cartItems.filter({ hasText: product.Name }).count();
   }
 
   /**
@@ -55,16 +56,23 @@ export class CartPage extends BasePage {
 
   /**
    * Remove product
-   * @param productName
+   * @param product as product object
    */
-  async removeProduct(productName: string) {
-    await this.page.locator(`[data-test="remove-${getProductId(productName)}"]`).click();
+  async removeProduct(product: Product) {
+    await this.page.locator(`[data-test="remove-${getProductId(product)}"]`).click();
+  }
+
+  /**
+   * Continue shopping
+   */
+  async continueShopping_OLD() { // TODO: delete
+    await this.SafeClick(this.continueShoppingButton);
   }
 
   /**
    * Continue shopping
    */
   async continueShopping() {
-    await this.SafeClick(this.continueShoppingButton);
+    await this.continueShoppingButton.click();
   }
 }

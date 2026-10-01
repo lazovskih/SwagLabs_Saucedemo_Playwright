@@ -19,7 +19,7 @@ test.describe("Shopping cart flow", () => {
 
   test("Adds selected products to the cart and verifies cart contents", async () => {
     // Add products to cart
-    await productsPage.addProductsToCart([products[0].Name, products[1].Name]);
+    await productsPage.addProductsToCart([products[0], products[1]]);
     expect(await productsPage.getCartCount()).toBe(2);
 
     // Open shopping cart
@@ -29,18 +29,18 @@ test.describe("Shopping cart flow", () => {
     await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Verify specific products present on the shopping cart page
-    expect(await cartPage.getProductCount(products[0].Name)).toBe(1);
-    expect(await cartPage.getProductCount(products[1].Name)).toBe(1);
+    expect(await cartPage.getProductCount(products[0])).toBe(1);
+    expect(await cartPage.getProductCount(products[1])).toBe(1);
 
     // Verify count on the shopping cart badge icon
     expect(await cartPage.getItemCount()).toBe(2);
   });
 
   test("Button changes from 'Add to cart' to 'Remove' when clicked", async () => {
-    const productName = products[0].Name;
+    const product = products[0];
 
-    const addToCartButton = productsPage.getAddToCartButton(productName);
-    const removeButton = productsPage.getRemoveButton(productName);
+    const addToCartButton = productsPage.getAddToCartButton(product);
+    const removeButton = productsPage.getRemoveButton(product);
 
     // Verify initial state
     await expect(addToCartButton).toBeVisible();
@@ -57,8 +57,8 @@ test.describe("Shopping cart flow", () => {
   test("Button changes from 'Remove' to 'Add to cart' when clicked", async () => {
     // Loop through all products
     for (const product of products) {
-      const addToCartButton = productsPage.getAddToCartButton(product.Name);
-      const removeButton = productsPage.getRemoveButton(product.Name);
+      const addToCartButton = productsPage.getAddToCartButton(product);
+      const removeButton = productsPage.getRemoveButton(product);
 
       // Add to cart first
       await addToCartButton.click();
@@ -78,7 +78,7 @@ test.describe("Shopping cart flow", () => {
 
     // Add all items and verify badge count increments
     for (const product of products) {
-      const addToCartButton = productsPage.getAddToCartButton(product.Name);
+      const addToCartButton = productsPage.getAddToCartButton(product);
       await addToCartButton.click();
       expectedCount++;
 
@@ -88,7 +88,7 @@ test.describe("Shopping cart flow", () => {
 
     // Remove all items and verify badge count decrements
     for (const product of products) {
-      const removeButton = productsPage.getRemoveButton(product.Name);
+      const removeButton = productsPage.getRemoveButton(product);
       await removeButton.click();
       expectedCount--;
 
@@ -102,7 +102,7 @@ test.describe("Shopping cart flow", () => {
 
   test("Remove button on products page should not be present for items removed from cart", async () => {
     // Add 3 items
-    await productsPage.addProductsToCart([products[0].Name, products[1].Name, products[2].Name]);
+    await productsPage.addProductsToCart([products[0], products[1], products[2]]);
 
     // Open shopping cart
     await productsPage.viewCart();
@@ -111,15 +111,15 @@ test.describe("Shopping cart flow", () => {
     expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Remove 2 items from the cart
-    await cartPage.removeProduct(products[0].Name);
-    await cartPage.removeProduct(products[1].Name);
+    await cartPage.removeProduct(products[0]);
+    await cartPage.removeProduct(products[1]);
 
     // Go back to products list
     await cartPage.continueShopping();
 
     // Verify the "Remove" button is NOT present for those removed items
     for (let i = 0; i < 1; i++) {
-      const button = await productsPage.getRemoveButton(products[i].Name);
+      const button = await productsPage.getRemoveButton(products[i]);
       await expect(button).toBeHidden();
     }
   });

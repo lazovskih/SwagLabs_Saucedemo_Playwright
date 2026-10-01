@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { getProductId } from "tests/utilities/formatters";
+import { Product } from "@data-types";
 
 export class ProductsPage extends BasePage {
   pageTitleText = "Products";
@@ -22,47 +23,47 @@ export class ProductsPage extends BasePage {
 
   /**
    * Gets the 'Add to cart' button for a specified product.
-   * @param productName - Name of the product.
-   * @returns A Playwright locator for the product's add-to-cart button.
+   * @param product as product object
+   * @returns Playwright locator for the product's add-to-cart button
    */
-  getAddToCartButton(productName: string) {
-    return this.page.locator(`[data-test="add-to-cart-${getProductId(productName)}"]`);
+  getAddToCartButton(product: Product) {
+    return this.page.locator(`[data-test="add-to-cart-${getProductId(product)}"]`);
   }
 
   /**
    * Gets the 'Remove' button for a specified product.
-   * @param productName - Name of the product.
-   * @returns A Playwright locator for the product's add-to-cart button.
+   * @param product as product object
+   * @returns Playwright locator for the product's add-to-cart button
    */
-  getRemoveButton(productName: string) {
-    return this.page.locator(`[data-test="remove-${getProductId(productName)}"]`);
+  getRemoveButton(product: Product) {
+    return this.page.locator(`[data-test="remove-${getProductId(product)}"]`);
   }
 
   /**
    * Clicks 'Add to cart' button for a specified product.
-   * @param productName - Name of the product.
+   * @param product as product object
    */
-  async addProductToCart(productName: string) {
-    await this.getAddToCartButton(productName).click();
+  async addProductToCart(product: Product) {
+    await this.getAddToCartButton(product).click();
 
-    const removeProductButton = this.getRemoveButton(productName);
+    const removeProductButton = this.getRemoveButton(product);
     await removeProductButton.waitFor({ state: "attached" });
     await removeProductButton.waitFor({ state: "visible" });
   }
 
   /**
    * Clicks 'Add to cart' button for a specified products.
-   * @param productNames - Array with names of the product.
+   * @param products as array with products objects
    */
-  async addProductsToCart(productNames: string[]) {
-    for (const productName of productNames) {
-      await this.addProductToCart(productName);
+  async addProductsToCart(products: Product[]) {
+    for (const product of products) {
+      await this.addProductToCart(product);
     }
   }
 
   /**
    * Get cart count
-   * @returns Promise<number> count of the items on the cart badge icon
+   * @returns Promise<number> count of items on the cart badge icon
    */
   async getCartCount() {
     const count = await this.cartBadge.count();

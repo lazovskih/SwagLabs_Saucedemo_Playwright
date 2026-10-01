@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { ShippingData } from "../utilities/dataLoader._s";
+import type { ShippingData } from "@data-types";
 
 export class CheckoutStepOnePage extends BasePage {
   pageTitleText = "Checkout: Your Information";
@@ -38,8 +38,15 @@ export class CheckoutStepOnePage extends BasePage {
   /**
    * Continue checkout
    */
-  async continueCheckout() {
+  async continueCheckout_OLD() { // TODO: delete
     await this.SafeClick(this.continueButton);
+  }
+
+  /**
+   * Continue checkout
+   */
+  async continueCheckout() {
+    await this.continueButton.click();
   }
 
   /**

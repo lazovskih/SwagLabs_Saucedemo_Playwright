@@ -29,7 +29,7 @@ test.describe("Checkout flow", () => {
 
   test("Completes checkout for a selected product", async () => {
     // Add products to cart
-    await productsPage.addProductToCart(products[2].Name);
+    await productsPage.addProductToCart(products[2]);
     expect(await productsPage.getCartCount()).toBe(1);
 
     // Open shopping cart
@@ -57,7 +57,7 @@ test.describe("Checkout flow", () => {
 
   test("Completes checkout and verifies totals for multiple selected products", async ({ page }) => {
     // Add multiple products to cart
-    await productsPage.addProductsToCart([products[2].Name, products[1].Name]);
+    await productsPage.addProductsToCart([products[2], products[1]]);
     expect(await productsPage.getCartCount()).toBe(2);
 
     // Open shopping cart

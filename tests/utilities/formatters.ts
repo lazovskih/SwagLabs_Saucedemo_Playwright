@@ -1,3 +1,5 @@
+import { Product } from "@data-types";
+
 /**
  * Options to configure currency parsing behavior.
  */
@@ -10,11 +12,11 @@ export interface CurrencyParseOptions {
 
 /**
  * Get product ID
- * @param productName
+ * @param product as product object
  * @returns Normalized product id string
  */
-export function getProductId(productName: string) {
-  return productName.toLowerCase().replace(/\s+/g, "-");
+export function getProductId(product: Product) {
+  return product.Name.toLowerCase().replace(/\s+/g, "-");
 }
 
 /**

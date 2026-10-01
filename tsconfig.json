@@ -12,7 +12,8 @@
     "paths": {
       "@helpers/*": ["tests/utilities/*"],
       "@fixtures/*": ["tests/fixtures/*"],
-      "@pages/*": ["tests/pages/*"]
+      "@pages/*": ["tests/pages/*"],
+      "@data-types": ["tests/types/index"]
     }
   },
   "include": ["**/*.ts", "**/*.json", "tests/utilities/dataLoader._s", "tests/fixtures/auth.fixture._s"]
