@@ -42,12 +42,4 @@ export class LoginPage extends BasePage {
     await this.passwordField.fill(password);
     await this.loginButton.click();
   }
-
-  /**
-   * Attempts login using locked-out user credentials from environment variables.
-   * @returns Promise that resolves when the login attempt completes.
-   */
-  async loginAsLockedOutUser() {
-    await this.login(process.env.LOCKED_OUT_USER!, process.env.DEMO_PASSWORD!);
-  }
 }

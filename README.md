@@ -72,7 +72,7 @@ Create a `.env` file in the project root:
 cp .env.example .env   # if an example file is available, otherwise create manually
 ```
 
-Add your credentials to `.env`:
+Add your credentials to `.env` and to Environment secrets:
 
 ```env
 STANDARD_USER=set_username
