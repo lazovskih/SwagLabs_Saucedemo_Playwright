@@ -1,5 +1,10 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
+
+/**
+ * Checkout complete page.
+ * Handles item summaries and order completion.
+ */
 export class CheckoutComplete extends BasePage {
   pageTitleText = "Checkout: Complete!";
   pageUrl = "/checkout-complete.html";

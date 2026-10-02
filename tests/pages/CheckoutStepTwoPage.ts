@@ -1,6 +1,11 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { parseCurrencyToNumber } from "../utilities/formatters";
+import { parseCurrencyToNumber } from "../utilities";
+
+/**
+ * Checkout Step Two (overview) page.
+ * Handles item summaries and order completion.
+ */
 export class CheckoutStepTwoPage extends BasePage {
   pageTitleText = "Checkout: Overview";
   pageUrl = "/checkout-step-two.html";
@@ -57,6 +62,6 @@ export class CheckoutStepTwoPage extends BasePage {
    */
   async finishOrder() {
     await this.finishButton.click();
-    await this.isLoaded();
+    await this.page.waitForLoadState("load");
   }
 }

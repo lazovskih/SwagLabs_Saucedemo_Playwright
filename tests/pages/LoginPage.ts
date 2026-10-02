@@ -1,6 +1,10 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
+/**
+ * Login page.
+ * Handles login form and authentication.
+ */
 export class LoginPage extends BasePage {
   pageTitleText = "Swag Labs";
   pageUrl = ""; // Resolves to baseURL, since this is the root (login) page.
@@ -33,10 +37,8 @@ export class LoginPage extends BasePage {
    */
   async login(username: string, password: string) {
     await this.open();
-
     await this.usernameField.fill(username);
     await this.passwordField.fill(password);
-    await this.page.waitForLoadState();
     await this.loginButton.click();
   }
 
@@ -46,21 +48,5 @@ export class LoginPage extends BasePage {
    */
   async loginAsLockedOutUser() {
     await this.login(process.env.LOCKED_OUT_USER!, process.env.DEMO_PASSWORD!);
-  }
-
-  /**
-   * Checks if the login error message banner is visible.
-   * @returns Promise resolving to true if error message is visible, false otherwise.
-   */
-  async isErrorMessageVisible() {
-    return await this.errorMessage.isVisible();
-  }
-
-  /**
-   * Retrieves the text content from the login error message element.
-   * @returns Promise resolving to the error message text, or null if not present.
-   */
-  async getErrorMessageText() {
-    return await this.errorMessage.textContent();
   }
 }

@@ -161,8 +161,7 @@ Saucedemo_Playwright/
 │   │   ├── checkout.spec.ts        # Checkout and order placement tests
 │   │   └── login.spec.ts           # Authentication & session tests
 │   ├── fixtures/                   # Playwright setup & fixtures
-│   │   ├── auth.setup.ts           # Global authentication setup project
-│   │   └── index.ts                # Merged test and expect fixtures
+│   │   └── auth.setup.ts           # Global authentication setup project
 │   ├── pages/                      # Page Object Model (POM) classes
 │   │   ├── BasePage.ts             # Base page class with common methods & navigation
 │   │   ├── CartPage.ts             # Shopping cart page object
@@ -174,7 +173,7 @@ Saucedemo_Playwright/
 │   ├── types/                      # TypeScript type declarations
 │   │   └── index.ts                # Product and ShippingData interfaces
 │   └── utilities/                  # Helper utilities
-│       └── formatters.ts           # Currency parsing and product ID utilities
+│       └── utilities.ts            # Currency parsing and product ID utilities
 ├── playwright.config.ts            # Multi-browser & project dependency config
 ├── tsconfig.json                   # TypeScript configuration & path aliases
 ├── package.json                    # Project dependencies and npm scripts
