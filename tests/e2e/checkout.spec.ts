@@ -30,8 +30,8 @@ test.describe("3. Checkout flow", () => {
   test("3.1 Completes checkout for a selected product", async () => {
 
     const productsList = [products[2]];
-    const procuctsListCount = productsList.length;
-    const procuctsListCountStr = procuctsListCount.toString();
+    const productsListCount = productsList.length;
+    const procuctsListCountStr = productsListCount.toString();
 
     // Add product to cart
     await productsPage.addProductsToCart(productsList);
@@ -49,7 +49,7 @@ test.describe("3. Checkout flow", () => {
     await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(procuctsListCountStr);
 
     // Verify list of cart items count
-    await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(procuctsListCount);
+    await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(productsListCount);
 
     // Start checkout
     await cartPage.startCheckout();
@@ -77,8 +77,8 @@ test.describe("3. Checkout flow", () => {
   test("3.2 Completes checkout and verifies totals for multiple selected products", async () => {
 
     const productsList = [products[2], products[1], products[0]];
-    const procuctsListCount = productsList.length;
-    const procuctsListCountStr = procuctsListCount.toString();
+    const productsListCount = productsList.length;
+    const procuctsListCountStr = productsListCount.toString();
 
     // Add multiple products to cart
     await productsPage.addProductsToCart(productsList);
@@ -96,7 +96,7 @@ test.describe("3. Checkout flow", () => {
     await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(procuctsListCountStr);
 
     // Verify list of cart items count
-    await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(procuctsListCount);
+    await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(productsListCount);
 
     // Start checkout
     await cartPage.startCheckout();

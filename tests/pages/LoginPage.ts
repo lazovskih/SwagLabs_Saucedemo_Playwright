@@ -18,6 +18,7 @@ export class LoginPage extends BasePage {
 
   readonly errorMessageText = "Epic sadface: Username and password do not match any user in this service";
   readonly noAccessMessageText = "Epic sadface: You can only access '/inventory.html' when you are logged in.";
+  readonly lockedOutMessageText = "Epic sadface: Sorry, this user has been locked out.";
 
   constructor(page: Page) {
     super(page);

@@ -4,15 +4,12 @@ import { Product } from "@data-types";
 
 /**
  * Products page.
- * Handles item summaries and order completion.
+ * Handles product browsing and inventory interactions.
  */
 export class ProductsPage extends BasePage {
   pageTitleText = "Products";
   pageUrl = "/inventory.html";
 
-  constructor(page: Page) {
-    super(page);
-  }
   /**
    * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
    * Can be used on both 'Products' page

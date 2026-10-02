@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { parseCurrencyToNumber } from "../utilities";
+import { parseCurrencyToNumber } from "@helpers/index";
 
 /**
  * Checkout Step Two (overview) page.

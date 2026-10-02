@@ -53,7 +53,7 @@ test.describe("2. Shopping cart flow", () => {
 
   test("2.2 Button changes from 'Add to cart' to 'Remove' when clicked", async () => {
     const product = products[0];
-    const addToCartButton = productsPage.getButton(product, "add to cart");
+    const addToCartButton = productsPage.getButton(product, "add");
     const removeButton = productsPage.getButton(product, "remove");
 
     // Verify initial state

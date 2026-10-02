@@ -18,15 +18,5 @@
     "FirstName": "Bob",
     "LastName": "Marley",
     "PostalCode": "92103"
-  },
-    {
-    "FirstName": "Alice",
-    "LastName": "Cooper",
-    "PostalCode": "92103"
-  },
-  {
-    "FirstName": "Bob",
-    "LastName": "Marley",
-    "PostalCode": "92103"
   }
 ]

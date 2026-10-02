@@ -173,7 +173,7 @@ Saucedemo_Playwright/
 │   ├── types/                      # TypeScript type declarations
 │   │   └── index.ts                # Product and ShippingData interfaces
 │   └── utilities/                  # Helper utilities
-│       └── utilities.ts            # Currency parsing and product ID utilities
+│       └── index.ts                # Currency parsing and product ID utilities
 ├── playwright.config.ts            # Multi-browser & project dependency config
 ├── tsconfig.json                   # TypeScript configuration & path aliases
 ├── package.json                    # Project dependencies and npm scripts

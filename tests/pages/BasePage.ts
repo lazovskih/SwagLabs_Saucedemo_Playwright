@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { Product } from "@data-types";
+import type { Product, CartButtonAction } from "@data-types";
 import { getProductId } from "@helpers/index";
 
 export abstract class BasePage {
@@ -40,7 +40,6 @@ export abstract class BasePage {
    */
   async open() {
     await this.page.goto(this.pageUrl, { waitUntil: "domcontentloaded" });
-    await this.page.waitForLoadState("load");
   }
 
   /**
@@ -66,10 +65,11 @@ export abstract class BasePage {
    * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
    * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object.
+   * @param button - Button type: 'add', 'remove'.
    * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
    */
-  getButton(product: Product, button: string) {
-    const buttonText = button.toLowerCase().trim().includes("remove") ? "remove" : "add-to-cart";
+  getButton(product: Product, button: CartButtonAction) {
+    const buttonText = button === "add" ? "add-to-cart" : "remove";
     return this.page.locator(`[data-test="${buttonText}-${getProductId(product)}"]`);
   }
 
