@@ -27,10 +27,10 @@ test.describe("1. Login page", () => {
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    expect(await productsPage.getCurrentUrl()).toContain(productsPage.pageUrl);
+    await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
 
     // Verify Products page title
-    await expect(productsPage.pageTitle).toHaveText(productsPage.pageTitleText);
+    await expect(productsPage.pageTitle, "Confirm page title is valid").toHaveText(productsPage.pageTitleText);
   });
 
   /**
@@ -39,28 +39,58 @@ test.describe("1. Login page", () => {
    */
   test("1.2. Login with invalid password - unsuccessful", async ({ page }) => {
     // Login with invalid password
-    await loginPage.usernameField.fill(process.env.STANDARD_USER!);
-    await loginPage.passwordField.fill("invalid_password");
-    await page.waitForLoadState();
-    await loginPage.loginButton.click();
+    await loginPage.login(process.env.STANDARD_USER!, "invalid_password")
 
-    // Verify error message is displayed
-    expect(await loginPage.isErrorMessageVisible(), "Error message should be visible").toBe(true);
-    expect(await loginPage.getErrorMessageText(), "Error message text should match").toBe(loginPage.errorMessageText);
+    // Verify error message is displayed 
+    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
+    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.errorMessageText);
+
+    // Verify still on login page
+    await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
+  });
+
+
+  /**
+   * Scenario 3: Login with invalid username and valid password - unsuccessful
+   * Verify error message displayed
+   */
+  test("1.3. Login with invalid username and valid password - unsuccessful", async ({ page }) => {
+    // Login with locked out username and valid password
+    await loginPage.login("invalid_user", process.env.DEMO_PASSWORD!)
+
+    // Verify error message is displayed 
+    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
+    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.errorMessageText);
 
     // Verify still on login page
     await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
   });
 
   /**
-   * Scenario 3: Login as standard user, logout, verify Products page not accessible
+   * Scenario 4: Login with locked out user and valid password - unsuccessful
+   * Verify error message displayed
    */
-  test("1.3. Login, logout, verify Products page not accessible", async ({ page }) => {
+  test("1.4. Login with locked out username - unsuccessful", async ({ page }) => {
+    // Login with locked out username and valid password
+    await loginPage.login(process.env.LOCKED_OUT_USER!, process.env.DEMO_PASSWORD!)
+
+    // Verify error message is displayed 
+    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
+    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.lockedOutMessageText);
+
+    // Verify still on login page
+    await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
+  });
+
+  /**
+   * Scenario 5: Login as standard user, logout, verify Products page not accessible
+   */
+  test("1.5. Login, logout, verify Products page not accessible", async ({ page }) => {
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    await expect(page).toHaveURL(/.*inventory.html/);
+    await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
 
     // Click logout
     await productsPage.clickLogoutMenu();

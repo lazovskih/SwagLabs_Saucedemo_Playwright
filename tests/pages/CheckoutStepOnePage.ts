@@ -2,6 +2,10 @@ import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import type { ShippingData } from "@data-types";
 
+/**
+ * Checkout Step One (information) page.
+ * Handles shipping information form.
+ */
 export class CheckoutStepOnePage extends BasePage {
   pageTitleText = "Checkout: Your Information";
   pageUrl = "/checkout-step-one.html";
@@ -11,16 +15,15 @@ export class CheckoutStepOnePage extends BasePage {
   readonly lastNameField: Locator;
   readonly postalCodeField: Locator;
   readonly continueButton: Locator;
-  readonly primaryHeader: Locator;
 
   constructor(page: Page) {
     super(page);
+
     // Initialize locators using data-test attribute
     this.firstNameField = page.locator('[data-test="firstName"]');
     this.lastNameField = page.locator('[data-test="lastName"]');
     this.postalCodeField = page.locator('[data-test="postalCode"]');
     this.continueButton = page.locator('[data-test="continue"]');
-    this.primaryHeader = page.locator('[data-test="title"]');
   }
 
   /**
@@ -40,13 +43,5 @@ export class CheckoutStepOnePage extends BasePage {
    */
   async continueCheckout() {
     await this.continueButton.click();
-  }
-
-  /**
-   * Retrieves the complete header text content.
-   * @returns Promise resolving to the complete header text, or null if not found.
-   */
-  async getCompleteHeaderText() {
-    return await this.completeHeader.textContent();
   }
 }

@@ -1,6 +1,11 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { parseCurrencyToNumber } from "../utilities/formatters";
+import { parseCurrencyToNumber } from "@helpers/index";
+
+/**
+ * Checkout Step Two (overview) page.
+ * Handles item summaries and order completion.
+ */
 export class CheckoutStepTwoPage extends BasePage {
   pageTitleText = "Checkout: Overview";
   pageUrl = "/checkout-step-two.html";
@@ -12,13 +17,9 @@ export class CheckoutStepTwoPage extends BasePage {
   private readonly summaryTotal: Locator;
   private readonly finishButton: Locator;
   private readonly cancelLink: Locator;
-  readonly primaryHeader: Locator;
 
   constructor(page: Page) {
     super(page);
-
-    // Initialize locators using data-test attribute - Step One
-    this.primaryHeader = page.locator('[data-test="title"]');
 
     // Step Two locators
     this.summaryInfo = page.locator('[data-test="summary-info"]');
@@ -61,6 +62,6 @@ export class CheckoutStepTwoPage extends BasePage {
    */
   async finishOrder() {
     await this.finishButton.click();
-    await this.isLoaded();
+    await this.page.waitForLoadState("load");
   }
 }

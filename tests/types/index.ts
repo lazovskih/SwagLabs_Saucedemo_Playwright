@@ -25,3 +25,8 @@ export interface ShippingData {
     /** Customer postal or zip code */
     PostalCode: string;
 }
+
+/**
+ * Represents the action of a button in the shopping cart.
+ */
+export type CartButtonAction = "add" | "remove" | "add-to-cart";

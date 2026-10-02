@@ -19,6 +19,7 @@ jobs:
         env:
           HOME: /root
           STANDARD_USER: ${{ secrets.STANDARD_USER }}
+          LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
           DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
           URL: ${{ vars.URL }}
       - uses: actions/upload-artifact@v5
