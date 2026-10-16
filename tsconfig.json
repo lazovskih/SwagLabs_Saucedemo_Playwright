@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "lib": ["DOM", "ES2020"],
     "strict": true,
     "resolveJsonModule": true,
@@ -15,5 +16,5 @@
       "@data-types": ["tests/types/index"]
     }
   },
-  "include": ["**/*.ts", "**/*.json"]
+  "include": ["**/*.ts", "**/*.json","src/**/*", "tests/**/*", "playwright.config.ts"]
 }
