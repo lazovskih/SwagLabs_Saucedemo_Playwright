@@ -4,9 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test",
+    "lint": "eslint . --max-warnings=0",
+    "pretest": "npm run lint",
+    "test": "playwright test",
+    "test:ci": "playwright test",
     "test:headed": "npx playwright test --headed",
-    "test:report": "npx playwright show-report"
+    "test:ui": "npx playwright test --ui",
+    "test:report": "npx playwright show-report",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,mts}": [
+      "eslint --max-warnings=0"
+    ]
   },
   "repository": {
     "type": "git",
@@ -21,8 +32,15 @@
   },
   "homepage": "https://github.com/lazovskih/online_store_playwright#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.59.1",
     "@types/node": "^25.9.3",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-playwright": "^2.12.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2"
   }
 }

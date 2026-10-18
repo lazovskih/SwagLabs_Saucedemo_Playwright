@@ -1,19 +1,47 @@
 name: Playwright Tests
+
 on:
   push:
+    branches: [main, master]
   pull_request:
     branches: [main, master]
+
 jobs:
+  lint:
+    name: Static Analysis & Promise Safety
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Execute ESLint Quality Gate
+        run: npm run lint
+
   test:
+    name: Playwright Test Execution
+    needs: [lint]
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
     environment: TEST
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run Playwright tests
         run: npx playwright test
         env:
@@ -22,7 +50,9 @@ jobs:
           LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
           DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
           URL: ${{ vars.URL }}
-      - uses: actions/upload-artifact@v5
+
+      - name: Publish Test Report Artifact
+        uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
