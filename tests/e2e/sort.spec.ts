@@ -33,6 +33,9 @@ test.describe("4. Sorting", () => {
   });
 
   test("4.3 Sort product items by Price (low to high)", async () => {
+    const expectedNames = [...products]
+      .sort((first, second) => first.Price - second.Price || first.Name.localeCompare(second.Name))
+      .map((product) => product.Name);
     const expectedPrices = [...products]
       .sort((first, second) => first.Price - second.Price)
       .map((product) => `$${product.Price.toFixed(2)}`);
@@ -40,9 +43,13 @@ test.describe("4. Sorting", () => {
     await productsPage.sortSelector.selectOption("lohi");
 
     await expect(productsPage.itemPrices).toHaveText(expectedPrices);
+    await expect(productsPage.itemNames).toHaveText(expectedNames);
   });
 
   test("4.4 Sort product items by Price (high to low)", async () => {
+    const expectedNames = [...products]
+      .sort((first, second) => second.Price - first.Price || first.Name.localeCompare(second.Name))
+      .map((product) => product.Name);
     const expectedPrices = [...products]
       .sort((first, second) => second.Price - first.Price)
       .map((product) => `$${product.Price.toFixed(2)}`);
@@ -50,5 +57,6 @@ test.describe("4. Sorting", () => {
     await productsPage.sortSelector.selectOption("hilo");
 
     await expect(productsPage.itemPrices).toHaveText(expectedPrices);
+    await expect(productsPage.itemNames).toHaveText(expectedNames);
   });
 });
