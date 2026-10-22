@@ -9,12 +9,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["node"],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@helpers/*": ["tests/utilities/*"],
       "@pages/*": ["tests/pages/*"],
       "@data-types": ["tests/types/index"]
     }
   },
-  "include": ["**/*.ts", "**/*.json","src/**/*", "tests/**/*", "playwright.config.ts"]
+  "include": ["**/*.ts", "**/*.json", "src/**/*", "tests/**/*", "playwright.config.ts"]
 }

@@ -1,4 +1,5 @@
 import { BasePage } from "./BasePage";
+import { Locator, Page } from "@playwright/test";
 import { Product } from "@data-types";
 
 /**
@@ -8,6 +9,18 @@ import { Product } from "@data-types";
 export class ProductsPage extends BasePage {
   pageTitleText = "Products";
   pageUrl = "/inventory.html";
+
+  // Page locators
+  readonly sortSelector: Locator;
+  readonly itemNames: Locator;
+  readonly itemPrices: Locator;
+
+  constructor(page: Page) {
+    super(page);
+    this.sortSelector = page.locator('[data-test="product-sort-container"]');
+    this.itemNames = page.locator('[data-test="inventory-item-name"]');
+    this.itemPrices = page.locator('[data-test="inventory-item-price"]');
+  }
 
   /**
    * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
