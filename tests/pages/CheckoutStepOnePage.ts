@@ -29,7 +29,6 @@ export class CheckoutStepOnePage extends BasePage {
   /**
    * Fills the shipping information form fields (first name, last name, and postal code).
    * @param shippingData - Customer shipping information object.
-   * @returns Promise that resolves when all fields are filled.
    */
   async fillShippingInformation(shippingData: ShippingData) {
     await this.firstNameField.fill(shippingData.FirstName);
@@ -39,7 +38,6 @@ export class CheckoutStepOnePage extends BasePage {
 
   /**
    * Clicks the continue button to proceed to the checkout overview step.
-   * @returns Promise that resolves when the continue button is clicked.
    */
   async continueCheckout() {
     await this.continueButton.click();

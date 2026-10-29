@@ -36,7 +36,6 @@ export abstract class BasePage {
 
   /**
    * Navigates to the page URL and waits for page load completion.
-   * @returns Promise that resolves when navigation and load state are complete.
    */
   async open() {
     await this.page.goto(this.pageUrl, { waitUntil: "domcontentloaded" });
@@ -44,7 +43,6 @@ export abstract class BasePage {
 
   /**
    * Clicks the main sidebar menu button.
-   * @returns Promise that resolves when the menu button is clicked.
    */
   async clickMenuButton() {
     // Implementation that works better for webkit browser and others
@@ -54,7 +52,6 @@ export abstract class BasePage {
 
   /**
    * Opens the sidebar menu and clicks the "Logout" link.
-   * @returns Promise that resolves when the logout link is clicked.
    */
   async clickLogoutMenu() {
     await this.clickMenuButton();
@@ -75,7 +72,6 @@ export abstract class BasePage {
 
   /**
    * Clicks the shopping cart link to navigate to the cart page.
-   * @returns Promise that resolves when the shopping cart link is clicked.
    */
   async viewCart() {
     await this.cartLink.click();
@@ -85,18 +81,17 @@ export abstract class BasePage {
    * Removes a specific product from the cart by clicking its remove button.
    * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object to remove.
-   * @returns Promise that resolves when the remove button is clicked.
    */
   async removeProduct(product: Product) {
     await this.getButton(product, "remove").click();
   }
 
   /**
-  * Gets the number of occurrences of a product in the cart.
-  * Can be used on both 'Products' and 'Shopping Cart' pages
-  * @param product - Product data object.
-  * @returns Promise resolving to the number of matching cart items.
-  */
+   * Gets the number of occurrences of a product in the cart.
+   * Can be used on both 'Products' and 'Shopping Cart' pages
+   * @param product - Product data object.
+   * @returns Promise resolving to the number of matching cart items.
+   */
   async getProductCount(product: Product) {
     return await this.inventoryItems.filter({ hasText: product.Name }).count();
   }
