@@ -21,7 +21,6 @@ export class CartPage extends BasePage {
 
   /**
    * Clicks the checkout button to initiate the checkout flow.
-   * @returns Promise that resolves when the checkout button is clicked.
    */
   async startCheckout() {
     await this.checkoutButton.click();
@@ -29,7 +28,6 @@ export class CartPage extends BasePage {
 
   /**
    * Clicks the continue shopping button to return to the inventory page.
-   * @returns Promise that resolves when the continue shopping button is clicked.
    */
   async continueShopping() {
     await this.continueShoppingButton.click();

@@ -34,7 +34,6 @@ export class LoginPage extends BasePage {
    * Navigates to the login page and submits credentials.
    * @param username - Username credential.
    * @param password - Password credential.
-   * @returns Promise that resolves when credentials have been submitted.
    */
   async login(username: string, password: string) {
     await this.open();

@@ -31,7 +31,7 @@ export class CheckoutStepTwoPage extends BasePage {
   }
   /**
    * Retrieves and parses the summary subtotal into a numeric value.
-   * @returns Promise resolving to the numeric subtotal amount.
+   * @returns Formatted numeric value of the subtotal.
    */
   async getSubtotal(): Promise<number> {
     const rawText = await this.summarySubtotal.textContent();
@@ -40,7 +40,7 @@ export class CheckoutStepTwoPage extends BasePage {
 
   /**
    * Retrieves and parses the summary tax into a numeric value.
-   * @returns Promise resolving to the numeric tax amount.
+   * @returns Formatted numeric value of the tax amount.
    */
   async getTax(): Promise<number> {
     const rawText = await this.summaryTax.textContent();
@@ -49,7 +49,7 @@ export class CheckoutStepTwoPage extends BasePage {
 
   /**
    * Retrieves and parses the summary total into a numeric value.
-   * @returns Promise resolving to the numeric total amount.
+   * @returns Formatted numeric value of the total amount.
    */
   async getTotal(): Promise<number> {
     const rawText = await this.summaryTotal.textContent();
@@ -58,7 +58,6 @@ export class CheckoutStepTwoPage extends BasePage {
 
   /**
    * Completes the order by clicking the finish button and waiting for page load.
-   * @returns Promise that resolves when the finish action completes.
    */
   async finishOrder() {
     await this.finishButton.click();

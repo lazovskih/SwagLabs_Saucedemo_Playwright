@@ -26,7 +26,6 @@ export class ProductsPage extends BasePage {
    * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
    * Can be used on both 'Products' page
    * @param product - Product data object to add.
-   * @returns Promise that resolves when the product is added.
    */
   async addProductToCart(product: Product) {
     await this.getButton(product, "add").click();
@@ -39,7 +38,6 @@ export class ProductsPage extends BasePage {
    * Sequentially adds multiple products to the shopping cart.
    * Can be used on both 'Products' page
    * @param products - Array of product data objects to add.
-   * @returns Promise that resolves when all products have been added.
    */
   async addProductsToCart(products: Product[]) {
     for (const product of products) {
