@@ -1,13 +1,13 @@
 import { test, expect } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
-import { CartPage } from "../pages/CartPage";
-import { CheckoutStepOnePage } from "../pages/CheckoutStepOnePage";
-import { CheckoutStepTwoPage } from "../pages/CheckoutStepTwoPage";
-import { CheckoutCompletePage } from "../pages/CheckoutCompletePage";
+import { ProductsPage } from "@pages/ProductsPage";
+import { CartPage } from "@pages/CartPage";
+import { CheckoutStepOnePage } from "@pages/CheckoutStepOnePage";
+import { CheckoutStepTwoPage } from "@pages/CheckoutStepTwoPage";
+import { CheckoutCompletePage } from "@pages/CheckoutCompletePage";
 
 // Import test data
-import products from "../../data/products.json";
-import shippingInfo from "../../data/shipping.json";
+import products from "@data/products.json";
+import shippingInfo from "@data/shipping.json";
 
 test.describe("3. Checkout flow", () => {
   let productsPage: ProductsPage;
@@ -30,7 +30,7 @@ test.describe("3. Checkout flow", () => {
   test("3.1 Completes checkout for a selected product", async () => {
     const productsList = [products[2]];
     const productsListCount = productsList.length;
-    const procuctsListCountStr = productsListCount.toString();
+    const productsListCountStr = productsListCount.toString();
 
     // Add product to cart
     await productsPage.addProductsToCart(productsList);
@@ -46,7 +46,7 @@ test.describe("3. Checkout flow", () => {
 
     // Verify cart badge count on 'Shopping Cart' page
     await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(
-      procuctsListCountStr,
+      productsListCountStr,
     );
 
     // Verify list of cart items count
@@ -82,7 +82,7 @@ test.describe("3. Checkout flow", () => {
   test("3.2 Completes checkout and verifies totals for multiple selected products", async () => {
     const productsList = [products[2], products[1], products[0]];
     const productsListCount = productsList.length;
-    const procuctsListCountStr = productsListCount.toString();
+    const productsListCountStr = productsListCount.toString();
 
     // Add multiple products to cart
     await productsPage.addProductsToCart(productsList);
@@ -121,7 +121,7 @@ test.describe("3. Checkout flow", () => {
 
     // Verify subtotal, tax, and total amounts
     const actualSubtotal = await checkoutStepTwoPage.getSubtotal();
-    const expectedSubtotal = productsList.reduce((acc, product) => acc + product.Price, 0);
+    const expectedSubtotal = productsList.reduce((acc, product) => acc + product.price, 0);
 
     expect(actualSubtotal, "Subtotal is not correct").toEqual(expectedSubtotal);
 

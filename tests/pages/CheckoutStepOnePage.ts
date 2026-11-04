@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { InternalPage } from "./InternalPage";
+import { InternalPage } from "@pages/InternalPage";
 import type { ShippingData } from "@data-types";
 
 /**
@@ -31,9 +31,9 @@ export class CheckoutStepOnePage extends InternalPage {
    * @param shippingData - Customer shipping information object.
    */
   async fillShippingInformation(shippingData: ShippingData) {
-    await this.firstNameField.fill(shippingData.FirstName);
-    await this.lastNameField.fill(shippingData.LastName);
-    await this.postalCodeField.fill(shippingData.PostalCode);
+    await this.firstNameField.fill(shippingData.firstName);
+    await this.lastNameField.fill(shippingData.lastName);
+    await this.postalCodeField.fill(shippingData.postalCode);
   }
 
   /**

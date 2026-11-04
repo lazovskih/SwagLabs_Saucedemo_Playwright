@@ -165,8 +165,9 @@ Saucedemo_Playwright/
 │   │   └── auth.setup.ts           # Global authentication setup project
 │   ├── pages/                      # Page Object Model (POM) classes
 │   │   ├── BasePage.ts             # Base page class with common methods & navigation
+│   │   ├── InternalPage.ts         # Parent class for all internal pages (authenticated)
 │   │   ├── CartPage.ts             # Shopping cart page object
-│   │   ├── CheckoutCompletePage.ts     # Order completion confirmation page object
+│   │   ├── CheckoutCompletePage.ts # Order completion confirmation page object
 │   │   ├── CheckoutStepOnePage.ts  # Checkout customer info page object
 │   │   ├── CheckoutStepTwoPage.ts  # Checkout overview & calculation page object
 │   │   ├── LoginPage.ts            # Login page object

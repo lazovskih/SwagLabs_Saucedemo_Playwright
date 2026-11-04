@@ -2,7 +2,6 @@
   "name": "online_store_playwright",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "lint": "eslint . --max-warnings=0",
     "pretest": "npm run lint",
@@ -25,7 +24,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/lazovskih/online_store_playwright/issues"

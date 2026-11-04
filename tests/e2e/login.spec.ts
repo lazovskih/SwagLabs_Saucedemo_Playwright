@@ -1,11 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
-import { ProductsPage } from "../pages/ProductsPage";
-import { CartPage } from "../pages/CartPage";
-import { CheckoutStepOnePage } from "../pages/CheckoutStepOnePage";
-import { CheckoutStepTwoPage } from "../pages/CheckoutStepTwoPage";
-import { CheckoutCompletePage } from "../pages/CheckoutCompletePage";
-import { InternalPage } from "../pages/InternalPage";
+import { LoginPage } from "@pages/LoginPage";
+import { ProductsPage } from "@pages/ProductsPage";
+import { CartPage } from "@pages/CartPage";
+import { CheckoutStepOnePage } from "@pages/CheckoutStepOnePage";
+import { CheckoutStepTwoPage } from "@pages/CheckoutStepTwoPage";
+import { CheckoutCompletePage } from "@pages/CheckoutCompletePage";
+import { InternalPage } from "@pages/InternalPage";
 
 /**
  * Test suite for login functionality and access control.
@@ -23,9 +23,6 @@ test.describe("1. Login page", () => {
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     productsPage = new ProductsPage(page);
-
-    // Navigate to login page
-    await loginPage.open();
   });
 
   /**
@@ -107,7 +104,7 @@ test.describe("1. Login page", () => {
     // Verify redirected to login page
     await expect(page).toHaveURL(/.*\/$/);
 
-    const InternalPages: InternalPage[] = [
+    const internalPages: InternalPage[] = [
       new ProductsPage(page),
       new CheckoutStepOnePage(page),
       new CheckoutStepTwoPage(page),
@@ -115,7 +112,7 @@ test.describe("1. Login page", () => {
       new CartPage(page),
     ];
 
-    for (const internalPage of InternalPages) {
+    for (const internalPage of internalPages) {
       // Try to navigate directly to internal page
       await page.goto(internalPage.pageUrl);
 

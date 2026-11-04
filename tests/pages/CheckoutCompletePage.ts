@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { InternalPage } from "./InternalPage";
+import { InternalPage } from "@pages/InternalPage";
 
 /**
  * Checkout complete page.

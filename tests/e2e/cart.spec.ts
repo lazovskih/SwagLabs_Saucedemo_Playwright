@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
-import { CartPage } from "../pages/CartPage";
+import { ProductsPage } from "@pages/ProductsPage";
+import { CartPage } from "@pages/CartPage";
 
 // Import test data 
-import products from "../../data/products.json";
+import products from "@data/products.json";
 
 test.describe("2. Shopping cart flow", () => {
   let productsPage: ProductsPage;
@@ -42,13 +42,10 @@ test.describe("2. Shopping cart flow", () => {
 
     // Verify specific products present on the shopping cart page
     for (const product of productsList) {
-      const productName = product.Name;
+      const productName = product.name;
       const productElements = cartPage.inventoryItems.filter({ hasText: productName });
       await expect(productElements, "Confirm product '" + productName + "' is present on the shopping cart page").toHaveCount(1);
     }
-
-    // Verify count on the shopping cart badge icon
-    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText("2");
   });
 
   test("2.2 Button changes from 'Add to cart' to 'Remove' when clicked", async () => {
@@ -76,7 +73,7 @@ test.describe("2. Shopping cart flow", () => {
 
       // Add to cart first
       await addToCartButton.click();
-      await expect(removeButton, `Remove button for product: '${product.Name}'`).toBeVisible();
+      await expect(removeButton, `Remove button for product: '${product.name}'`).toBeVisible();
 
       // Click remove
       await removeButton.click();

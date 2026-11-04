@@ -1,19 +1,18 @@
-import { Locator, Page } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import type { Product, CartButtonAction } from "@data-types";
 import { getProductId } from "@helpers/index";
-import { BasePage } from "./BasePage";
+import { BasePage } from "@pages/BasePage";
 
 export class InternalPage extends BasePage {
   pageTitleText = "Internal pages";
   pageUrl = "";
 
-  readonly pageTitle: Locator;
   readonly cartLink: Locator;
 
   private readonly mainMenuButton: Locator;
   private readonly sideMenu: Locator;
   private readonly allItemsMenu: Locator;
-  private readonly AboutMenu: Locator;
+  private readonly aboutMenu: Locator;
   private readonly logoutMenu: Locator;
 
   readonly inventoryItems: Locator;
@@ -21,11 +20,10 @@ export class InternalPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.pageTitle = page.locator('[data-test="title"]');
     this.mainMenuButton = page.locator('[data-test="open-menu"]');
     this.sideMenu = page.locator(".bm-menu");
     this.allItemsMenu = page.locator('[data-test="inventory-sidebar-link"]');
-    this.AboutMenu = page.locator('[data-test="about-sidebar-link"]');
+    this.aboutMenu = page.locator('[data-test="about-sidebar-link"]');
     this.logoutMenu = page.locator("#logout_sidebar_link");
     this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
     this.cartLink = page.locator('[data-test="shopping-cart-link"]');
@@ -39,8 +37,8 @@ export class InternalPage extends BasePage {
    */
   async clickMenuButton() {
     // Implementation that works better for webkit browser and others
-    await this.mainMenuButton.click({ delay: 100, force: true });
-    await this.sideMenu.waitFor({ state: "visible" });
+    await this.mainMenuButton.click();
+    await expect(this.sideMenu).toBeVisible()
   }
 
   /**
@@ -59,7 +57,7 @@ export class InternalPage extends BasePage {
    * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
    */
   getButton(product: Product, button: CartButtonAction) {
-    const buttonText = button === "add" ? "add-to-cart" : "remove";
+    const buttonText = button.toLowerCase().includes("add") ? "add-to-cart" : "remove";
     return this.page.locator(`[data-test="${buttonText}-${getProductId(product)}"]`);
   }
 
@@ -86,7 +84,7 @@ export class InternalPage extends BasePage {
    * @returns Promise resolving to the number of matching cart items.
    */
   async getProductCount(product: Product) {
-    return await this.inventoryItems.filter({ hasText: product.Name }).count();
+    return await this.inventoryItems.filter({ hasText: product.name }).count();
   }
 
   /**

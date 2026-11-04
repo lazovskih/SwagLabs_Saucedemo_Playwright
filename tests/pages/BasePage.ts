@@ -4,8 +4,7 @@ export abstract class BasePage {
   readonly page: Page;
   abstract pageTitleText: string;
   abstract pageUrl: string;
-
-  readonly pageTitle: Locator;
+  public pageTitle: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -16,6 +15,6 @@ export abstract class BasePage {
    * Navigates to the page URL and waits for page load completion.
    */
   async open() {
-    await this.page.goto(this.pageUrl, { waitUntil: "domcontentloaded" });
+    await this.page.goto(this.pageUrl);
   }
 }

@@ -16,7 +16,7 @@ export interface CurrencyParseOptions {
  * @returns Normalized lowercase hyphen-delimited product ID string.
  */
 export function getProductId(product: Product) {
-  return product.Name.toLowerCase().replace(/\s+/g, "-");
+  return product.name.toLowerCase().replace(/\s+/g, "-");
 }
 
 /**

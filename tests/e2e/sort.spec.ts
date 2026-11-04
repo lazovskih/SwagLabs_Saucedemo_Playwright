@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
-import products from "../../data/products.json";
+import { ProductsPage } from "@pages/ProductsPage";
+import products from "@data/products.json";
 
 test.describe("4. Sorting", () => {
   let productsPage: ProductsPage;
@@ -14,8 +14,8 @@ test.describe("4. Sorting", () => {
 
   test("4.1 Sort product items by Name (A to Z)", async () => {
     const expectedNames = [...products]
-      .sort((first, second) => first.Name.localeCompare(second.Name))
-      .map((product) => product.Name);
+      .sort((first, second) => first.name.localeCompare(second.name))
+      .map((product) => product.name);
 
     await productsPage.sortSelector.selectOption("az");
 
@@ -24,8 +24,8 @@ test.describe("4. Sorting", () => {
 
   test("4.2 Sort product items by Name (Z to A)", async () => {
     const expectedNames = [...products]
-      .sort((first, second) => second.Name.localeCompare(first.Name))
-      .map((product) => product.Name);
+      .sort((first, second) => second.name.localeCompare(first.name))
+      .map((product) => product.name);
 
     await productsPage.sortSelector.selectOption("za");
 
@@ -34,11 +34,11 @@ test.describe("4. Sorting", () => {
 
   test("4.3 Sort product items by Price (low to high)", async () => {
     const expectedNames = [...products]
-      .sort((first, second) => first.Price - second.Price || first.Name.localeCompare(second.Name))
-      .map((product) => product.Name);
+      .sort((first, second) => first.price - second.price || first.name.localeCompare(second.name))
+      .map((product) => product.name);
     const expectedPrices = [...products]
-      .sort((first, second) => first.Price - second.Price)
-      .map((product) => `$${product.Price.toFixed(2)}`);
+      .sort((first, second) => first.price - second.price)
+      .map((product) => `$${product.price.toFixed(2)}`);
 
     await productsPage.sortSelector.selectOption("lohi");
 
@@ -48,11 +48,11 @@ test.describe("4. Sorting", () => {
 
   test("4.4 Sort product items by Price (high to low)", async () => {
     const expectedNames = [...products]
-      .sort((first, second) => second.Price - first.Price || first.Name.localeCompare(second.Name))
-      .map((product) => product.Name);
+      .sort((first, second) => second.price - first.price || first.name.localeCompare(second.name))
+      .map((product) => product.name);
     const expectedPrices = [...products]
-      .sort((first, second) => second.Price - first.Price)
-      .map((product) => `$${product.Price.toFixed(2)}`);
+      .sort((first, second) => second.price - first.price)
+      .map((product) => `$${product.price.toFixed(2)}`);
 
     await productsPage.sortSelector.selectOption("hilo");
 

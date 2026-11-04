@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
+import { BasePage } from "@pages/BasePage";
 
 /**
  * Login page.
@@ -14,7 +14,6 @@ export class LoginPage extends BasePage {
   readonly passwordField: Locator;
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
-  readonly pageTitle: Locator;
 
   readonly errorMessageText = "Epic sadface: Username and password do not match any user in this service";
   readonly noAccessMessageText = "Epic sadface: You can only access '{pageUrl}' when you are logged in.";

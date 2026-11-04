@@ -3,13 +3,13 @@
  */
 export interface Product {
     /** Unique slug identifier for the product */
-    Id: string;
+    id: string;
     /** Full display name of the product */
-    Name: string;
+    name: string;
     /** Detailed product description */
-    Description: string;
+    description: string;
     /** Price of the product in USD */
-    Price: number;
+    price: number;
     /** Static asset URL of the product image */
     imageUrl: string;
 }
@@ -19,11 +19,11 @@ export interface Product {
  */
 export interface ShippingData {
     /** Customer first name */
-    FirstName: string;
+    firstName: string;
     /** Customer last name */
-    LastName: string;
+    lastName: string;
     /** Customer postal or zip code */
-    PostalCode: string;
+    postalCode: string;
 }
 
 /**
