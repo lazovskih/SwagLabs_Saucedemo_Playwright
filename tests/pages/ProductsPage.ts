@@ -1,4 +1,4 @@
-import { BasePage } from "./BasePage";
+import { InternalPage } from "./InternalPage";
 import { Locator, Page } from "@playwright/test";
 import { Product } from "@data-types";
 
@@ -6,7 +6,7 @@ import { Product } from "@data-types";
  * Products page.
  * Handles product browsing and inventory interactions.
  */
-export class ProductsPage extends BasePage {
+export class ProductsPage extends InternalPage {
   pageTitleText = "Products";
   pageUrl = "/inventory.html";
 

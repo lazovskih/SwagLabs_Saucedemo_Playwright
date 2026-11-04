@@ -23,7 +23,6 @@ export function getProductId(product: Product) {
  * Extracts a numeric value by finding the index of the first digit,
  * slicing the number substring to the end of the text, and evaluating
  * any preceding minus sign.
- *
  * Designed for predictable DOM outputs like:
  * - "Tax: $1.92" -> 1.92
  * - "Estimated State Sales Tax: $1,249.92" -> 1249.92

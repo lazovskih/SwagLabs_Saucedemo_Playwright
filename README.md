@@ -159,13 +159,14 @@ Saucedemo_Playwright/
 │   ├── e2e/                        # End-to-end test suites
 │   │   ├── cart.spec.ts            # Shopping cart flow tests
 │   │   ├── checkout.spec.ts        # Checkout and order placement tests
-│   │   └── login.spec.ts           # Authentication & session tests
+│   │   ├── login.spec.ts           # Authentication & session tests
+│   │   └── sort.spec.ts            # Verify sorting on products page
 │   ├── fixtures/                   # Playwright setup & fixtures
 │   │   └── auth.setup.ts           # Global authentication setup project
 │   ├── pages/                      # Page Object Model (POM) classes
 │   │   ├── BasePage.ts             # Base page class with common methods & navigation
 │   │   ├── CartPage.ts             # Shopping cart page object
-│   │   ├── CheckoutComplete.ts     # Order completion confirmation page object
+│   │   ├── CheckoutCompletePage.ts     # Order completion confirmation page object
 │   │   ├── CheckoutStepOnePage.ts  # Checkout customer info page object
 │   │   ├── CheckoutStepTwoPage.ts  # Checkout overview & calculation page object
 │   │   ├── LoginPage.ts            # Login page object

@@ -1,12 +1,12 @@
 import { Locator, Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
+import { InternalPage } from "./InternalPage";
 import type { ShippingData } from "@data-types";
 
 /**
  * Checkout Step One (information) page.
  * Handles shipping information form.
  */
-export class CheckoutStepOnePage extends BasePage {
+export class CheckoutStepOnePage extends InternalPage {
   pageTitleText = "Checkout: Your Information";
   pageUrl = "/checkout-step-one.html";
 

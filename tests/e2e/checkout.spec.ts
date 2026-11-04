@@ -3,7 +3,7 @@ import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
 import { CheckoutStepOnePage } from "../pages/CheckoutStepOnePage";
 import { CheckoutStepTwoPage } from "../pages/CheckoutStepTwoPage";
-import { CheckoutComplete } from "../pages/CheckoutComplete";
+import { CheckoutCompletePage } from "../pages/CheckoutCompletePage";
 
 // Import test data
 import products from "../../data/products.json";
@@ -14,21 +14,20 @@ test.describe("3. Checkout flow", () => {
   let cartPage: CartPage;
   let checkoutStepOnePage: CheckoutStepOnePage;
   let checkoutStepTwoPage: CheckoutStepTwoPage;
-  let checkoutComplete: CheckoutComplete;
+  let checkoutComplete: CheckoutCompletePage;
 
   test.beforeEach(async ({ page }) => {
     productsPage = new ProductsPage(page);
     cartPage = new CartPage(page);
     checkoutStepOnePage = new CheckoutStepOnePage(page);
     checkoutStepTwoPage = new CheckoutStepTwoPage(page);
-    checkoutComplete = new CheckoutComplete(page);
+    checkoutComplete = new CheckoutCompletePage(page);
 
     // Navigate directly to the products page using the pre-authenticated state
     await productsPage.open();
   });
 
   test("3.1 Completes checkout for a selected product", async () => {
-
     const productsList = [products[2]];
     const productsListCount = productsList.length;
     const procuctsListCountStr = productsListCount.toString();
@@ -46,7 +45,9 @@ test.describe("3. Checkout flow", () => {
     await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Verify cart badge count on 'Shopping Cart' page
-    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(procuctsListCountStr);
+    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(
+      procuctsListCountStr,
+    );
 
     // Verify list of cart items count
     await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(productsListCount);
@@ -70,12 +71,15 @@ test.describe("3. Checkout flow", () => {
     await checkoutStepTwoPage.finishOrder();
 
     // Verify checkout complete header and text
-    await expect(checkoutComplete.completeHeader, "Confirm complete header is valid").toHaveText(checkoutComplete.completeHeaderText);
-    await expect(checkoutComplete.completeTextElement, "Confirm complete text is valid").toHaveText(checkoutComplete.completeText);
+    await expect(checkoutComplete.completeHeader, "Confirm complete header is valid").toHaveText(
+      checkoutComplete.completeHeaderText,
+    );
+    await expect(checkoutComplete.completeTextElement, "Confirm complete text is valid").toHaveText(
+      checkoutComplete.completeText,
+    );
   });
 
   test("3.2 Completes checkout and verifies totals for multiple selected products", async () => {
-
     const productsList = [products[2], products[1], products[0]];
     const productsListCount = productsList.length;
     const procuctsListCountStr = productsListCount.toString();
@@ -93,7 +97,9 @@ test.describe("3. Checkout flow", () => {
     await expect(cartPage.pageTitle, "Confirm page title is valid").toHaveText(cartPage.pageTitleText);
 
     // Verify cart badge count on 'Shopping Cart' page
-    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(procuctsListCountStr);
+    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(
+      procuctsListCountStr,
+    );
 
     // Verify list of cart items count
     await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(productsListCount);

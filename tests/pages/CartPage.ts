@@ -1,11 +1,11 @@
 import { Locator, Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
+import { InternalPage } from "./InternalPage";
 
 /**
  * Cart page.
  * Handles item summaries and order completion.
  */
-export class CartPage extends BasePage {
+export class CartPage extends InternalPage {
   pageTitleText = "Your Cart";
   pageUrl = "/cart.html";
 

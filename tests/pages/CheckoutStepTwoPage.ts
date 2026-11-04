@@ -1,12 +1,12 @@
 import { Locator, Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
+import { InternalPage } from "./InternalPage";
 import { parseCurrencyToNumber } from "@helpers/index";
 
 /**
  * Checkout Step Two (overview) page.
  * Handles item summaries and order completion.
  */
-export class CheckoutStepTwoPage extends BasePage {
+export class CheckoutStepTwoPage extends InternalPage {
   pageTitleText = "Checkout: Overview";
   pageUrl = "/checkout-step-two.html";
 
