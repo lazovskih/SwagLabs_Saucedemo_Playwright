@@ -1,17 +1,19 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { BasePage } from "@pages/BasePage";
 
+/**
+ * Internal page.
+ * Handles navigation and shared components across internal pages.
+ */
 export abstract class InternalPage extends BasePage {
-  readonly cartLink: Locator;
-
+  // Page locators
   private readonly mainMenuButton: Locator;
   private readonly sideMenu: Locator;
   private readonly allItemsMenu: Locator;
   private readonly aboutMenu: Locator;
   private readonly logoutMenu: Locator;
-
-  readonly inventoryItems: Locator;
   readonly cartBadge: Locator;
+  readonly cartLink: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -22,9 +24,6 @@ export abstract class InternalPage extends BasePage {
     this.logoutMenu = page.locator("#logout_sidebar_link");
     this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
     this.cartLink = page.locator('[data-test="shopping-cart-link"]');
-
-    // Inventory items locator is used on both 'Products', 'Shopping Cart', 'Checkout' pages
-    this.inventoryItems = page.locator('[data-test="inventory-item"]');
   }
 
   /**

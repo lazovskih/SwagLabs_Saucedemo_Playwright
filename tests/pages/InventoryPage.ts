@@ -1,25 +1,49 @@
-import { ProductsPage } from "./ProductsPage";
 import { Locator, Page } from "@playwright/test";
-import { Product } from "@data-types";
+import { InternalPage } from "@pages/InternalPage";
+import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
+import type { Product, CartButtonAction } from "@data-types";
 
 /**
  * Products page.
  * Handles product browsing and inventory interactions.
  */
-export class InventoryPage extends ProductsPage {
+export class InventoryPage extends InternalPage {
     pageTitleText = "Products";
     pageUrl = "/inventory.html";
 
     // Page locators
+    private readonly productActions: ProductActionsComponent;
     readonly sortSelector: Locator;
+    readonly inventoryItems: Locator;
     readonly itemNames: Locator;
     readonly itemPrices: Locator;
 
     constructor(page: Page) {
         super(page);
+        this.productActions = new ProductActionsComponent(page);
         this.sortSelector = page.locator('[data-test="product-sort-container"]');
-        this.itemNames = page.locator('[data-test="inventory-item-name"]');
-        this.itemPrices = page.locator('[data-test="inventory-item-price"]');
+        this.inventoryItems = this.productActions.inventoryItems;
+        this.itemNames = this.productActions.itemNames;
+        this.itemPrices = this.productActions.itemPrices;
+    }
+
+    /**
+     * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
+     * Can be used on both 'Products' and 'Shopping Cart' pages
+     * @param product - Product data object.
+     * @param button - Button type: 'add', 'remove'.
+     * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
+     */
+    getButton(product: Product, action: CartButtonAction): Locator {
+        return this.productActions.getButton(product, action);
+    }
+
+    /**
+     * Returns the image locator for a specific product on either the Inventory page
+     * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
+     */
+    getImage(product: Product): Locator {
+        return this.productActions.getImage(product);
     }
 
     /**
@@ -28,10 +52,7 @@ export class InventoryPage extends ProductsPage {
      * @param product - Product data object to add.
      */
     async addProductToCart(product: Product) {
-        await this.getButton(product, "add").click();
-
-        const removeProductButton = this.getButton(product, "remove");
-        await removeProductButton.waitFor({ state: "visible" });
+        await this.productActions.addProduct(product);
     }
 
     /**
@@ -41,7 +62,36 @@ export class InventoryPage extends ProductsPage {
      */
     async addProductsToCart(products: Product[]) {
         for (const product of products) {
-            await this.addProductToCart(product);
+            await this.productActions.addProduct(product);
         }
     }
+
+    /**
+     * Removes a specific product from the cart by clicking its remove button.
+     * Can be used on both 'Products' and 'Shopping Cart' pages
+     * @param product - Product data object to remove.
+     */
+    async removeProduct(product: Product) {
+        await this.productActions.removeProduct(product);
+    }
+
+    /**
+     * Gets the number of occurrences of a product in the cart.
+     * Can be used on both 'Products' and 'Shopping Cart' pages
+     * @param product - Product data object.
+     * @returns Promise resolving to the number of matching cart items.
+     */
+    async getProductCount(product: Product) {
+        return await this.productActions.getProductCount(product);
+    }
+
+    /**
+    * Retrieves the total count of item rows currently displayed in the cart.
+    * Can be used on both 'Products' and 'Shopping Cart' pages
+    * @returns Promise resolving to the number of cart items.
+    */
+    async getItemCount() {
+        return await this.productActions.getItemCount();
+    }
 }
+

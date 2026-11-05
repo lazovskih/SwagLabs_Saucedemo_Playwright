@@ -1,25 +1,44 @@
-import { ProductsPage } from "./ProductsPage";
 import { Locator, Page } from "@playwright/test";
-import { Product } from "@data-types";
+import { InternalPage } from "@pages/InternalPage";
+import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
+import type { Product, CartButtonAction } from "@data-types";
 
 /**
  * Products page.
  * Handles product browsing and inventory interactions.
  */
-export class InventoryItemPage extends ProductsPage {
+export class InventoryItemPage extends InternalPage {
     pageTitleText = "Products";
     pageUrl = "/inventory-item.html";
+    private readonly productActions: ProductActionsComponent;
 
     // Page locators
     readonly backToProductsButton: Locator;
-    readonly itemImage: Locator;
 
     constructor(page: Page) {
         super(page);
-        this.backToProductsButton = page.locator('data-test="back-to-products"');
-        this.itemImage = page.locator('[data-test="item-sauce-labs-onesie-img"]');
+        this.productActions = new ProductActionsComponent(page);
+        this.backToProductsButton = page.locator('[data-test="back-to-products"]');
     }
 
+    /**
+     * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
+     * Can be used on both 'Products' and 'Shopping Cart' pages
+     * @param product - Product data object.
+     * @param button - Button type: 'add', 'remove'.
+     * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
+     */
+    getButton(product: Product, action: CartButtonAction): Locator {
+        return this.productActions.getButton(product, action);
+    }
+
+    /**
+     * Returns the image locator for a specific product on either the Inventory page
+     * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
+     */
+    getImage(product: Product): Locator {
+        return this.productActions.getImage(product);
+    }
 
     /**
      * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
@@ -27,20 +46,15 @@ export class InventoryItemPage extends ProductsPage {
      * @param product - Product data object to add.
      */
     async addProductToCart(product: Product) {
-        await this.getButton(product, "add").click();
-
-        const removeProductButton = this.getButton(product, "remove");
-        await removeProductButton.waitFor({ state: "visible" });
+        await this.productActions.addProduct(product);
     }
 
     /**
-     * Sequentially adds multiple products to the shopping cart.
-     * Can be used on both 'Products' page
-     * @param products - Array of product data objects to add.
+     * Removes a specific product from the cart by clicking its remove button.
+     * Can be used on both 'Products' and 'Shopping Cart' pages
+     * @param product - Product data object to remove.
      */
-    async addProductsToCart(products: Product[]) {
-        for (const product of products) {
-            await this.addProductToCart(product);
-        }
+    async removeProduct(product: Product) {
+        await this.productActions.removeProduct(product);
     }
 }

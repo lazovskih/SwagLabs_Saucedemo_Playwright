@@ -11,7 +11,7 @@ test.describe("2. Shopping cart flow", () => {
     await inventoryPage.open();
   });
 
-  test("2.1 Adds selected products to the cart and verifies cart contents{ inventoryPage, cartPage }", async ({ inventoryPage, cartPage }) => {
+  test("2.1 Adds selected products to the cart and verifies cart contents", async ({ inventoryPage, cartPage }) => {
     // Verify cart link on 'Products' page has no numbers when opened first time
     await expect(inventoryPage.cartLink, "Confirm cart link is empty on 'Products' page").toHaveText("");
 
@@ -34,11 +34,19 @@ test.describe("2. Shopping cart flow", () => {
     // Verify cart page title, then start checkout
     await expect(cartPage.pageTitle, "Confirm cart page title is valid").toHaveText(cartPage.pageTitleText);
 
+    // Verify total cart items count on the page
+    await expect
+      .poll(() => cartPage.getItemCount(), "Confirm total cart items count")
+      .toBe(productsList.length);
+
     // Verify specific products present on the shopping cart page
     for (const product of productsList) {
-      const productName = product.name;
-      const productElements = cartPage.inventoryItems.filter({ hasText: productName });
-      await expect(productElements, "Confirm product '" + productName + "' is present on the shopping cart page").toHaveCount(1);
+
+      await expect(cartPage.getProductItem(product), `Confirm product '${product.name}' is present on the shopping cart page`).toHaveCount(1);
+      //   const productName = product.name;
+      //   const productElements = cartPage.inventoryItems.filter({ hasText: productName });
+      //   await expect(productElements, "Confirm product '" + productName + "' is present on the shopping cart page").toHaveCount(1);
+      // TODO: remove ^^
     }
   });
 
