@@ -1,45 +1,31 @@
-import { test, expect } from "@playwright/test";
-import { ProductsPage } from "@pages/ProductsPage";
-import { CartPage } from "@pages/CartPage";
-import { CheckoutStepOnePage } from "@pages/CheckoutStepOnePage";
-import { CheckoutStepTwoPage } from "@pages/CheckoutStepTwoPage";
-import { CheckoutCompletePage } from "@pages/CheckoutCompletePage";
+import { test, expect } from "@fixtures/pages.fixture";
+import { sumCurrencyAmounts, calculateTax } from "@utilities/index";
 
 // Import test data
 import products from "@data/products.json";
 import shippingInfo from "@data/shipping.json";
+import pricing from "@data/locale.json";
 
 test.describe("3. Checkout flow", () => {
-  let productsPage: ProductsPage;
-  let cartPage: CartPage;
-  let checkoutStepOnePage: CheckoutStepOnePage;
-  let checkoutStepTwoPage: CheckoutStepTwoPage;
-  let checkoutComplete: CheckoutCompletePage;
 
-  test.beforeEach(async ({ page }) => {
-    productsPage = new ProductsPage(page);
-    cartPage = new CartPage(page);
-    checkoutStepOnePage = new CheckoutStepOnePage(page);
-    checkoutStepTwoPage = new CheckoutStepTwoPage(page);
-    checkoutComplete = new CheckoutCompletePage(page);
-
+  test.beforeEach(async ({ inventoryPage }) => {
     // Navigate directly to the products page using the pre-authenticated state
-    await productsPage.open();
+    await inventoryPage.open();
   });
 
-  test("3.1 Completes checkout for a selected product", async () => {
+  test("3.1 Completes checkout for a selected product", async ({ inventoryPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage }) => {
     const productsList = [products[2]];
     const productsListCount = productsList.length;
     const productsListCountStr = productsListCount.toString();
 
     // Add product to cart
-    await productsPage.addProductsToCart(productsList);
+    await inventoryPage.addProductsToCart(productsList);
 
     // Verify cart badge count on 'Products' page
-    await expect(productsPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(procuctsListCountStr);
+    await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(productsListCountStr);
 
     // Open shopping cart
-    await productsPage.viewCart();
+    await inventoryPage.viewCart();
 
     // Verify cart page title
     await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
@@ -71,34 +57,34 @@ test.describe("3. Checkout flow", () => {
     await checkoutStepTwoPage.finishOrder();
 
     // Verify checkout complete header and text
-    await expect(checkoutComplete.completeHeader, "Confirm complete header is valid").toHaveText(
-      checkoutComplete.completeHeaderText,
+    await expect(checkoutCompletePage.completeHeader, "Confirm complete header is valid").toHaveText(
+      checkoutCompletePage.completeHeaderText,
     );
-    await expect(checkoutComplete.completeTextElement, "Confirm complete text is valid").toHaveText(
-      checkoutComplete.completeText,
+    await expect(checkoutCompletePage.completeTextElement, "Confirm complete text is valid").toHaveText(
+      checkoutCompletePage.completeText,
     );
   });
 
-  test("3.2 Completes checkout and verifies totals for multiple selected products", async () => {
+  test("3.2 Completes checkout and verifies totals for multiple selected products", async ({ inventoryPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage }) => {
     const productsList = [products[2], products[1], products[0]];
     const productsListCount = productsList.length;
     const productsListCountStr = productsListCount.toString();
 
     // Add multiple products to cart
-    await productsPage.addProductsToCart(productsList);
+    await inventoryPage.addProductsToCart(productsList);
 
     // Verify cart badge count on 'Products' page
-    await expect(productsPage.cartBadge, "Confirm cart badge count is valid").toHaveText(procuctsListCountStr);
+    await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid").toHaveText(productsListCountStr);
 
     // Open shopping cart
-    await productsPage.viewCart();
+    await inventoryPage.viewCart();
 
     // Verify cart page title
     await expect(cartPage.pageTitle, "Confirm page title is valid").toHaveText(cartPage.pageTitleText);
 
     // Verify cart badge count on 'Shopping Cart' page
     await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(
-      procuctsListCountStr,
+      productsListCountStr,
     );
 
     // Verify list of cart items count
@@ -120,16 +106,24 @@ test.describe("3. Checkout flow", () => {
     await expect(checkoutStepTwoPage.pageTitle, "Confirm page title is valid").toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Verify subtotal, tax, and total amounts
-    const actualSubtotal = await checkoutStepTwoPage.getSubtotal();
-    const expectedSubtotal = productsList.reduce((acc, product) => acc + product.price, 0);
-
-    expect(actualSubtotal, "Subtotal is not correct").toEqual(expectedSubtotal);
-
     // Calculate expected total based on subtotal and tax, then verify total
-    const actualTax = await checkoutStepTwoPage.getTax();
-    const expectedTotal = (expectedSubtotal + actualTax).toFixed(2);
-    const actualTotal = (await checkoutStepTwoPage.getTotal()).toFixed(2);
 
-    expect(actualTotal, "Total is not correct").toEqual(expectedTotal);
+    // 1. Verify Subtotal matches sum of product prices
+    const expectedSubtotal = sumCurrencyAmounts(productsList.map((p) => p.price));
+    await expect
+      .poll(() => checkoutStepTwoPage.getSubtotal(), "Subtotal is not correct")
+      .toBe(expectedSubtotal);
+
+    // 2. Verify Tax matches expected tax calculation (8% of subtotal)
+    const expectedTax = calculateTax(expectedSubtotal, pricing);
+    await expect
+      .poll(() => checkoutStepTwoPage.getTax(), "Tax is not correct")
+      .toBe(expectedTax);
+
+    // 3. Verify Total matches Subtotal + Tax
+    const expectedTotal = await checkoutStepTwoPage.getCalculatedTotal(expectedSubtotal);
+    await expect
+      .poll(() => checkoutStepTwoPage.getTotal(), "Total is not correct")
+      .toBe(expectedTotal);
   });
 });

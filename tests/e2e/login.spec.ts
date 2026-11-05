@@ -1,11 +1,4 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "@pages/LoginPage";
-import { ProductsPage } from "@pages/ProductsPage";
-import { CartPage } from "@pages/CartPage";
-import { CheckoutStepOnePage } from "@pages/CheckoutStepOnePage";
-import { CheckoutStepTwoPage } from "@pages/CheckoutStepTwoPage";
-import { CheckoutCompletePage } from "@pages/CheckoutCompletePage";
-import { InternalPage } from "@pages/InternalPage";
+import { test, expect } from "@fixtures/pages.fixture";
 
 /**
  * Test suite for login functionality and access control.
@@ -17,34 +10,26 @@ test.use({ storageState: { cookies: [], origins: [] } });
  * Login Test Scenarios for SauceDemo
  */
 test.describe("1. Login page", () => {
-  let loginPage: LoginPage;
-  let productsPage: ProductsPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    productsPage = new ProductsPage(page);
-  });
-
   /**
    * Scenario 1: Login as standard user with valid password - successful
    * Verify "Products" page opened
    */
-  test("1.1. Login with valid credentials - successful", async ({ page }) => {
+  test("1.1. Login with valid credentials - successful", async ({ page, loginPage, inventoryPage }) => {
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
+    await expect(page, "Confirm Products page is displayed").toHaveURL(inventoryPage.pageUrl);
 
     // Verify Products page title
-    await expect(productsPage.pageTitle, "Confirm page title is valid").toHaveText(productsPage.pageTitleText);
+    await expect(inventoryPage.pageTitle, "Confirm page title is valid").toHaveText(inventoryPage.pageTitleText);
   });
 
   /**
    * Scenario 2: Login as standard user with invalid password - unsuccessful
    * Verify error message displayed
    */
-  test("1.2. Login with valid username and invalid password - unsuccessful", async ({ page }) => {
+  test("1.2. Login with valid username and invalid password - unsuccessful", async ({ page, loginPage }) => {
     // Login with invalid password
     await loginPage.login(process.env.STANDARD_USER!, "invalid_password");
 
@@ -60,7 +45,7 @@ test.describe("1. Login page", () => {
    * Scenario 3: Login with invalid username and valid password - unsuccessful
    * Verify error message displayed
    */
-  test("1.3. Login with invalid username and valid password - unsuccessful", async ({ page }) => {
+  test("1.3. Login with invalid username and valid password - unsuccessful", async ({ page, loginPage }) => {
     // Login with locked out username and valid password
     await loginPage.login("invalid_user", process.env.DEMO_PASSWORD!);
 
@@ -76,7 +61,7 @@ test.describe("1. Login page", () => {
    * Scenario 4: Login with locked out user and valid password - unsuccessful
    * Verify error message displayed
    */
-  test("1.4. Login with locked out username - unsuccessful", async ({ page }) => {
+  test("1.4. Login with locked out username - unsuccessful", async ({ page, loginPage }) => {
     // Login with locked out username and valid password
     await loginPage.login(process.env.LOCKED_OUT_USER!, process.env.DEMO_PASSWORD!);
 
@@ -91,25 +76,26 @@ test.describe("1. Login page", () => {
   /**
    * Scenario 5: Login as standard user, logout, verify Products page not accessible
    */
-  test("1.5. Login, logout, verify Products page not accessible", async ({ page }) => {
+  test("1.5. Login, logout, verify Products page not accessible", async ({ page, loginPage,
+    checkoutStepOnePage, inventoryPage, checkoutStepTwoPage, checkoutCompletePage, cartPage }) => {
     // Login with valid credentials
     await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
 
     // Verify Products page is displayed
-    await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
+    await expect(page, "Confirm Products page is displayed").toHaveURL(inventoryPage.pageUrl);
 
     // Click logout
-    await productsPage.clickLogoutMenu();
+    await inventoryPage.clickLogoutMenu();
 
     // Verify redirected to login page
     await expect(page).toHaveURL(/.*\/$/);
 
     const internalPages: InternalPage[] = [
-      new ProductsPage(page),
-      new CheckoutStepOnePage(page),
-      new CheckoutStepTwoPage(page),
-      new CheckoutCompletePage(page),
-      new CartPage(page),
+      inventoryPage,
+      checkoutStepOnePage,
+      checkoutStepTwoPage,
+      checkoutCompletePage,
+      cartPage,
     ];
 
     for (const internalPage of internalPages) {

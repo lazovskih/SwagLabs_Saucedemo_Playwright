@@ -1,18 +1,39 @@
-import { test as pages } from "@playwright/test";
+import { test as base, expect } from "@playwright/test";
 import { LoginPage } from "@pages/LoginPage";
-import { ProductsPage } from "@pages/ProductsPage";
+import { InventoryPage } from "@pages/InventoryPage";
 import { CartPage } from "@pages/CartPage";
 import { CheckoutStepOnePage } from "@pages/CheckoutStepOnePage";
 import { CheckoutStepTwoPage } from "@pages/CheckoutStepTwoPage";
 import { CheckoutCompletePage } from "@pages/CheckoutCompletePage";
 
-pages("Set pages", async ({ page }) => {
-    return {
-        productPage: new ProductsPage(page),
-        checkoutStepOnePage: new CheckoutStepOnePage(page),
-        checkoutStepTwoPage: new CheckoutStepTwoPage(page),
-        checkoutCompletePage: new CheckoutCompletePage(page),
-        cartPage: new CartPage(page),
-        loginPage: new LoginPage(page)
-    }
+export interface PageFixtures {
+    loginPage: LoginPage;
+    inventoryPage: InventoryPage;
+    cartPage: CartPage;
+    checkoutStepOnePage: CheckoutStepOnePage;
+    checkoutStepTwoPage: CheckoutStepTwoPage;
+    checkoutCompletePage: CheckoutCompletePage;
+}
+
+export const test = base.extend<PageFixtures>({
+    loginPage: async ({ page }, use) => {
+        await use(new LoginPage(page));
+    },
+    inventoryPage: async ({ page }, use) => {
+        await use(new InventoryPage(page));
+    },
+    cartPage: async ({ page }, use) => {
+        await use(new CartPage(page));
+    },
+    checkoutStepOnePage: async ({ page }, use) => {
+        await use(new CheckoutStepOnePage(page));
+    },
+    checkoutStepTwoPage: async ({ page }, use) => {
+        await use(new CheckoutStepTwoPage(page));
+    },
+    checkoutCompletePage: async ({ page }, use) => {
+        await use(new CheckoutCompletePage(page));
+    },
 });
+
+export { expect };

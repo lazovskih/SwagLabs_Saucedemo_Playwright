@@ -1,4 +1,4 @@
-import { Product } from "@data-types";
+import { Product, PricingConfig } from "@data-types";
 
 /**
  * Options to configure currency parsing behavior.
@@ -67,4 +67,27 @@ export function parseCurrencyToNumber(rawText: string | null | undefined, option
   }
 
   return parsedValue;
+}
+
+/**
+ * Converts a dollar amount (e.g., 29.99) to integer cents (2999).
+ */
+export function toCents(amount: number): number {
+  return Math.round(amount * 100);
+}
+
+/**
+ * Sums an array of dollar amounts using exact integer cents math
+ * and returns the exact dollar total (e.g., [15.99, 9.99, 29.99] -> 55.97).
+ */
+export function sumCurrencyAmounts(amounts: number[]): number {
+  const totalCents = amounts.reduce((sum, amount) => sum + toCents(amount), 0);
+  return totalCents / 100;
+}
+
+/**
+ * Calculates tax rounded to the nearest cent using integer cents math.
+ */
+export function calculateTax(subtotal: number, pricing: PricingConfig): number {
+  return Math.round(toCents(subtotal) * pricing.taxRate) / 100;
 }

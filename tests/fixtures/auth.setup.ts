@@ -1,6 +1,6 @@
 import { test as setup } from "@playwright/test";
 import { LoginPage } from "@pages/LoginPage";
-import { ProductsPage } from "@pages/ProductsPage";
+import { InventoryPage } from "@pages/InventoryPage";
 
 const authFile = "playwright/.auth/user.json";
 
@@ -17,18 +17,18 @@ setup("authenticate", async ({ page }) => {
     }
 
     const loginPage = new LoginPage(page);
-    const productsPage = new ProductsPage(page);
+    const inventoryPage = new InventoryPage(page);
 
     await loginPage.login(username, password);
 
     // 2. Auto-wait for navigation; if it fails, extract the on-screen error message
     try {
-        await page.waitForURL(new RegExp(productsPage.pageUrl), { timeout: 5000 });
+        await page.waitForURL(new RegExp(inventoryPage.pageUrl), { timeout: 5000 });
     } catch {
         const errorBanner = await loginPage.errorMessage.textContent().catch(() => null);
         throw new Error(
             `[Auth Setup Failed for '${username}']:\n` +
-            (errorBanner ? `  Site Error: "${errorBanner.trim()}"\n` : `  Timed out navigating to '${productsPage.pageUrl}'.\n`) +
+            (errorBanner ? `  Site Error: "${errorBanner.trim()}"\n` : `  Timed out navigating to '${inventoryPage.pageUrl}'.\n`) +
             `  Please verify credentials in your .env file or CI secrets.`
         );
     }

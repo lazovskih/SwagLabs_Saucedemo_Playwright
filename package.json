@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "eslint . --max-warnings=0",
     "pretest": "npm run lint",
+    "typecheck": "tsc --noEmit",
     "test": "playwright test",
     "test:ci": "playwright test",
     "test:headed": "npx playwright test --headed",

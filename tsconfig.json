@@ -10,10 +10,11 @@
     "skipLibCheck": true,
     "types": ["node"],
     "paths": {
-      "@helpers/*": ["./tests/utilities/*"],
+      "@utilities/*": ["./tests/utilities/*"],
       "@pages/*": ["./tests/pages/*"],
       "@data-types": ["./tests/types/index"],
-      "@data/*": ["./data/*"]
+      "@data/*": ["./data/*"],
+      "@fixtures/*": ["./tests/fixtures/*"]
     }
   },
   "include": ["**/*.ts", "**/*.json", "tests/**/*", "playwright.config.ts"]

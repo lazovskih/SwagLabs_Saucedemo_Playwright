@@ -7,7 +7,7 @@
   {
     "firstName": "John",
     "lastName": "Smith",
-    "PostalCode": "92103"
+    "postalCode": "92103"
   },
   {
     "firstName": "Alice",

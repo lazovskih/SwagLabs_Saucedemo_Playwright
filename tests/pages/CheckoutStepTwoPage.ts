@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { InternalPage } from "@pages/InternalPage";
-import { parseCurrencyToNumber } from "@helpers/index";
+import { parseCurrencyToNumber } from "@utilities/index";
+import { sumCurrencyAmounts } from "@utilities/index";
 
 /**
  * Checkout Step Two (overview) page.
@@ -29,6 +30,7 @@ export class CheckoutStepTwoPage extends InternalPage {
     this.finishButton = page.locator('[data-test="finish"]');
     this.cancelLink = page.locator('[data-test="cancel"]');
   }
+
   /**
    * Retrieves and parses the summary subtotal into a numeric value.
    * @returns Formatted numeric value of the subtotal.
@@ -62,5 +64,17 @@ export class CheckoutStepTwoPage extends InternalPage {
   async finishOrder() {
     await this.finishButton.click();
     await this.page.waitForLoadState("load");
+  }
+
+  /**
+   * Calculates the expected total by summing the subtotal and displayed tax
+   * using exact integer cents math.
+   * @param subtotal - Optional pre-validated subtotal; if omitted, reads subtotal from the page.
+   * @returns Calculated total amount (subtotal + tax).
+   */
+  async getCalculatedTotal(subtotal?: number): Promise<number> {
+    const resolvedSubtotal = subtotal ?? (await this.getSubtotal());
+    const actualTax = await this.getTax();
+    return sumCurrencyAmounts([resolvedSubtotal, actualTax]);
   }
 }
