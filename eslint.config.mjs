@@ -1,38 +1,40 @@
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import playwright from 'eslint-plugin-playwright';
+import { defineConfig } from "eslint/config";
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+import playwright from "eslint-plugin-playwright";
 
-export default tseslint.config(
-  // 1. Base JS rules for all files (including config files)
+export default defineConfig([
+  // 1. Global ignores
+  {
+    ignores: ["test-results/**", "playwright-report/**", "blob-report/**", "playwright/.cache/**", "node_modules/**"],
+  },
+
+  // 2. Base JS rules
   js.configs.recommended,
 
-  // 2. Playwright and TypeScript config - strictly applied to your test/spec files
+  // 3. TypeScript type-checked rules for ALL .ts files (including playwright.config.ts)
   {
-    files: ['tests/**/*.ts', '**/*.spec.ts', '**/*.test.ts'],
-    extends: [
-      ...tseslint.configs.recommendedTypeChecked,
-    ],
+    files: ["**/*.ts"],
+    extends: [...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.json'],
+        project: ["./tsconfig.json"],
         tsconfigRootDir: import.meta.dirname,
       },
     },
-    plugins: {
-      playwright,
-    },
     rules: {
-      '@typescript-eslint/no-floating-promises': 'error',
-      'playwright/missing-playwright-await': [
-        'error',
-        { customMatchers: [] },
-      ],
-      'playwright/valid-expect': 'error',
+      "@typescript-eslint/no-floating-promises": "error",
     },
   },
 
-  // 3. Global ignores (optional, but good practice)
+  // 4. Playwright recommended rules for test and page object files
   {
-    ignores: ['test-results/**', 'playwright-report/**', 'node_modules/**'],
-  }
-);
+    ...playwright.configs["flat/recommended"],
+    files: ["tests/**/*.ts"],
+    rules: {
+      ...playwright.configs["flat/recommended"].rules,
+      // Allow web-first expect() assertions inside Page Object / Component helper methods
+      "playwright/no-standalone-expect": "off",
+    },
+  },
+]);

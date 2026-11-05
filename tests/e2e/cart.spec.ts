@@ -84,28 +84,26 @@ test.describe("2. Shopping cart flow", () => {
   test("2.4 Cart badge updates quantity correctly when items are added and removed", async ({ inventoryPage }) => {
     let expectedCount = 0;
 
-    // Add all items and verify badge count increments
+    // 1. Add all items and verify badge count increments
     for (const product of products) {
-      const addToCartButton = inventoryPage.getButton(product, "add");
-      await addToCartButton.click();
+      await inventoryPage.addProductToCart(product);
       expectedCount++;
 
       await expect(inventoryPage.cartBadge).toBeVisible();
       await expect(inventoryPage.cartBadge).toHaveText(expectedCount.toString());
     }
 
-    // Remove all items and verify badge count decrements
-    for (const product of products) {
-      const removeButton = inventoryPage.getButton(product, "remove");
-      await removeButton.click();
+    // 2. Remove all but the last item and verify badge count decrements (5 -> 1)
+    for (const product of products.slice(0, -1)) {
+      await inventoryPage.removeProduct(product);
       expectedCount--;
 
-      if (expectedCount === 0) {
-        await expect(inventoryPage.cartBadge).toBeHidden();
-      } else {
-        await expect(inventoryPage.cartBadge).toHaveText(expectedCount.toString());
-      }
+      await expect(inventoryPage.cartBadge).toHaveText(expectedCount.toString());
     }
+
+    // 3. Remove the final item and verify the badge disappears completely
+    await inventoryPage.removeProduct(products[products.length - 1]);
+    await expect(inventoryPage.cartBadge).toBeHidden();
 
     // Verify cart link on 'Products' page has no numbers when all items are removed
     await expect(inventoryPage.cartLink, "Confirm cart link is empty on 'Products' page").toHaveText("");

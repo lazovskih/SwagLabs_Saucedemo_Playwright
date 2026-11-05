@@ -10,9 +10,9 @@ import type { Product, CartButtonAction } from "@data-types";
 export class InventoryPage extends InternalPage {
     pageTitleText = "Products";
     pageUrl = "/inventory.html";
+    private readonly productActions: ProductActionsComponent;
 
     // Page locators
-    private readonly productActions: ProductActionsComponent;
     readonly sortSelector: Locator;
     readonly inventoryItems: Locator;
     readonly itemNames: Locator;
