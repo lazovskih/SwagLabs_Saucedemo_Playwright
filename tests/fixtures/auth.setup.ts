@@ -1,25 +1,14 @@
 import { test as setup } from "@playwright/test";
 import { LoginPage } from "@pages/LoginPage";
 import { InventoryPage } from "@pages/InventoryPage";
+import { env } from "@utilities/index";
 
 const authFile = "playwright/.auth/user.json";
 
 setup("authenticate", async ({ page }) => {
-    const username = process.env.STANDARD_USER;
-    const password = process.env.DEMO_PASSWORD;
-
-    // 1. Fail fast if environment variables are not configured
-    if (!username || !password) {
-        throw new Error(
-            `[Auth Setup Error]: Missing credentials.\n` +
-            `Please ensure STANDARD_USER and DEMO_PASSWORD are set in your .env file or environment variables.`
-        );
-    }
-
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
-
-    await loginPage.login(username, password);
+    await loginPage.login(env.standardUser, env.demoPassword);
 
     // 2. Auto-wait for navigation; if it fails, extract the on-screen error message
     try {
@@ -27,7 +16,7 @@ setup("authenticate", async ({ page }) => {
     } catch {
         const errorBanner = await loginPage.errorMessage.textContent().catch(() => null);
         throw new Error(
-            `[Auth Setup Failed for '${username}']:\n` +
+            `[Auth Setup Failed for '${env.standardUser}']:\n` +
             (errorBanner ? `  Site Error: "${errorBanner.trim()}"\n` : `  Timed out navigating to '${inventoryPage.pageUrl}'.\n`) +
             `  Please verify credentials in your .env file or CI secrets.`
         );

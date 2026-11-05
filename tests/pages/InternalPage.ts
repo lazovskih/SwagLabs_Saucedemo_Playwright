@@ -17,7 +17,7 @@ export abstract class InternalPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.mainMenuButton = page.locator('[data-test="open-menu"]');
+    this.mainMenuButton = page.locator('#react-burger-menu-btn');
     this.sideMenu = page.locator(".bm-menu");
     this.allItemsMenu = page.locator('[data-test="inventory-sidebar-link"]');
     this.aboutMenu = page.locator('[data-test="about-sidebar-link"]');
@@ -31,8 +31,10 @@ export abstract class InternalPage extends BasePage {
    */
   async clickMenuButton() {
     // Implementation that works better for webkit browser and others
-    await this.mainMenuButton.click();
-    await expect(this.sideMenu).toBeVisible()
+    await expect(async () => {
+      await this.mainMenuButton.click();
+      await expect(this.sideMenu).toBeVisible({ timeout: 1000 });
+    }).toPass();
   }
 
   /**

@@ -16,7 +16,7 @@ export interface CurrencyParseOptions {
  * @returns Normalized lowercase hyphen-delimited product ID string.
  */
 export function getProductId(product: Product) {
-  return product.name.toLowerCase().replace(/\s+/g, "-");
+  return product.id ?? product.name.toLowerCase().replace(/\s+/g, "-");
 }
 
 /**
@@ -91,3 +91,5 @@ export function sumCurrencyAmounts(amounts: number[]): number {
 export function calculateTax(subtotal: number, pricing: PricingConfig): number {
   return Math.round(toCents(subtotal) * pricing.taxRate) / 100;
 }
+
+export { env, type EnvConfig } from "./env";

@@ -41,12 +41,7 @@ test.describe("2. Shopping cart flow", () => {
 
     // Verify specific products present on the shopping cart page
     for (const product of productsList) {
-
       await expect(cartPage.getProductItem(product), `Confirm product '${product.name}' is present on the shopping cart page`).toHaveCount(1);
-      //   const productName = product.name;
-      //   const productElements = cartPage.inventoryItems.filter({ hasText: productName });
-      //   await expect(productElements, "Confirm product '" + productName + "' is present on the shopping cart page").toHaveCount(1);
-      // TODO: remove ^^
     }
   });
 

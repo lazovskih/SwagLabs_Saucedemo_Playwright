@@ -48,8 +48,8 @@ Tests are automatically executed on every push and pull request to the `main` / 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/lazovskih/SwagLabs_saucedemo.git
-cd SwagLabs_saucedemo
+git clone https://github.com/lazovskih/SwagLabs_Saucedemo_Playwright.git
+cd SwagLabs_Saucedemo_Playwright
 ```
 
 ### 2. Install dependencies
@@ -153,6 +153,7 @@ Saucedemo_Playwright/
 │   └── workflows/
 │       └── playwright.yml          # GitHub Actions CI workflow
 ├── data/
+│   ├── locale.json                 # UI Locale test data
 │   ├── products.json               # Product catalog test data
 │   └── shipping.json               # Customer checkout test data
 ├── tests/
@@ -162,7 +163,8 @@ Saucedemo_Playwright/
 │   │   ├── login.spec.ts           # Authentication & session tests
 │   │   └── sort.spec.ts            # Verify sorting on products page
 │   ├── fixtures/                   # Playwright setup & fixtures
-│   │   └── auth.setup.ts           # Global authentication setup project
+│   │   ├── auth.setup.ts           # Global authentication setup project
+│   │   └── pages.fixture.ts        # All Pages on Page fixture
 │   ├── pages/                      # Page Object Model (POM) classes
 │   │   ├── BasePage.ts             # Base page class with common methods & navigation
 │   │   ├── InternalPage.ts         # Parent class for all internal pages (authenticated)
@@ -175,6 +177,7 @@ Saucedemo_Playwright/
 │   ├── types/                      # TypeScript type declarations
 │   │   └── index.ts                # Product and ShippingData interfaces
 │   └── utilities/                  # Helper utilities
+│       ├── env.ts                  # Environment variables validator
 │       └── index.ts                # Currency parsing and product ID utilities
 ├── playwright.config.ts            # Multi-browser & project dependency config
 ├── tsconfig.json                   # TypeScript configuration & path aliases
