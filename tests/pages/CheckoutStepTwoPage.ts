@@ -12,23 +12,23 @@ export class CheckoutStepTwoPage extends InternalPage {
   pageUrl = "/checkout-step-two.html";
 
   // Checkout page elements - Step Two (overview)
-  private readonly summaryInfo: Locator;
+  // private readonly summaryInfo: Locator;
   private readonly summarySubtotal: Locator;
   private readonly summaryTax: Locator;
   private readonly summaryTotal: Locator;
   private readonly finishButton: Locator;
-  private readonly cancelLink: Locator;
+  // private readonly cancelLink: Locator;
 
   constructor(page: Page) {
     super(page);
 
     // Step Two locators
-    this.summaryInfo = page.locator('[data-test="summary-info"]');
+    // this.summaryInfo = page.locator('[data-test="summary-info"]');
     this.summarySubtotal = page.locator('[data-test="subtotal-label"]');
     this.summaryTax = page.locator('[data-test="tax-label"]');
     this.summaryTotal = page.locator('[data-test="total-label"]');
     this.finishButton = page.locator('[data-test="finish"]');
-    this.cancelLink = page.locator('[data-test="cancel"]');
+    // this.cancelLink = page.locator('[data-test="cancel"]');
   }
 
   /**

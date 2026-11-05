@@ -9,8 +9,8 @@ export abstract class InternalPage extends BasePage {
   // Page locators
   private readonly mainMenuButton: Locator;
   private readonly sideMenu: Locator;
-  private readonly allItemsMenu: Locator;
-  private readonly aboutMenu: Locator;
+  // private readonly allItemsMenu: Locator;
+  // private readonly aboutMenu: Locator;
   private readonly logoutMenu: Locator;
   readonly cartBadge: Locator;
   readonly cartLink: Locator;
@@ -19,8 +19,8 @@ export abstract class InternalPage extends BasePage {
     super(page);
     this.mainMenuButton = page.locator('#react-burger-menu-btn');
     this.sideMenu = page.locator(".bm-menu");
-    this.allItemsMenu = page.locator('[data-test="inventory-sidebar-link"]');
-    this.aboutMenu = page.locator('[data-test="about-sidebar-link"]');
+    // this.allItemsMenu = page.locator('[data-test="inventory-sidebar-link"]');
+    // this.aboutMenu = page.locator('[data-test="about-sidebar-link"]');
     this.logoutMenu = page.locator("#logout_sidebar_link");
     this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
     this.cartLink = page.locator('[data-test="shopping-cart-link"]');

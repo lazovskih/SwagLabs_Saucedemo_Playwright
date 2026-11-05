@@ -172,8 +172,7 @@ Saucedemo_Playwright/
 │   │   ├── CheckoutCompletePage.ts # Order completion confirmation page object
 │   │   ├── CheckoutStepOnePage.ts  # Checkout customer info page object
 │   │   ├── CheckoutStepTwoPage.ts  # Checkout overview & calculation page object
-│   │   ├── LoginPage.ts            # Login page object
-│   │   └── ProductsPage.ts         # Products catalog & inventory page object
+│   │   └── LoginPage.ts            # Login page object
 │   ├── types/                      # TypeScript type declarations
 │   │   └── index.ts                # Product and ShippingData interfaces
 │   └── utilities/                  # Helper utilities
