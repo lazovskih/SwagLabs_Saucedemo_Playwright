@@ -3,15 +3,26 @@
  */
 export interface Product {
     /** Unique slug identifier for the product */
-    Id: string;
+    id: string;
     /** Full display name of the product */
-    Name: string;
+    name: string;
     /** Detailed product description */
-    Description: string;
+    description: string;
     /** Price of the product in USD */
-    Price: number;
+    price: number;
     /** Static asset URL of the product image */
     imageUrl: string;
+}
+
+
+/**
+ * Localized values for UI text and currency.
+ */
+export interface PricingConfig {
+    /** Currency symbol displayed in the UI (e.g., "$") */
+    currencySymbol: string;
+    /** Tax rate as a decimal (e.g., 0.08 for 8%) */
+    taxRate: number;
 }
 
 /**
@@ -19,14 +30,14 @@ export interface Product {
  */
 export interface ShippingData {
     /** Customer first name */
-    FirstName: string;
+    firstName: string;
     /** Customer last name */
-    LastName: string;
+    lastName: string;
     /** Customer postal or zip code */
-    PostalCode: string;
+    postalCode: string;
 }
 
 /**
  * Represents the action of a button in the shopping cart.
  */
-export type CartButtonAction = "add" | "remove" | "add-to-cart";
+export type CartButtonAction = "add" | "remove";

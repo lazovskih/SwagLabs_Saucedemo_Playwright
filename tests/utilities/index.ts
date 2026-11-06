@@ -1,4 +1,4 @@
-import { Product } from "@data-types";
+import { Product, PricingConfig } from "@data-types";
 
 /**
  * Options to configure currency parsing behavior.
@@ -16,14 +16,13 @@ export interface CurrencyParseOptions {
  * @returns Normalized lowercase hyphen-delimited product ID string.
  */
 export function getProductId(product: Product) {
-  return product.Name.toLowerCase().replace(/\s+/g, "-");
+  return product.id ?? product.name.toLowerCase().replace(/\s+/g, "-");
 }
 
 /**
  * Extracts a numeric value by finding the index of the first digit,
  * slicing the number substring to the end of the text, and evaluating
  * any preceding minus sign.
- *
  * Designed for predictable DOM outputs like:
  * - "Tax: $1.92" -> 1.92
  * - "Estimated State Sales Tax: $1,249.92" -> 1249.92
@@ -35,37 +34,64 @@ export function getProductId(product: Product) {
  * @throws Error if no digits are found or if the slice cannot be parsed.
  */
 export function parseCurrencyToNumber(rawText: string | null | undefined, options: CurrencyParseOptions = {}): number {
-  const { allowNegative = false } = options;
-
+  const { currencySymbol = "$", allowNegative = false } = options;
   if (!rawText || typeof rawText !== "string") {
     throw new Error(`[CurrencyParsingError]: Invalid input received: ${JSON.stringify(rawText)}. Expected non-empty string.`);
   }
-
-  const trimmedText = rawText.trim();
-
-  // 1. Locate the index of the very first digit (the delimiter pivot)
-  const firstDigitIndex = trimmedText.search(/\d/);
-
-  if (firstDigitIndex === -1) {
-    throw new Error(`[CurrencyParsingError]: No numeric digits found in input string: "${rawText}".`);
+  const escapedSymbol = currencySymbol.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(-?)\\s*${escapedSymbol}?\\s*(\\d[\\d,]*(?:\\.\\d+)?)`);
+  const match = rawText.trim().match(regex);
+  if (!match) {
+    throw new Error(`[CurrencyParsingError]: No numeric currency value found in input string: "${rawText}".`);
   }
-
-  // 2. Slice the number substring from the first digit to the end
-  // Strip commas (thousands separators) and any trailing non-numeric artifacts
-  const rawNumberPart = trimmedText.slice(firstDigitIndex).replace(/,/g, "").trim();
-
-  // 3. Inspect the prefix substring (everything prior to the first digit) for a minus sign
-  const prefix = trimmedText.slice(0, firstDigitIndex);
-  const isNegative = allowNegative && prefix.includes("-");
-
-  // 4. Parse the final sanitized numeric string
-  const parsedValue = Number.parseFloat((isNegative ? "-" : "") + rawNumberPart);
-
+  const [, minusSign, numberPart] = match;
+  const isNegative = allowNegative && (minusSign === "-" || rawText.includes(`-${currencySymbol}`));
+  const parsedValue = Number.parseFloat((isNegative ? "-" : "") + numberPart.replace(/,/g, ""));
   if (Number.isNaN(parsedValue)) {
-    throw new Error(
-      `[CurrencyParsingError]: Failed to parse extracted substring "${rawNumberPart}" from original: "${rawText}".`,
-    );
+    throw new Error(`[CurrencyParsingError]: Failed to parse extracted substring "${numberPart}" from original: "${rawText}".`);
   }
-
   return parsedValue;
 }
+
+/**
+ * Converts a dollar amount (e.g., 29.99) to integer cents (2999).
+ */
+export function toCents(amount: number): number {
+  return Math.round(amount * 100);
+}
+
+/**
+ * Sums an array of dollar amounts using exact integer cents math
+ * and returns the exact dollar total (e.g., [15.99, 9.99, 29.99] -> 55.97).
+ */
+export function sumCurrencyAmounts(amounts: number[]): number {
+  const totalCents = amounts.reduce((sum, amount) => sum + toCents(amount), 0);
+  return totalCents / 100;
+}
+
+/**
+ * Calculates tax rounded to the nearest cent using integer cents math.
+ */
+export function calculateTax(subtotal: number, pricing: PricingConfig): number {
+  return Math.round(toCents(subtotal) * pricing.taxRate) / 100;
+}
+
+/**
+ * Error fomatter for the setup fixture to satisfy playwright/no-conditional-in-test (only inspects inside the setup() body):
+ * @param username 
+ * @param pageUrl 
+ * @param errorBanner 
+ * @returns 
+ */
+export function formatAuthError(username: string, pageUrl: string, errorBanner: string | null): string {
+  const detail = errorBanner
+    ? `  Site Error: "${errorBanner.trim()}"\n`
+    : `  Timed out navigating to '${pageUrl}'.\n`;
+
+  return (
+    `[Auth Setup Failed for '${username}']:\n` +
+    detail +
+    `  Please verify credentials in your .env file or CI secrets.`
+  );
+}
+export { env, type EnvConfig } from "./env";

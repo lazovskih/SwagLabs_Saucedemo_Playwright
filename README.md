@@ -14,30 +14,33 @@ A demo end-to-end test automation project for the [SauceDemo](https://www.sauced
 
 This project demonstrates automated E2E testing of key user flows on the [www.saucedemo.com](https://www.saucedemo.com) website, including:
 
-- 🔐 User authentication (login / logout)
+- 🔐 User authentication (login, logout, and route access control)
 - 🛍️ Adding and removing items from the shopping cart
-- 💳 Checkout flow (customer details → order summary → order confirmation)
+- 💳 Checkout flow (customer details → order summary & tax/total calculation → order confirmation)
+- 🔃 Product catalog sorting (by name A–Z / Z–A and price low-to-high / high-to-low)
 
-The tests are written using the **Page Object Model (POM)** pattern for maintainability and clarity.
+The tests are architected using the **Page Object Model (POM)** with **component composition** and **Playwright custom fixtures** (`test.extend`) for maintainability and clarity.
 
 ### Tech Stack
 
-| Tool                                  | Version           |
-| ------------------------------------- | ----------------- |
-| [Playwright](https://playwright.dev/) | ^1.59.1           |
-| TypeScript                            | via `@types/node` |
-| Node.js                               | LTS               |
-| dotenv                                | ^17.4.2           |
+| Tool                                                        | Version   |
+| ----------------------------------------------------------- | --------- |
+| [Playwright](https://playwright.dev/)                       | ^1.59.1   |
+| [TypeScript](https://www.typescriptlang.org/)               | ^6.0.3    |
+| [Node.js](https://nodejs.org/)                              | 22 LTS    |
+| [ESLint](https://eslint.org/) + `eslint-plugin-playwright`  | ^10.13.0  |
+| [Husky](https://typicode.github.io/husky/) + `lint-staged`  | ^9.1.7    |
+| [dotenv](https://github.com/motdotla/dotenv)                | ^17.4.2   |
 
 ### CI/CD
 
-Tests are automatically executed on every push and pull request to the `main` / `master` branch via **GitHub Actions**. Test credentials are stored securely as GitHub Secrets in the `TEST` environment.
+Tests and static analysis quality gates (`eslint` and `tsc --noEmit`) are automatically executed via **GitHub Actions**. Test credentials are stored securely as GitHub Secrets in the `TEST` environment.
 
 ---
 
 ## ⚙️ Prerequisites
 
-- [Node.js](https://nodejs.org/) (LTS version recommended)
+- [Node.js](https://nodejs.org/) (v22 LTS recommended)
 - [Git](https://git-scm.com/)
 - A SauceDemo account — use the standard credentials provided at [www.saucedemo.com](https://www.saucedemo.com)
 
@@ -48,8 +51,8 @@ Tests are automatically executed on every push and pull request to the `main` / 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/lazovskih/SwagLabs_saucedemo.git
-cd SwagLabs_saucedemo
+git clone https://github.com/lazovskih/SwagLabs_Saucedemo_Playwright.git
+cd SwagLabs_Saucedemo_Playwright
 ```
 
 ### 2. Install dependencies
@@ -69,10 +72,10 @@ npx playwright install --with-deps
 Create a `.env` file in the project root:
 
 ```bash
-cp .env.example .env   # if an example file is available, otherwise create manually
+cp .env.example .env
 ```
 
-Add your credentials to `.env` and to Environment secrets:
+Add your credentials to `.env` and to GitHub Environment secrets:
 
 ```env
 STANDARD_USER=set_username
@@ -85,15 +88,15 @@ URL=https://www.saucedemo.com
 
 ---
 
-## ▶️ Running Tests
+## ▶️ Running Tests & Quality Checks
 
-### Run all tests (headless)
+### Run all tests (headless, runs ESLint automatically via `pretest`)
 
 ```bash
 npm test
 ```
 
-or equivalently:
+or run Playwright directly:
 
 ```bash
 npx playwright test
@@ -108,7 +111,7 @@ npm run test:headed
 ### Run tests with the interactive Playwright UI
 
 ```bash
-npx playwright test --ui
+npm run test:ui
 ```
 
 ### Run a specific test file
@@ -117,6 +120,7 @@ npx playwright test --ui
 npx playwright test tests/e2e/login.spec.ts
 npx playwright test tests/e2e/cart.spec.ts
 npx playwright test tests/e2e/checkout.spec.ts
+npx playwright test tests/e2e/sort.spec.ts
 ```
 
 ### Run tests on a specific browser
@@ -125,6 +129,13 @@ npx playwright test tests/e2e/checkout.spec.ts
 npx playwright test --project=chromium
 npx playwright test --project=firefox
 npx playwright test --project=webkit
+```
+
+### Run linting and TypeScript type-checking
+
+```bash
+npm run lint
+npm run typecheck
 ```
 
 ---
@@ -148,38 +159,49 @@ npx playwright show-report
 ## 📁 Project Structure
 
 ```
-Saucedemo_Playwright/
+SwagLabs_Saucedemo_Playwright/
 ├── .github/
 │   └── workflows/
-│       └── playwright.yml          # GitHub Actions CI workflow
+│       └── playwright.yml                       # GitHub Actions CI workflow
+├── .husky/
+│   └── pre-commit                               # Pre-commit hook running lint-staged
 ├── data/
-│   ├── products.json               # Product catalog test data
-│   └── shipping.json               # Customer checkout test data
+│   ├── locale.json                              # Store currency & tax rate test data
+│   ├── products.json                            # Product catalog test data
+│   └── shipping.json                            # Customer checkout test data
 ├── tests/
-│   ├── e2e/                        # End-to-end test suites
-│   │   ├── cart.spec.ts            # Shopping cart flow tests
-│   │   ├── checkout.spec.ts        # Checkout and order placement tests
-│   │   └── login.spec.ts           # Authentication & session tests
-│   ├── fixtures/                   # Playwright setup & fixtures
-│   │   └── auth.setup.ts           # Global authentication setup project
-│   ├── pages/                      # Page Object Model (POM) classes
-│   │   ├── BasePage.ts             # Base page class with common methods & navigation
-│   │   ├── CartPage.ts             # Shopping cart page object
-│   │   ├── CheckoutComplete.ts     # Order completion confirmation page object
-│   │   ├── CheckoutStepOnePage.ts  # Checkout customer info page object
-│   │   ├── CheckoutStepTwoPage.ts  # Checkout overview & calculation page object
-│   │   ├── LoginPage.ts            # Login page object
-│   │   └── ProductsPage.ts         # Products catalog & inventory page object
-│   ├── types/                      # TypeScript type declarations
-│   │   └── index.ts                # Product and ShippingData interfaces
-│   └── utilities/                  # Helper utilities
-│       └── index.ts                # Currency parsing and product ID utilities
-├── playwright.config.ts            # Multi-browser & project dependency config
-├── tsconfig.json                   # TypeScript configuration & path aliases
-├── package.json                    # Project dependencies and npm scripts
-├── .env                            # Local environment variables (not committed)
-├── .env.example                    # Environment variable template
-└── README.md                       # Project documentation
+│   ├── e2e/                                     # End-to-end test suites
+│   │   ├── cart.spec.ts                         # Shopping cart flow tests
+│   │   ├── checkout.spec.ts                     # Checkout and order placement tests
+│   │   ├── login.spec.ts                        # Authentication & session tests
+│   │   └── sort.spec.ts                         # Product sorting tests
+│   ├── fixtures/                                # Playwright setup & custom fixtures
+│   │   ├── auth.setup.ts                        # Global authentication setup project
+│   │   └── pages.fixture.ts                     # Custom page object fixtures
+│   ├── pages/                                   # Page Object Model (POM) classes
+│   │   ├── components/
+│   │   │   └── ProductActionsComponent.ts       # Shared product/cart item actions component
+│   │   ├── BasePage.ts                          # Abstract base page with navigation
+│   │   ├── InternalPage.ts                      # Abstract base for authenticated pages (header/menu)
+│   │   ├── CartPage.ts                          # Shopping cart page object
+│   │   ├── CheckoutCompletePage.ts              # Order completion confirmation page object
+│   │   ├── CheckoutStepOnePage.ts               # Checkout customer info page object
+│   │   ├── CheckoutStepTwoPage.ts               # Checkout overview & calculation page object
+│   │   ├── InventoryItemPage.ts                 # Single product item detail page object
+│   │   ├── InventoryPage.ts                     # Products catalog & inventory page object
+│   │   └── LoginPage.ts                         # Login page object
+│   ├── types/                                   # TypeScript type declarations
+│   │   └── index.ts                             # Product, PricingConfig, and ShippingData types
+│   └── utilities/                               # Helper utilities
+│       ├── env.ts                               # Environment variable validation & config
+│       └── index.ts                             # Currency parsing, cents math, and product helpers
+├── eslint.config.mjs                            # ESLint flat configuration (TS + Playwright)
+├── playwright.config.ts                         # Multi-browser & project dependency config
+├── tsconfig.json                                # TypeScript configuration & path aliases
+├── package.json                                 # Project dependencies and npm scripts
+├── .env                                         # Local environment variables (not committed)
+├── .env.example                                 # Environment variable template
+└── README.md                                    # Project documentation
 ```
 
 ---

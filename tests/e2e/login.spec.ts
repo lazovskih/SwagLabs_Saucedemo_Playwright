@@ -1,107 +1,98 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
-import { ProductsPage } from "../pages/ProductsPage";
+import { test, expect } from "@fixtures/pages.fixture";
+import { env } from "@utilities/index";
+import type { LoginPage } from "@pages/LoginPage";
 
+/**
+ * Test suite for login functionality and access control.
+ * Covers scenarios for valid and invalid login attempts, as well as logout behavior.
+ */
 test.use({ storageState: { cookies: [], origins: [] } });
+
 /**
  * Login Test Scenarios for SauceDemo
  */
 test.describe("1. Login page", () => {
-  let loginPage: LoginPage;
-  let productsPage: ProductsPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    productsPage = new ProductsPage(page);
-
-    // Navigate to login page
-    await loginPage.open();
-  });
-
   /**
    * Scenario 1: Login as standard user with valid password - successful
    * Verify "Products" page opened
    */
-  test("1.1. Login with valid credentials - successful", async ({ page }) => {
+  test("1.1. Login with valid credentials - successful", async ({ page, loginPage, inventoryPage }) => {
     // Login with valid credentials
-    await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
+    await loginPage.login(env.standardUser, env.demoPassword);
 
     // Verify Products page is displayed
-    await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
+    await expect(page, "Confirm Products page is displayed").toHaveURL(inventoryPage.pageUrl);
 
     // Verify Products page title
-    await expect(productsPage.pageTitle, "Confirm page title is valid").toHaveText(productsPage.pageTitleText);
+    await expect(inventoryPage.pageTitle, "Confirm page title is valid").toHaveText(inventoryPage.pageTitleText);
   });
 
   /**
-   * Scenario 2: Login as standard user with invalid password - unsuccessful
-   * Verify error message displayed
+   * Scenario 3-4: Login as user with invalid credentials - unsuccessful
+   * Verify internal pages are not accessible
    */
-  test("1.2. Login with invalid password - unsuccessful", async ({ page }) => {
-    // Login with invalid password
-    await loginPage.login(process.env.STANDARD_USER!, "invalid_password")
-
-    // Verify error message is displayed 
-    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
-    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.errorMessageText);
-
-    // Verify still on login page
-    await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
-  });
-
+  const invalidLoginScenarios = [
+    {
+      title: "1.2. Login with valid username and invalid password - unsuccessful",
+      username: env.standardUser,
+      password: "invalid_password",
+      getExpectedError: (loginPage: LoginPage) => loginPage.errorMessageText,
+    },
+    {
+      title: "1.3. Login with invalid username and valid password - unsuccessful",
+      username: "invalid_user",
+      password: env.demoPassword,
+      getExpectedError: (loginPage: LoginPage) => loginPage.errorMessageText,
+    },
+    {
+      title: "1.4. Login with locked out username - unsuccessful",
+      username: env.lockedOutUser,
+      password: env.demoPassword,
+      getExpectedError: (loginPage: LoginPage) => loginPage.lockedOutMessageText,
+    },
+  ];
+  for (const { title, username, password, getExpectedError } of invalidLoginScenarios) {
+    test(title, async ({ page, loginPage }) => {
+      await loginPage.login(username, password);
+      await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
+      await expect(loginPage.errorMessage, "Error message text should match").toHaveText(getExpectedError(loginPage));
+      await expect(page, "Should remain on login page").toHaveURL(/.*\/$/);
+    });
+  }
 
   /**
-   * Scenario 3: Login with invalid username and valid password - unsuccessful
-   * Verify error message displayed
+   * Scenario 5: Login as standard user, logout, verify internal pages are not accessible
    */
-  test("1.3. Login with invalid username and valid password - unsuccessful", async ({ page }) => {
-    // Login with locked out username and valid password
-    await loginPage.login("invalid_user", process.env.DEMO_PASSWORD!)
-
-    // Verify error message is displayed 
-    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
-    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.errorMessageText);
-
-    // Verify still on login page
-    await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
-  });
-
-  /**
-   * Scenario 4: Login with locked out user and valid password - unsuccessful
-   * Verify error message displayed
-   */
-  test("1.4. Login with locked out username - unsuccessful", async ({ page }) => {
-    // Login with locked out username and valid password
-    await loginPage.login(process.env.LOCKED_OUT_USER!, process.env.DEMO_PASSWORD!)
-
-    // Verify error message is displayed 
-    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
-    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.lockedOutMessageText);
-
-    // Verify still on login page
-    await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
-  });
-
-  /**
-   * Scenario 5: Login as standard user, logout, verify Products page not accessible
-   */
-  test("1.5. Login, logout, verify Products page not accessible", async ({ page }) => {
+  test("1.5. Login, logout, verify internal pages are not accessible", async ({
+    page,
+    loginPage,
+    inventoryPage,
+    internalPages,
+  }) => {
     // Login with valid credentials
-    await loginPage.login(process.env.STANDARD_USER!, process.env.DEMO_PASSWORD!);
+    await loginPage.login(env.standardUser, env.demoPassword);
 
     // Verify Products page is displayed
-    await expect(page, "Confirm Products page is displayed").toHaveURL(productsPage.pageUrl);
+    await expect(page, "Confirm Products page is displayed").toHaveURL(inventoryPage.pageUrl);
 
     // Click logout
-    await productsPage.clickLogoutMenu();
+    await inventoryPage.clickLogoutMenu();
 
     // Verify redirected to login page
     await expect(page).toHaveURL(/.*\/$/);
 
-    // Try to navigate directly to Products page
-    await page.goto(productsPage.pageUrl);
+    for (const internalPage of internalPages) {
 
-    // Verify redirected back to login page (not accessible)
-    await expect(page).toHaveURL(/.*\/$/);
+      // Try to navigate directly to each internal page
+      await internalPage.open();
+
+      // Verify redirected back to login page 
+      await expect(page).toHaveURL(/.*\/$/);
+
+      // Verify error message is displayed with valid reference to page URL
+      const noAccessMessageText = loginPage.noAccessMessageText.replace("{pageUrl}", internalPage.pageUrl);
+      await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
+      await expect(loginPage.errorMessage, "Error message text should match").toHaveText(noAccessMessageText);
+    }
   });
 });

@@ -1,34 +1,35 @@
 import { Locator, Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
-import { parseCurrencyToNumber } from "@helpers/index";
+import { InternalPage } from "@pages/InternalPage";
+import { parseCurrencyToNumber, sumCurrencyAmounts } from "@utilities/index";
 
 /**
  * Checkout Step Two (overview) page.
  * Handles item summaries and order completion.
  */
-export class CheckoutStepTwoPage extends BasePage {
+export class CheckoutStepTwoPage extends InternalPage {
   pageTitleText = "Checkout: Overview";
   pageUrl = "/checkout-step-two.html";
 
   // Checkout page elements - Step Two (overview)
-  private readonly summaryInfo: Locator;
+  // private readonly summaryInfo: Locator;
   private readonly summarySubtotal: Locator;
   private readonly summaryTax: Locator;
   private readonly summaryTotal: Locator;
   private readonly finishButton: Locator;
-  private readonly cancelLink: Locator;
+  // private readonly cancelLink: Locator;
 
   constructor(page: Page) {
     super(page);
 
     // Step Two locators
-    this.summaryInfo = page.locator('[data-test="summary-info"]');
+    // this.summaryInfo = page.locator('[data-test="summary-info"]');
     this.summarySubtotal = page.locator('[data-test="subtotal-label"]');
     this.summaryTax = page.locator('[data-test="tax-label"]');
     this.summaryTotal = page.locator('[data-test="total-label"]');
     this.finishButton = page.locator('[data-test="finish"]');
-    this.cancelLink = page.locator('[data-test="cancel"]');
+    // this.cancelLink = page.locator('[data-test="cancel"]');
   }
+
   /**
    * Retrieves and parses the summary subtotal into a numeric value.
    * @returns Formatted numeric value of the subtotal.
@@ -61,6 +62,17 @@ export class CheckoutStepTwoPage extends BasePage {
    */
   async finishOrder() {
     await this.finishButton.click();
-    await this.page.waitForLoadState("load");
+  }
+
+  /**
+   * Calculates the expected total by summing the subtotal and displayed tax
+   * using exact integer cents math.
+   * @param subtotal - Optional pre-validated subtotal; if omitted, reads subtotal from the page.
+   * @returns Calculated total amount (subtotal + tax).
+   */
+  async getCalculatedTotal(subtotal?: number): Promise<number> {
+    const resolvedSubtotal = subtotal ?? (await this.getSubtotal());
+    const actualTax = await this.getTax();
+    return sumCurrencyAmounts([resolvedSubtotal, actualTax]);
   }
 }

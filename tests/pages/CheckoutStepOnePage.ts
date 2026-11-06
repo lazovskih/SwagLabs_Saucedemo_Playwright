@@ -1,12 +1,12 @@
-import { Locator, Page } from "@playwright/test";
-import { BasePage } from "./BasePage";
+import { Locator, Page, expect } from "@playwright/test";
+import { InternalPage } from "@pages/InternalPage";
 import type { ShippingData } from "@data-types";
 
 /**
  * Checkout Step One (information) page.
  * Handles shipping information form.
  */
-export class CheckoutStepOnePage extends BasePage {
+export class CheckoutStepOnePage extends InternalPage {
   pageTitleText = "Checkout: Your Information";
   pageUrl = "/checkout-step-one.html";
 
@@ -31,9 +31,19 @@ export class CheckoutStepOnePage extends BasePage {
    * @param shippingData - Customer shipping information object.
    */
   async fillShippingInformation(shippingData: ShippingData) {
-    await this.firstNameField.fill(shippingData.FirstName);
-    await this.lastNameField.fill(shippingData.LastName);
-    await this.postalCodeField.fill(shippingData.PostalCode);
+    await expect(async () => {
+      await expect(this.firstNameField).toHaveValue("");
+      await this.firstNameField.fill(shippingData.firstName);
+      await expect(this.firstNameField).toHaveValue(shippingData.firstName);
+
+      await expect(this.lastNameField).toHaveValue("");
+      await this.lastNameField.fill(shippingData.lastName);
+      await expect(this.lastNameField).toHaveValue(shippingData.lastName);
+
+      await expect(this.postalCodeField).toHaveValue("");
+      await this.postalCodeField.fill(shippingData.postalCode);
+      await expect(this.postalCodeField).toHaveValue(shippingData.postalCode);
+    }).toPass();
   }
 
   /**
