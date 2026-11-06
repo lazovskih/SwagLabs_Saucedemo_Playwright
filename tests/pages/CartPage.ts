@@ -2,9 +2,9 @@ import { Locator, Page } from "@playwright/test";
 import { InternalPage } from "@pages/InternalPage";
 import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
 import type { Product, CartButtonAction } from "@data-types";
+
 /**
- * Cart page.
- * Handles item summaries and order completion.
+ * Cart page class. 
  */
 export class CartPage extends InternalPage {
   pageTitleText = "Your Cart";

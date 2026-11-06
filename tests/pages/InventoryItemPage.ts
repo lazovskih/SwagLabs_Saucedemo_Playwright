@@ -4,8 +4,8 @@ import { ProductActionsComponent } from "@pages/components/ProductActionsCompone
 import type { Product, CartButtonAction } from "@data-types";
 
 /**
- * Products page.
- * Handles product browsing and inventory interactions.
+ * Inventory Item Page.
+ * Exposes single item name, image and description
  */
 export class InventoryItemPage extends InternalPage {
     pageTitleText = "Products";
@@ -25,7 +25,7 @@ export class InventoryItemPage extends InternalPage {
      * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
      * Can be used on both 'Products' and 'Shopping Cart' pages
      * @param product - Product data object.
-     * @param button - Button type: 'add', 'remove'.
+     * @param action - action type: 'add', 'remove'.
      * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
      */
     getButton(product: Product, action: CartButtonAction): Locator {
@@ -35,6 +35,7 @@ export class InventoryItemPage extends InternalPage {
     /**
      * Returns the image locator for a specific product on either the Inventory page
      * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
+     * @param product - Product data object.
      */
     getImage(product: Product): Locator {
         return this.productActions.getImage(product);

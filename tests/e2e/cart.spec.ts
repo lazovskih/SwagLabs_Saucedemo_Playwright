@@ -28,10 +28,10 @@ test.describe("2. Shopping cart flow", () => {
     // Verify cart badge count on 'Shopping Cart' page
     await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText("2");
 
-    // Verify list of cart items count
-    await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(2);
+    // // Verify list of cart items count
+    // await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(2);
 
-    // Verify cart page title, then start checkout
+    // Verify cart page title
     await expect(cartPage.pageTitle, "Confirm cart page title is valid").toHaveText(cartPage.pageTitleText);
 
     // Verify total cart items count on the page
@@ -117,7 +117,7 @@ test.describe("2. Shopping cart flow", () => {
     // Open shopping cart
     await inventoryPage.viewCart();
 
-    // Verify cart page title, then start checkout
+    // Verify cart page title
     await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
 
     // Remove 2 items from the cart

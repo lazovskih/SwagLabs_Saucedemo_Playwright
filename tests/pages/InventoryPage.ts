@@ -31,7 +31,7 @@ export class InventoryPage extends InternalPage {
      * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
      * Can be used on both 'Products' and 'Shopping Cart' pages
      * @param product - Product data object.
-     * @param button - Button type: 'add', 'remove'.
+     * @param action - action type: 'add', 'remove'.
      * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
      */
     getButton(product: Product, action: CartButtonAction): Locator {
@@ -48,7 +48,6 @@ export class InventoryPage extends InternalPage {
 
     /**
      * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
-     * Can be used on both 'Products' page
      * @param product - Product data object to add.
      */
     async addProductToCart(product: Product) {
@@ -57,7 +56,6 @@ export class InventoryPage extends InternalPage {
 
     /**
      * Sequentially adds multiple products to the shopping cart.
-     * Can be used on both 'Products' page
      * @param products - Array of product data objects to add.
      */
     async addProductsToCart(products: Product[]) {
@@ -68,7 +66,6 @@ export class InventoryPage extends InternalPage {
 
     /**
      * Removes a specific product from the cart by clicking its remove button.
-     * Can be used on both 'Products' and 'Shopping Cart' pages
      * @param product - Product data object to remove.
      */
     async removeProduct(product: Product) {
@@ -77,7 +74,6 @@ export class InventoryPage extends InternalPage {
 
     /**
      * Gets the number of occurrences of a product in the cart.
-     * Can be used on both 'Products' and 'Shopping Cart' pages
      * @param product - Product data object.
      * @returns Promise resolving to the number of matching cart items.
      */
@@ -87,7 +83,6 @@ export class InventoryPage extends InternalPage {
 
     /**
     * Retrieves the total count of item rows currently displayed in the cart.
-    * Can be used on both 'Products' and 'Shopping Cart' pages
     * @returns Promise resolving to the number of cart items.
     */
     async getItemCount() {

@@ -1,7 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { InternalPage } from "@pages/InternalPage";
-import { parseCurrencyToNumber } from "@utilities/index";
-import { sumCurrencyAmounts } from "@utilities/index";
+import { parseCurrencyToNumber, sumCurrencyAmounts } from "@utilities/index";
 
 /**
  * Checkout Step Two (overview) page.
@@ -63,7 +62,6 @@ export class CheckoutStepTwoPage extends InternalPage {
    */
   async finishOrder() {
     await this.finishButton.click();
-    await this.page.waitForLoadState("load");
   }
 
   /**

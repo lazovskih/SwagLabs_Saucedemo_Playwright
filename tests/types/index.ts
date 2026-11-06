@@ -40,4 +40,4 @@ export interface ShippingData {
 /**
  * Represents the action of a button in the shopping cart.
  */
-export type CartButtonAction = "add" | "remove" | "add-to-cart";
+export type CartButtonAction = "add" | "remove";

@@ -1,5 +1,6 @@
 import { test, expect } from "@fixtures/pages.fixture";
 import { env } from "@utilities/index";
+import type { LoginPage } from "@pages/LoginPage";
 
 /**
  * Test suite for login functionality and access control.
@@ -27,57 +28,42 @@ test.describe("1. Login page", () => {
   });
 
   /**
-   * Scenario 2: Login as standard user with invalid password - unsuccessful
-   * Verify error message displayed
+   * Scenario 3-4: Login as user with invalid credentials - unsuccessful
+   * Verify internal pages are not accessible
    */
-  test("1.2. Login with valid username and invalid password - unsuccessful", async ({ page, loginPage }) => {
-    // Login with invalid password
-    await loginPage.login(env.standardUser, "invalid_password");
-
-    // Verify error message is displayed
-    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
-    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.errorMessageText);
-
-    // Verify still on login page
-    await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
-  });
+  const invalidLoginScenarios = [
+    {
+      title: "1.2. Login with valid username and invalid password - unsuccessful",
+      username: env.standardUser,
+      password: "invalid_password",
+      getExpectedError: (loginPage: LoginPage) => loginPage.errorMessageText,
+    },
+    {
+      title: "1.3. Login with invalid username and valid password - unsuccessful",
+      username: "invalid_user",
+      password: env.demoPassword,
+      getExpectedError: (loginPage: LoginPage) => loginPage.errorMessageText,
+    },
+    {
+      title: "1.4. Login with locked out username - unsuccessful",
+      username: env.lockedOutUser,
+      password: env.demoPassword,
+      getExpectedError: (loginPage: LoginPage) => loginPage.lockedOutMessageText,
+    },
+  ];
+  for (const { title, username, password, getExpectedError } of invalidLoginScenarios) {
+    test(title, async ({ page, loginPage }) => {
+      await loginPage.login(username, password);
+      await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
+      await expect(loginPage.errorMessage, "Error message text should match").toHaveText(getExpectedError(loginPage));
+      await expect(page, "Should remain on login page").toHaveURL(/.*\/$/);
+    });
+  }
 
   /**
-   * Scenario 3: Login with invalid username and valid password - unsuccessful
-   * Verify error message displayed
+   * Scenario 5: Login as standard user, logout, verify internal pages are not accessible
    */
-  test("1.3. Login with invalid username and valid password - unsuccessful", async ({ page, loginPage }) => {
-    // Login with locked out username and valid password
-    await loginPage.login("invalid_user", env.demoPassword);
-
-    // Verify error message is displayed
-    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
-    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.errorMessageText);
-
-    // Verify still on login page
-    await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
-  });
-
-  /**
-   * Scenario 4: Login with locked out user and valid password - unsuccessful
-   * Verify error message displayed
-   */
-  test("1.4. Login with locked out username - unsuccessful", async ({ page, loginPage }) => {
-    // Login with locked out username and valid password
-    await loginPage.login(env.lockedOutUser, env.demoPassword);
-
-    // Verify error message is displayed
-    await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
-    await expect(loginPage.errorMessage, "Error message text should match").toHaveText(loginPage.lockedOutMessageText);
-
-    // Verify still on login page
-    await expect(page, "Should be redirected to login page").toHaveURL(/.*\/$/);
-  });
-
-  /**
-   * Scenario 5: Login as standard user, logout, verify Products page not accessible
-   */
-  test("1.5. Login, logout, verify internal pages not accessible", async ({
+  test("1.5. Login, logout, verify internal pages are not accessible", async ({
     page,
     loginPage,
     inventoryPage,
