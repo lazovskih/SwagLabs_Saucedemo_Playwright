@@ -28,9 +28,6 @@ test.describe("2. Shopping cart flow", () => {
     // Verify cart badge count on 'Shopping Cart' page
     await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText("2");
 
-    // // Verify list of cart items count
-    // await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(2);
-
     // Verify cart page title
     await expect(cartPage.pageTitle, "Confirm cart page title is valid").toHaveText(cartPage.pageTitleText);
 
@@ -46,20 +43,22 @@ test.describe("2. Shopping cart flow", () => {
   });
 
   test("2.2 Button changes from 'Add to cart' to 'Remove' when clicked", async ({ inventoryPage }) => {
-    const product = products[0];
-    const addToCartButton = inventoryPage.getButton(product, "add");
-    const removeButton = inventoryPage.getButton(product, "remove");
+    // Loop through all products
+    for (const product of products) {
+      const addToCartButton = inventoryPage.getButton(product, "add");
+      const removeButton = inventoryPage.getButton(product, "remove");
 
-    // Verify initial state
-    await expect(addToCartButton).toBeVisible();
-    await expect(removeButton).toBeHidden();
+      // Verify initial state
+      await expect(addToCartButton).toBeVisible();
+      await expect(removeButton).toBeHidden();
 
-    // Click add to cart
-    await addToCartButton.click();
+      // Click add to cart
+      await addToCartButton.click();
 
-    // Verify state changed
-    await expect(addToCartButton).toBeHidden();
-    await expect(removeButton).toBeVisible();
+      // Verify state changed
+      await expect(addToCartButton).toBeHidden();
+      await expect(removeButton).toBeVisible();
+    }
   });
 
   test("2.3 Button changes from 'Remove' to 'Add to cart' when clicked", async ({ inventoryPage }) => {

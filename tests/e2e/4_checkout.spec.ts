@@ -6,14 +6,14 @@ import products from "@data/products.json";
 import shippingInfo from "@data/shipping.json";
 import pricing from "@data/locale.json";
 
-test.describe("3. Checkout flow", () => {
+test.describe("4. Checkout flow", () => {
 
   test.beforeEach(async ({ inventoryPage }) => {
     // Navigate directly to the products page using the pre-authenticated state
     await inventoryPage.open();
   });
 
-  test("3.1 Completes checkout for a selected product", async ({ inventoryPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage }) => {
+  test("4.1 Completes checkout for a selected product", async ({ inventoryPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage }) => {
     const productsList = [products[2]];
     const productsListCount = productsList.length;
     const productsListCountStr = productsListCount.toString();
@@ -65,7 +65,7 @@ test.describe("3. Checkout flow", () => {
     );
   });
 
-  test("3.2 Completes checkout and verifies totals for multiple selected products", async ({ inventoryPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage }) => {
+  test("4.2 Completes checkout and verifies totals for multiple selected products", async ({ inventoryPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage }) => {
     const productsList = [products[2], products[1], products[0]];
     const productsListCount = productsList.length;
     const productsListCountStr = productsListCount.toString();
@@ -120,7 +120,7 @@ test.describe("3. Checkout flow", () => {
       .poll(() => checkoutStepTwoPage.getTax(), "Tax is not correct")
       .toBe(expectedTax);
 
-    // 3. Verify Total matches Subtotal + Tax
+    // 4. Verify Total matches Subtotal + Tax
     const expectedTotal = await checkoutStepTwoPage.getCalculatedTotal(expectedSubtotal);
     await expect
       .poll(() => checkoutStepTwoPage.getTotal(), "Total is not correct")
