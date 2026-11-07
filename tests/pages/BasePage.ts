@@ -16,5 +16,6 @@ export abstract class BasePage {
    */
   async open() {
     await this.page.goto(this.pageUrl);
+    await this.page.waitForLoadState("load");
   }
 }

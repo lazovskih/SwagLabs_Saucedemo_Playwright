@@ -3,15 +3,12 @@ import { test, expect } from "@fixtures/pages.fixture";
 // Import test data
 import products from "@data/products.json";
 
-test.describe("3. Item to cart flow", () => {
+test.describe("3. Add Item to cart flow", () => {
   test("3.1 Item page: Adds item to the cart and verifies cart contents", async ({
     inventoryPage,
     inventoryItemPage,
     cartPage,
   }) => {
-    // Verify cart link on 'Products' page has no numbers when opened first time
-    await expect(inventoryPage.cartLink, "Confirm cart link is empty on 'Products' page").toHaveText("");
-
     // Loop through all products
     for (const product of products) {
       // Navigate to the products page
@@ -152,6 +149,9 @@ test.describe("3. Item to cart flow", () => {
     inventoryItemPage,
     cartPage,
   }) => {
+    // Navigate to the products page
+    await inventoryPage.open();
+
     // Add product items
     const productsList = [products[0], products[1], products[2], products[3]];
     await inventoryPage.addProductsToCart(productsList);

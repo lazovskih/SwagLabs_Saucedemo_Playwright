@@ -17,7 +17,6 @@ export class InventoryPage extends InternalPage {
   readonly inventoryItems: Locator;
   readonly itemNames: Locator;
   readonly itemPrices: Locator;
-  readonly inventoryItemName: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -26,7 +25,6 @@ export class InventoryPage extends InternalPage {
     this.inventoryItems = this.productActions.inventoryItems;
     this.itemNames = this.productActions.itemNames;
     this.itemPrices = this.productActions.itemPrices;
-    this.inventoryItemName = page.locator('[data-test="inventory-item-name"]');
   }
 
   /**
@@ -34,7 +32,9 @@ export class InventoryPage extends InternalPage {
    * @param product - Product data object
    */
   async openItemPage(product: Product) {
-    await this.productActions.getProductItem(product).click();
+    const productName = this.productActions.getProductItem(product).locator(this.itemNames);
+
+    await productName.locator("..").click();
   }
 
   /**
