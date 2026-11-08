@@ -1,9 +1,10 @@
 import { test, expect } from "@fixtures/pages.fixture";
+import { parseCurrencyToNumber } from "@utilities/index";
 
 // Import test data
 import products from "@data/products.json";
 
-test.describe("3. Add Item to cart flow", () => {
+test.describe("3. Item page: Add items to cart", () => {
   test("3.1 Item page: Adds item to the cart and verifies cart contents", async ({
     inventoryPage,
     inventoryItemPage,
@@ -21,8 +22,11 @@ test.describe("3. Add Item to cart flow", () => {
       await inventoryItemPage.addProductToCart(product);
     }
 
+    // Navigate to the products page
+    await inventoryPage.open();
+
     // Verify cart badge count on 'Products' page
-    await expect(inventoryItemPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText("6");
+    await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText("6");
 
     // Open shopping cart
     await inventoryPage.viewCart();
@@ -45,17 +49,20 @@ test.describe("3. Add Item to cart flow", () => {
     }
   });
 
-  test("3.2 Item page: Button changes from 'Add to cart' to 'Remove' when clicked", async ({ inventoryPage }) => {
+  test("3.2 Item page: Button changes from 'Add to cart' to 'Remove' when clicked", async ({
+    inventoryPage,
+    inventoryItemPage,
+  }) => {
     // Loop through all products
     for (const product of products) {
-      const addToCartButton = inventoryPage.getButton(product, "add");
-      const removeButton = inventoryPage.getButton(product, "remove");
-
       // Navigate to the products page
       await inventoryPage.open();
 
       // Open product item page
       await inventoryPage.openItemPage(product);
+
+      const addToCartButton = inventoryItemPage.getButton(product, "add");
+      const removeButton = inventoryItemPage.getButton(product, "remove");
 
       // Verify initial state
       await expect(addToCartButton).toBeVisible();
@@ -65,33 +72,36 @@ test.describe("3. Add Item to cart flow", () => {
       await addToCartButton.click();
 
       // Verify state changed
-      await expect(addToCartButton).toBeHidden();
-      await expect(removeButton).toBeVisible();
+      await expect(addToCartButton, `Add button for product: '${product.name}' is hidden`).toBeHidden();
+      await expect(removeButton, `Remove button for product: '${product.name}' is visible`).toBeVisible();
     }
   });
 
-  test("3.3 Item page: Button changes from 'Remove' to 'Add to cart' when clicked", async ({ inventoryPage }) => {
+  test("3.3 Item page: Button changes from 'Remove' to 'Add to cart' when clicked", async ({
+    inventoryPage,
+    inventoryItemPage,
+  }) => {
     // Loop through all products
     for (const product of products) {
-      const addToCartButton = inventoryPage.getButton(product, "add");
-      const removeButton = inventoryPage.getButton(product, "remove");
-
       // Navigate to the products page
       await inventoryPage.open();
 
       // Open product item page
       await inventoryPage.openItemPage(product);
 
+      const addToCartButton = inventoryItemPage.getButton(product, "add");
+      const removeButton = inventoryItemPage.getButton(product, "remove");
+
       // Add to cart first
       await addToCartButton.click();
-      await expect(removeButton, `Remove button for product: '${product.name}'`).toBeVisible();
+      await expect(removeButton, `Remove button for product: '${product.name}' is visible`).toBeVisible();
 
       // Click remove
       await removeButton.click();
 
       // Verify state changed back
-      await expect(removeButton).toBeHidden();
-      await expect(addToCartButton).toBeVisible();
+      await expect(removeButton, `Remove button for product: '${product.name}' is hidden`).toBeHidden();
+      await expect(addToCartButton, `Add button for product: '${product.name}' is visible`).toBeVisible();
     }
   });
 
@@ -182,6 +192,63 @@ test.describe("3. Add Item to cart flow", () => {
     // Verify that the "Add to Cart" button is present for those removed items
     for (let i = 0; i < 2; i++) {
       await expect(inventoryItemPage.getButton(productsList[i], "add")).toBeVisible();
+    }
+  });
+
+  test("3.6 Item page: Adds selected products to the cart on item page and verifies inventory page", async ({
+    inventoryPage,
+    inventoryItemPage,
+  }) => {
+    // Add products to cart
+    const productsList = [products[0], products[1], products[5]];
+
+    // Loop through selected products
+    for (const product of productsList) {
+      // Navigate to the products page
+      await inventoryPage.open();
+
+      // Open product item page
+      await inventoryPage.openItemPage(product);
+
+      // Add item on item page
+      await inventoryItemPage.addProductToCart(product);
+
+      // Navigate to the products page
+      await inventoryPage.open();
+
+      const addToCartButton = inventoryPage.getButton(product, "add");
+      const removeButton = inventoryPage.getButton(product, "remove");
+
+      // Verify initial state
+      await expect(addToCartButton, `Add button for product: '${product.name}' is hidden`).toBeHidden();
+      await expect(removeButton, `Remove button for product: '${product.name}' is visible`).toBeVisible();
+    }
+  });
+
+  test("3.7 Item page: Verifies item name, image and details", async ({ inventoryPage, inventoryItemPage }) => {
+    // Add products to cart
+    const productsList = [products[0], products[1], products[5]];
+
+    // Loop through selected products
+    for (const product of productsList) {
+      // Navigate to the products page
+      await inventoryPage.open();
+
+      // Open product item page
+      await inventoryPage.openItemPage(product);
+
+      const actualPrice = parseCurrencyToNumber(await inventoryItemPage.itemPrice.textContent());
+      const imgUrl = await inventoryItemPage.getImage(product).getAttribute("src");
+
+      await expect(inventoryItemPage.itemName, `Item name '${product.name}' is matching the expected name`).toHaveText(
+        product.name,
+      );
+      expect(actualPrice, `Item price of '${product.name}' is matching the expected price`).toBe(product.price);
+      expect(imgUrl, `Item image of '${product.name}' is matching the expected image URL`).toContain(product.imageUrl);
+      await expect(
+        inventoryItemPage.itemDescription,
+        `Item description of '${product.name}' is matching the expected description`,
+      ).toHaveText(product.description);
     }
   });
 });

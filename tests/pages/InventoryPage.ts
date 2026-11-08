@@ -1,5 +1,6 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import { InternalPage } from "@pages/InternalPage";
+import { InventoryItemPage } from "@pages/InventoryItemPage";
 import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
 import type { Product, CartButtonAction } from "@data-types";
 
@@ -11,20 +12,24 @@ export class InventoryPage extends InternalPage {
   pageTitleText = "Products";
   pageUrl = "/inventory.html";
   private readonly productActions: ProductActionsComponent;
+  private readonly inventoryItemPage: InventoryItemPage;
 
   // Page locators
   readonly sortSelector: Locator;
   readonly inventoryItems: Locator;
-  readonly itemNames: Locator;
-  readonly itemPrices: Locator;
+  readonly itemName: Locator;
+  readonly itemPrice: Locator;
+  readonly itemDescription: Locator;
 
   constructor(page: Page) {
     super(page);
     this.productActions = new ProductActionsComponent(page);
+    this.inventoryItemPage = new InventoryItemPage(page);
     this.sortSelector = page.locator('[data-test="product-sort-container"]');
     this.inventoryItems = this.productActions.inventoryItems;
-    this.itemNames = this.productActions.itemNames;
-    this.itemPrices = this.productActions.itemPrices;
+    this.itemName = this.productActions.itemName;
+    this.itemPrice = this.productActions.itemPrice;
+    this.itemDescription = page.locator('[data-test="inventory-item-desc"]');
   }
 
   /**
@@ -32,9 +37,11 @@ export class InventoryPage extends InternalPage {
    * @param product - Product data object
    */
   async openItemPage(product: Product) {
-    const productName = this.productActions.getProductItem(product).locator(this.itemNames);
+    const productName = this.productActions.getProductItem(product).locator(this.itemName);
 
     await productName.locator("..").click();
+    await expect(this.page).toHaveURL((url) => url.pathname === this.inventoryItemPage.pageUrl);
+    await expect(this.inventoryItemPage.backToProductsButton).toBeVisible();
   }
 
   /**
@@ -97,5 +104,29 @@ export class InventoryPage extends InternalPage {
    */
   async getItemCount() {
     return await this.productActions.getItemCount();
+  }
+
+  /**
+   * Retrieves the item price locator for specified product.
+   * @returns Locator of the item price.
+   */
+  getItemPrice(product: Product) {
+    return this.productActions.getProductItem(product).locator(this.itemPrice);
+  }
+
+  /**
+   * Retrieves the item name locator for specified product.
+   * @returns Locator of the item name.
+   */
+  getItemName(product: Product) {
+    return this.productActions.getProductItem(product).locator(this.itemName);
+  }
+
+  /**
+   * Retrieves the item description locator for specified product.
+   * @returns Locator of the item description.
+   */
+  getItemDescription(product: Product) {
+    return this.productActions.getProductItem(product).locator(this.itemDescription);
   }
 }

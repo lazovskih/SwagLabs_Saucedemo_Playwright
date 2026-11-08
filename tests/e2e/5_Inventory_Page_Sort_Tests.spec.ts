@@ -4,7 +4,6 @@ import products from "@data/products.json";
 import pricing from "@data/locale.json";
 
 test.describe("5. Sorting", () => {
-
   test.beforeEach(async ({ inventoryPage }) => {
     // Navigate to the products page directly using the pre-authenticated session state
     await inventoryPage.open();
@@ -17,7 +16,7 @@ test.describe("5. Sorting", () => {
 
     await inventoryPage.sortSelector.selectOption("az");
 
-    await expect(inventoryPage.itemNames).toHaveText(expectedNames);
+    await expect(inventoryPage.itemName).toHaveText(expectedNames);
   });
 
   test("5.2 Sort product items by Name (Z to A)", async ({ inventoryPage }) => {
@@ -27,7 +26,7 @@ test.describe("5. Sorting", () => {
 
     await inventoryPage.sortSelector.selectOption("za");
 
-    await expect(inventoryPage.itemNames).toHaveText(expectedNames);
+    await expect(inventoryPage.itemName).toHaveText(expectedNames);
   });
 
   test("5.3 Sort product items by Price (low to high)", async ({ inventoryPage }) => {
@@ -40,8 +39,8 @@ test.describe("5. Sorting", () => {
 
     await inventoryPage.sortSelector.selectOption("lohi");
 
-    await expect(inventoryPage.itemPrices).toHaveText(expectedPrices);
-    await expect(inventoryPage.itemNames).toHaveText(expectedNames);
+    await expect(inventoryPage.itemPrice).toHaveText(expectedPrices);
+    await expect(inventoryPage.itemName).toHaveText(expectedNames);
   });
 
   test("5.4 Sort product items by Price (high to low)", async ({ inventoryPage }) => {
@@ -54,7 +53,7 @@ test.describe("5. Sorting", () => {
 
     await inventoryPage.sortSelector.selectOption("hilo");
 
-    await expect(inventoryPage.itemPrices).toHaveText(expectedPrices);
-    await expect(inventoryPage.itemNames).toHaveText(expectedNames);
+    await expect(inventoryPage.itemPrice).toHaveText(expectedPrices);
+    await expect(inventoryPage.itemName).toHaveText(expectedNames);
   });
 });

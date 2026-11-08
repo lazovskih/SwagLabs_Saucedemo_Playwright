@@ -7,16 +7,16 @@ export class ProductActionsComponent {
 
   // Component locators
   readonly inventoryItems: Locator;
-  readonly itemNames: Locator;
+  readonly itemName: Locator;
+  readonly itemPrice: Locator;
   readonly itemDescription: Locator;
-  readonly itemPrices: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.inventoryItems = page.locator('[data-test="inventory-item"]');
-    this.itemNames = page.locator('[data-test="inventory-item-name"]');
-    this.itemDescription = page.locator('[data-test="inventory-item-description"]');
-    this.itemPrices = page.locator('[data-test="inventory-item-price"]');
+    this.itemName = page.locator('[data-test="inventory-item-name"]');
+    this.itemPrice = page.locator('[data-test="inventory-item-price"]');
+    this.itemDescription = page.locator('[data-test="inventory-item-desc"]');
   }
 
   /**

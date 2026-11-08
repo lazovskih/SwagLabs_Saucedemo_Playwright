@@ -7,13 +7,18 @@ import shippingInfo from "@data/shipping.json";
 import pricing from "@data/locale.json";
 
 test.describe("4. Checkout flow", () => {
-
   test.beforeEach(async ({ inventoryPage }) => {
     // Navigate directly to the products page using the pre-authenticated state
     await inventoryPage.open();
   });
 
-  test("4.1 Completes checkout for a selected product", async ({ inventoryPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage, checkoutCompletePage }) => {
+  test("4.1 Completes checkout for a selected product", async ({
+    inventoryPage,
+    cartPage,
+    checkoutStepOnePage,
+    checkoutStepTwoPage,
+    checkoutCompletePage,
+  }) => {
     const productsList = [products[2]];
     const productsListCount = productsList.length;
     const productsListCountStr = productsListCount.toString();
@@ -22,7 +27,9 @@ test.describe("4. Checkout flow", () => {
     await inventoryPage.addProductsToCart(productsList);
 
     // Verify cart badge count on 'Products' page
-    await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(productsListCountStr);
+    await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(
+      productsListCountStr,
+    );
 
     // Open shopping cart
     await inventoryPage.viewCart();
@@ -65,7 +72,12 @@ test.describe("4. Checkout flow", () => {
     );
   });
 
-  test("4.2 Completes checkout and verifies totals for multiple selected products", async ({ inventoryPage, cartPage, checkoutStepOnePage, checkoutStepTwoPage }) => {
+  test("4.2 Completes checkout and verifies totals for multiple selected products", async ({
+    inventoryPage,
+    cartPage,
+    checkoutStepOnePage,
+    checkoutStepTwoPage,
+  }) => {
     const productsList = [products[2], products[1], products[0]];
     const productsListCount = productsList.length;
     const productsListCountStr = productsListCount.toString();
@@ -110,20 +122,14 @@ test.describe("4. Checkout flow", () => {
 
     // 1. Verify Subtotal matches sum of product prices
     const expectedSubtotal = sumCurrencyAmounts(productsList.map((p) => p.price));
-    await expect
-      .poll(() => checkoutStepTwoPage.getSubtotal(), "Subtotal is not correct")
-      .toBe(expectedSubtotal);
+    await expect.poll(() => checkoutStepTwoPage.getSubtotal(), "Subtotal is not correct").toBe(expectedSubtotal);
 
     // 2. Verify Tax matches expected tax calculation (8% of subtotal)
     const expectedTax = calculateTax(expectedSubtotal, pricing);
-    await expect
-      .poll(() => checkoutStepTwoPage.getTax(), "Tax is not correct")
-      .toBe(expectedTax);
+    await expect.poll(() => checkoutStepTwoPage.getTax(), "Tax is not correct").toBe(expectedTax);
 
     // 4. Verify Total matches Subtotal + Tax
     const expectedTotal = await checkoutStepTwoPage.getCalculatedTotal(expectedSubtotal);
-    await expect
-      .poll(() => checkoutStepTwoPage.getTotal(), "Total is not correct")
-      .toBe(expectedTotal);
+    await expect.poll(() => checkoutStepTwoPage.getTotal(), "Total is not correct").toBe(expectedTotal);
   });
 });
