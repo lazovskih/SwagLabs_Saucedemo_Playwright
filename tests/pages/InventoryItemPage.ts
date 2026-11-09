@@ -5,7 +5,7 @@ import type { Product, CartButtonAction } from "@data-types";
 
 /**
  * Inventory Item Page.
- * Exposes single item name, image and description
+ * Exposes single item name, image and description.
  */
 export class InventoryItemPage extends InternalPage {
   pageTitleText = "Products";
@@ -28,10 +28,29 @@ export class InventoryItemPage extends InternalPage {
   }
 
   /**
+   * Checks whether the Inventory Item details page is currently open
+   * by verifying the URL pathname and 'Back to products' button visibility.
+   * @returns Promise resolving to true if both conditions are met.
+   */
+  async itemPageOpened(): Promise<boolean> {
+    await this.waitForPageMount();
+    const currentPathname = new URL(this.page.url()).pathname;
+    const isUrlMatch = currentPathname === this.pageUrl;
+    const isButtonVisible = await this.backToProductsButton.isVisible();
+    return isUrlMatch && isButtonVisible;
+  }
+
+  /**
+   * Navigates back to the Inventory page.
+   */
+  async backToProducts() {
+    await this.backToProductsButton.click();
+  }
+
+  /**
    * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object.
-   * @param action - action type: 'add', 'remove'.
+   * @param action - Action type: 'add' or 'remove'.
    * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
    */
   getButton(product: Product, action: CartButtonAction): Locator {
@@ -49,7 +68,6 @@ export class InventoryItemPage extends InternalPage {
 
   /**
    * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
-   * Can be used on both 'Products' page
    * @param product - Product data object to add.
    */
   async addProductToCart(product: Product) {
@@ -58,7 +76,6 @@ export class InventoryItemPage extends InternalPage {
 
   /**
    * Removes a specific product from the cart by clicking its remove button.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object to remove.
    */
   async removeProduct(product: Product) {

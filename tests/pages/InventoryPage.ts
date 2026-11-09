@@ -1,6 +1,5 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { InternalPage } from "@pages/InternalPage";
-import { InventoryItemPage } from "@pages/InventoryItemPage";
 import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
 import type { Product, CartButtonAction } from "@data-types";
 
@@ -12,7 +11,6 @@ export class InventoryPage extends InternalPage {
   pageTitleText = "Products";
   pageUrl = "/inventory.html";
   private readonly productActions: ProductActionsComponent;
-  private readonly inventoryItemPage: InventoryItemPage;
 
   // Page locators
   readonly sortSelector: Locator;
@@ -24,12 +22,11 @@ export class InventoryPage extends InternalPage {
   constructor(page: Page) {
     super(page);
     this.productActions = new ProductActionsComponent(page);
-    this.inventoryItemPage = new InventoryItemPage(page);
     this.sortSelector = page.locator('[data-test="product-sort-container"]');
     this.inventoryItems = this.productActions.inventoryItems;
     this.itemName = this.productActions.itemName;
     this.itemPrice = this.productActions.itemPrice;
-    this.itemDescription = page.locator('[data-test="inventory-item-desc"]');
+    this.itemDescription = this.productActions.itemDescription;
   }
 
   /**
@@ -37,11 +34,7 @@ export class InventoryPage extends InternalPage {
    * @param product - Product data object
    */
   async openItemPage(product: Product) {
-    const productName = this.productActions.getProductItem(product).locator(this.itemName);
-
-    await productName.locator("..").click();
-    await expect(this.page).toHaveURL((url) => url.pathname === this.inventoryItemPage.pageUrl);
-    await expect(this.inventoryItemPage.backToProductsButton).toBeVisible();
+    await this.getItemName(product).click();
   }
 
   /**
@@ -94,23 +87,23 @@ export class InventoryPage extends InternalPage {
    * @param product - Product data object.
    * @returns Promise resolving to the number of matching cart items.
    */
-  async getProductCount(product: Product) {
-    return await this.productActions.getProductCount(product);
+  getProductCount(product: Product): Promise<number> {
+    return this.productActions.getProductCount(product);
   }
 
   /**
    * Retrieves the total count of item rows currently displayed in the cart.
    * @returns Promise resolving to the number of cart items.
    */
-  async getItemCount() {
-    return await this.productActions.getItemCount();
+  getItemCount(): Promise<number> {
+    return this.productActions.getItemCount();
   }
 
   /**
    * Retrieves the item price locator for specified product.
    * @returns Locator of the item price.
    */
-  getItemPrice(product: Product) {
+  getItemPrice(product: Product): Locator {
     return this.productActions.getProductItem(product).locator(this.itemPrice);
   }
 
@@ -118,7 +111,7 @@ export class InventoryPage extends InternalPage {
    * Retrieves the item name locator for specified product.
    * @returns Locator of the item name.
    */
-  getItemName(product: Product) {
+  getItemName(product: Product): Locator {
     return this.productActions.getProductItem(product).locator(this.itemName);
   }
 
@@ -126,7 +119,7 @@ export class InventoryPage extends InternalPage {
    * Retrieves the item description locator for specified product.
    * @returns Locator of the item description.
    */
-  getItemDescription(product: Product) {
+  getItemDescription(product: Product): Locator {
     return this.productActions.getProductItem(product).locator(this.itemDescription);
   }
 }

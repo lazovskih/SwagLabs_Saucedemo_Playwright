@@ -23,14 +23,14 @@ The tests are architected using the **Page Object Model (POM)** with **component
 
 ### Tech Stack
 
-| Tool                                                        | Version   |
-| ----------------------------------------------------------- | --------- |
-| [Playwright](https://playwright.dev/)                       | ^1.59.1   |
-| [TypeScript](https://www.typescriptlang.org/)               | ^6.0.3    |
-| [Node.js](https://nodejs.org/)                              | 22 LTS    |
-| [ESLint](https://eslint.org/) + `eslint-plugin-playwright`  | ^10.13.0  |
-| [Husky](https://typicode.github.io/husky/) + `lint-staged`  | ^9.1.7    |
-| [dotenv](https://github.com/motdotla/dotenv)                | ^17.4.2   |
+| Tool                                                       | Version  |
+| ---------------------------------------------------------- | -------- |
+| [Playwright](https://playwright.dev/)                      | ^1.59.1  |
+| [TypeScript](https://www.typescriptlang.org/)              | ^6.0.3   |
+| [Node.js](https://nodejs.org/)                             | 22 LTS   |
+| [ESLint](https://eslint.org/) + `eslint-plugin-playwright` | ^10.13.0 |
+| [Husky](https://typicode.github.io/husky/) + `lint-staged` | ^9.1.7   |
+| [dotenv](https://github.com/motdotla/dotenv)               | ^17.4.2  |
 
 ### CI/CD
 
@@ -117,10 +117,11 @@ npm run test:ui
 ### Run a specific test file
 
 ```bash
-npx playwright test tests/e2e/login.spec.ts
-npx playwright test tests/e2e/cart.spec.ts
-npx playwright test tests/e2e/checkout.spec.ts
-npx playwright test tests/e2e/sort.spec.ts
+npx playwright test tests/e2e/1_login.spec.ts
+npx playwright test tests/e2e/2_inventory.spec.ts
+npx playwright test tests/e2e/3_inventory_item.spec.ts
+npx playwright test tests/e2e/4_checkout.spec.ts
+npx playwright test tests/e2e/5_inventory_sort.spec.ts
 ```
 
 ### Run tests on a specific browser
@@ -171,10 +172,11 @@ SwagLabs_Saucedemo_Playwright/
 │   └── shipping.json                            # Customer checkout test data
 ├── tests/
 │   ├── e2e/                                     # End-to-end test suites
-│   │   ├── cart.spec.ts                         # Shopping cart flow tests
-│   │   ├── checkout.spec.ts                     # Checkout and order placement tests
-│   │   ├── login.spec.ts                        # Authentication & session tests
-│   │   └── sort.spec.ts                         # Product sorting tests
+│   │   ├── 1_login.spec.ts                      # Authentication & session tests
+│   │   ├── 2_inventory.spec.ts                  # Products catalog & inventory tests
+│   │   ├── 3_inventory_item.spec.ts             # Single product item detail tests
+│   │   ├── 4_checkout.spec.ts                   # Checkout and order placement tests
+│   │   └── 5_inventory_sort.spec.ts             # Product sorting tests
 │   ├── fixtures/                                # Playwright setup & custom fixtures
 │   │   ├── auth.setup.ts                        # Global authentication setup project
 │   │   └── pages.fixture.ts                     # Custom page object fixtures

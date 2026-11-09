@@ -28,7 +28,7 @@ test.describe("1. Login page", () => {
   });
 
   /**
-   * Scenario 3-4: Login as user with invalid credentials - unsuccessful
+   * Scenario 2-4: Login as user with invalid credentials - unsuccessful
    * Verify internal pages are not accessible
    */
   const invalidLoginScenarios = [

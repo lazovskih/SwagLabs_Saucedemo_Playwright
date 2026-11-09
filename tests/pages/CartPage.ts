@@ -59,8 +59,8 @@ export class CartPage extends InternalPage {
    * @param product - Product data object.
    * @returns Promise resolving to the number of matching cart items.
    */
-  async getProductCount(product: Product) {
-    return await this.productActions.getProductCount(product);
+  getProductCount(product: Product): Promise<number> {
+    return this.productActions.getProductCount(product);
   }
 
   /**
@@ -68,8 +68,8 @@ export class CartPage extends InternalPage {
    * Can be used on both 'Products' and 'Shopping Cart' pages
    * @returns Promise resolving to the number of cart items.
    */
-  async getItemCount() {
-    return await this.productActions.getItemCount();
+  getItemCount(): Promise<number> {
+    return this.productActions.getItemCount();
   }
 
   /**

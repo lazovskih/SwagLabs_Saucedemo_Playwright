@@ -3,7 +3,7 @@ import { test, expect } from "@fixtures/pages.fixture";
 import products from "@data/products.json";
 import pricing from "@data/locale.json";
 
-test.describe("5. Sorting", () => {
+test.describe("5. Inventory page: Sorting items", () => {
   test.beforeEach(async ({ inventoryPage }) => {
     // Navigate to the products page directly using the pre-authenticated session state
     await inventoryPage.open();

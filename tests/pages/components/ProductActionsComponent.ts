@@ -1,4 +1,4 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import type { Product, CartButtonAction } from "@data-types";
 import { getProductId } from "@utilities/index";
 
@@ -45,7 +45,6 @@ export class ProductActionsComponent {
    */
   async addProduct(product: Product) {
     await this.getButton(product, "add").click();
-    await expect(this.getButton(product, "remove")).toBeVisible();
   }
 
   /**
@@ -61,8 +60,8 @@ export class ProductActionsComponent {
    * @param product - Product data object.
    * @returns Promise resolving to the number of matching cart items.
    */
-  async getProductCount(product: Product) {
-    return await this.inventoryItems.filter({ hasText: product.name }).count();
+  getProductCount(product: Product): Promise<number> {
+    return this.getProductItem(product).count();
   }
 
   /**
@@ -70,8 +69,8 @@ export class ProductActionsComponent {
    * Can be used on both 'Products' and 'Shopping Cart' pages
    * @returns Promise resolving to the number of cart items.
    */
-  async getItemCount() {
-    return await this.inventoryItems.count();
+  getItemCount(): Promise<number> {
+    return this.inventoryItems.count();
   }
 
   /**
