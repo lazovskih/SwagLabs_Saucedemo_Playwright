@@ -12,7 +12,17 @@ export abstract class BasePage {
   }
 
   /**
-   * Navigates to the page URL and waits for page load completion.
+   * Waits for the browser to complete the current rendering & paint cycle
+   * so React synthetic event listeners and controlled inputs are fully mounted.
+   */
+  async waitForPageMount(): Promise<void> {
+    await this.page.evaluate(
+      () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))),
+    );
+  }
+
+  /**
+   * Navigates to the page URL and waits for React mount completion.
    */
   async open() {
     await this.page.goto(this.pageUrl);

@@ -1,4 +1,4 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { BasePage } from "@pages/BasePage";
 
 /**
@@ -9,8 +9,6 @@ export abstract class InternalPage extends BasePage {
   // Page locators
   private readonly mainMenuButton: Locator;
   private readonly sideMenu: Locator;
-  // private readonly allItemsMenu: Locator;
-  // private readonly aboutMenu: Locator;
   private readonly logoutMenu: Locator;
   readonly cartBadge: Locator;
   readonly cartLink: Locator;
@@ -18,23 +16,21 @@ export abstract class InternalPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.mainMenuButton = page.locator('#react-burger-menu-btn');
-    this.sideMenu = page.locator(".bm-menu");
-    // this.allItemsMenu = page.locator('[data-test="inventory-sidebar-link"]');
-    // this.aboutMenu = page.locator('[data-test="about-sidebar-link"]');
+
+    // In InternalPage.ts '.bm-menu-wrap[aria-hidden="false"]' targets React's open-menu state directly
+    this.sideMenu = page.locator('.bm-menu-wrap[aria-hidden="false"]');
+
     this.logoutMenu = page.locator("#logout_sidebar_link");
     this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
     this.cartLink = page.locator('[data-test="shopping-cart-link"]');
   }
 
   /**
-   * Clicks the main sidebar menu button.
+   * Clicks the main sidebar menu button and ensures the sidebar menu opens.
    */
-  async clickMenuButton() {
-    // Implementation that works better for webkit browser and others
-    await expect(async () => {
-      await this.mainMenuButton.click();
-      await expect(this.sideMenu).toBeVisible({ timeout: 1000 });
-    }).toPass();
+  async clickMenuButton(): Promise<void> {
+    await this.mainMenuButton.click();
+    await this.sideMenu.waitFor({ state: "visible" });
   }
 
   /**

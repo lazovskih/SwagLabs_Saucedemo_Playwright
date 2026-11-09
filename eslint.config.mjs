@@ -33,8 +33,6 @@ export default defineConfig([
     files: ["tests/**/*.ts"],
     rules: {
       ...playwright.configs["flat/recommended"].rules,
-      // Allow web-first expect() assertions inside Page Object / Component helper methods
-      "playwright/no-standalone-expect": "off",
     },
   },
 ]);

@@ -28,7 +28,7 @@ test.describe("1. Login page", () => {
   });
 
   /**
-   * Scenario 3-4: Login as user with invalid credentials - unsuccessful
+   * Scenario 2-4: Login as user with invalid credentials - unsuccessful
    * Verify internal pages are not accessible
    */
   const invalidLoginScenarios = [
@@ -82,11 +82,10 @@ test.describe("1. Login page", () => {
     await expect(page).toHaveURL(/.*\/$/);
 
     for (const internalPage of internalPages) {
-
       // Try to navigate directly to each internal page
       await internalPage.open();
 
-      // Verify redirected back to login page 
+      // Verify redirected back to login page
       await expect(page).toHaveURL(/.*\/$/);
 
       // Verify error message is displayed with valid reference to page URL

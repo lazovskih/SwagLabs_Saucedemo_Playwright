@@ -1,4 +1,4 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { InternalPage } from "@pages/InternalPage";
 import type { ShippingData } from "@data-types";
 
@@ -27,23 +27,32 @@ export class CheckoutStepOnePage extends InternalPage {
   }
 
   /**
-   * Fills the shipping information form fields (first name, last name, and postal code).
-   * @param shippingData - Customer shipping information object.
-   */
+    * Fills the shipping information form fields (first name, last name, and postal code).
+    * @param shippingData - Customer shipping information object.
+    */
   async fillShippingInformation(shippingData: ShippingData) {
-    await expect(async () => {
-      await expect(this.firstNameField).toHaveValue("");
-      await this.firstNameField.fill(shippingData.firstName);
-      await expect(this.firstNameField).toHaveValue(shippingData.firstName);
+    await this.waitForPageMount();
+    await this.firstNameField.fill(shippingData.firstName);
+    await this.lastNameField.fill(shippingData.lastName);
+    await this.postalCodeField.fill(shippingData.postalCode);
+  }
 
-      await expect(this.lastNameField).toHaveValue("");
-      await this.lastNameField.fill(shippingData.lastName);
-      await expect(this.lastNameField).toHaveValue(shippingData.lastName);
-
-      await expect(this.postalCodeField).toHaveValue("");
-      await this.postalCodeField.fill(shippingData.postalCode);
-      await expect(this.postalCodeField).toHaveValue(shippingData.postalCode);
-    }).toPass();
+  /**
+  * Checks whether all shipping form fields match the expected shipping data.
+  * @param shippingData - Expected customer shipping information.
+  * @returns Promise resolving to true if all fields match.
+  */
+  async shippingInformationFilled(shippingData: ShippingData): Promise<boolean> {
+    const [firstName, lastName, postalCode] = await Promise.all([
+      this.firstNameField.inputValue(),
+      this.lastNameField.inputValue(),
+      this.postalCodeField.inputValue(),
+    ]);
+    return (
+      firstName === shippingData.firstName &&
+      lastName === shippingData.lastName &&
+      postalCode === shippingData.postalCode
+    );
   }
 
   /**
