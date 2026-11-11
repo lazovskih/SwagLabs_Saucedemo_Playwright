@@ -14,12 +14,13 @@ A demo end-to-end test automation project for the [SauceDemo](https://www.sauced
 
 This project demonstrates automated E2E testing of key user flows on the [www.saucedemo.com](https://www.saucedemo.com) website, including:
 
-- 🔐 User authentication (login, logout, and route access control)
-- 🛍️ Adding and removing items from the shopping cart
-- 💳 Checkout flow (customer details → order summary & tax/total calculation → order confirmation)
-- 🔃 Product catalog sorting (by name A–Z / Z–A and price low-to-high / high-to-low)
+- 🔐 **User authentication** — valid/invalid login, locked-out user handling, logout, and route access control
+- 🛍️ **Inventory page cart & catalog interactions** — adding and removing items on the products page, verifying `Add to cart` / `Remove` button state transitions, validating shopping cart contents and cart badge counts, and verifying product details (name, price, image, and description)
+- 🔍 **Item details page interactions** — adding and removing items directly on the product item details page, verifying shopping cart contents and cart badge count updates, confirming button state synchronization between the inventory, item details, and cart pages, and validating item details
+- 💳 **Checkout flow** — customer shipping details → order summary with subtotal, tax, and total calculation → order confirmation
+- 🔃 **Product catalog sorting** — sorting items by name (A–Z / Z–A) and price (low-to-high / high-to-low)
 
-The tests are architected using the **Page Object Model (POM)** with **component composition** and **Playwright custom fixtures** (`test.extend`) for maintainability and clarity.
+The tests are architected using the **Page Object Model (POM)** with **component composition**, **Playwright custom fixtures** (`test.extend`), and **strict separation of concerns** (all test assertions reside exclusively in spec files).
 
 ### Tech Stack
 
@@ -78,9 +79,9 @@ cp .env.example .env
 Add your credentials to `.env` and to GitHub Environment secrets:
 
 ```env
-STANDARD_USER=set_username
-LOCKED_OUT_USER=set_lockedout_username
-DEMO_PASSWORD=set_password
+STANDARD_USER=<set_standard_username>
+LOCKED_OUT_USER=<set_lockedout_username>
+DEMO_PASSWORD=<set_demo_password>
 URL=https://www.saucedemo.com
 ```
 
@@ -136,6 +137,7 @@ npx playwright test --project=webkit
 
 ```bash
 npm run lint
+npm run lint:fix
 npm run typecheck
 ```
 
@@ -172,18 +174,18 @@ SwagLabs_Saucedemo_Playwright/
 │   └── shipping.json                            # Customer checkout test data
 ├── tests/
 │   ├── e2e/                                     # End-to-end test suites
-│   │   ├── 1_login.spec.ts                      # Authentication & session tests
-│   │   ├── 2_inventory.spec.ts                  # Products catalog & inventory tests
-│   │   ├── 3_inventory_item.spec.ts             # Single product item detail tests
-│   │   ├── 4_checkout.spec.ts                   # Checkout and order placement tests
-│   │   └── 5_inventory_sort.spec.ts             # Product sorting tests
+│   │   ├── 1_login.spec.ts                      # Authentication, logout & access control tests
+│   │   ├── 2_inventory.spec.ts                  # Inventory page cart, badge & product detail tests
+│   │   ├── 3_inventory_item.spec.ts             # Item details page cart, badge & item detail tests
+│   │   ├── 4_checkout.spec.ts                   # Checkout flow & order total calculation tests
+│   │   └── 5_inventory_sort.spec.ts             # Product catalog sorting tests
 │   ├── fixtures/                                # Playwright setup & custom fixtures
 │   │   ├── auth.setup.ts                        # Global authentication setup project
 │   │   └── pages.fixture.ts                     # Custom page object fixtures
 │   ├── pages/                                   # Page Object Model (POM) classes
 │   │   ├── components/
 │   │   │   └── ProductActionsComponent.ts       # Shared product/cart item actions component
-│   │   ├── BasePage.ts                          # Abstract base page with navigation
+│   │   ├── BasePage.ts                          # Abstract base page with navigation & mount sync
 │   │   ├── InternalPage.ts                      # Abstract base for authenticated pages (header/menu)
 │   │   ├── CartPage.ts                          # Shopping cart page object
 │   │   ├── CheckoutCompletePage.ts              # Order completion confirmation page object
@@ -193,7 +195,7 @@ SwagLabs_Saucedemo_Playwright/
 │   │   ├── InventoryPage.ts                     # Products catalog & inventory page object
 │   │   └── LoginPage.ts                         # Login page object
 │   ├── types/                                   # TypeScript type declarations
-│   │   └── index.ts                             # Product, PricingConfig, and ShippingData types
+│   │   └── index.ts                             # Product, PricingConfig, ShippingData & CartButtonAction
 │   └── utilities/                               # Helper utilities
 │       ├── env.ts                               # Environment variable validation & config
 │       └── index.ts                             # Currency parsing, cents math, and product helpers

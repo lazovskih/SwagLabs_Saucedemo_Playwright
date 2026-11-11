@@ -104,7 +104,7 @@ export class InventoryPage extends InternalPage {
    * @returns Locator of the item price.
    */
   getItemPrice(product: Product): Locator {
-    return this.productActions.getProductItem(product).locator(this.itemPrice);
+    return this.productActions.getItemPrice(product);
   }
 
   /**
@@ -112,7 +112,7 @@ export class InventoryPage extends InternalPage {
    * @returns Locator of the item name.
    */
   getItemName(product: Product): Locator {
-    return this.productActions.getProductItem(product).locator(this.itemName);
+    return this.productActions.getItemName(product);
   }
 
   /**
@@ -120,6 +120,6 @@ export class InventoryPage extends InternalPage {
    * @returns Locator of the item description.
    */
   getItemDescription(product: Product): Locator {
-    return this.productActions.getProductItem(product).locator(this.itemDescription);
+    return this.productActions.getItemDescription(product);
   }
 }

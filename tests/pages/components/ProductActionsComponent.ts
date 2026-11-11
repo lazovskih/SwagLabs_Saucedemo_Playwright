@@ -82,4 +82,27 @@ export class ProductActionsComponent {
   getProductItem(product: Product): Locator {
     return this.inventoryItems.filter({ hasText: product.name });
   }
+
+  /**
+   * Retrieves the item name locator for specified product.
+   * @returns Locator of the item name.
+   */
+  getItemName(product: Product): Locator {
+    return this.getProductItem(product).locator(this.itemName);
+  }
+  /**
+   * Retrieves the item price locator for specified product.
+   * @returns Locator of the item price.
+   */
+  getItemPrice(product: Product): Locator {
+    return this.getProductItem(product).locator(this.itemPrice);
+  }
+
+  /**
+   * Retrieves the item description locator for specified product.
+   * @returns Locator of the item description.
+   */
+  getItemDescription(product: Product): Locator {
+    return this.getProductItem(product).locator(this.itemDescription);
+  }
 }
