@@ -154,7 +154,7 @@ test.describe("3. Item page: Add items to cart", () => {
     await expect.poll(() => inventoryItemPage.itemPageOpened(), "Confirm Inventory Item page is opened").toBe(true);
 
     await inventoryItemPage.removeProduct(products[products.length - 1]);
-    await expect(inventoryItemPage.cartBadge, "Confirm cart link is hidden on 'Item' page").toBeHidden();
+    await expect(inventoryItemPage.cartBadge, "Confirm cart badge is hidden on 'Item' page").toBeHidden();
 
     // Verify cart link on 'Inventory Item' page has no numbers when all items are removed
     await expect(inventoryItemPage.cartLink, "Confirm cart link is empty on 'Item' page").toHaveText("");
@@ -189,8 +189,8 @@ test.describe("3. Item page: Add items to cart", () => {
       await expect.poll(() => inventoryItemPage.itemPageOpened(), "Confirm Inventory Item page is opened").toBe(true);
 
       // Verify that the "Add to Cart" button is present for those removed items
-      await expect(inventoryItemPage.getButton(productsList[i], "remove"), "Remove button is not visible for removed product").toBeHidden();
-      await expect(inventoryItemPage.getButton(productsList[i], "add"), "Add button is not visible for removed product").toBeVisible();
+      await expect(inventoryItemPage.getButton(productsList[i], "remove"), "Confirm Remove button button is not visible for removed product").toBeHidden();
+      await expect(inventoryItemPage.getButton(productsList[i], "add"), "Confirm add to cart button is visible for removed product").toBeVisible();
 
       // Navigate back to the products page
       await inventoryItemPage.backToProducts();

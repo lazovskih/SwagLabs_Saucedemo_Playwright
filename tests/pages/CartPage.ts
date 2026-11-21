@@ -26,6 +26,9 @@ export class CartPage extends InternalPage {
 
   /**
    * Returns the 'Add to cart' or 'Remove' button locator for a specific product.
+   * @param product - Product data object with the name of the product to find.
+   * @param action - Action type: 'add' or 'remove'.
+   * @returns Playwright locator for the specific button.
    */
   getButton(product: Product, action: CartButtonAction): Locator {
     return this.productActions.getButton(product, action);
@@ -57,7 +60,7 @@ export class CartPage extends InternalPage {
    * Retrieves a locator for a specific cart item row based on the product name.
    * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object with the name of the product to find.
-   * @returns Promise resolving to a Locator for the specific cart item.
+   * @returns Locator for the specific cart item.
    */
   getProductItem(product: Product): Locator {
     return this.productActions.getProductItem(product);

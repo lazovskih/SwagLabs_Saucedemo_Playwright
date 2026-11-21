@@ -1,12 +1,9 @@
 import { Locator, Page } from "@playwright/test";
 import type { Product, CartButtonAction } from "@data-types";
-import { getProductId } from "@utilities/index";;
-import { InternalPage } from "@pages/InternalPage";
+import { getProductId } from "@utilities/index";
 
-export class ProductActionsComponent extends InternalPage {
+export class ProductActionsComponent {
   readonly page: Page;
-  pageTitleText = "";
-  pageUrl = "";
 
   // Component locators
   readonly inventoryItems: Locator;
@@ -15,7 +12,6 @@ export class ProductActionsComponent extends InternalPage {
   readonly itemDescription: Locator;
 
   constructor(page: Page) {
-    super(page);
     this.page = page;
     this.inventoryItems = page.locator('[data-test="inventory-item"]');
     this.itemName = page.locator('[data-test="inventory-item-name"]');
@@ -26,7 +22,8 @@ export class ProductActionsComponent extends InternalPage {
   /**
    * Returns the 'Add to cart' or 'Remove' button locator for a specific product.
    * @param product - Product data object with the name of the product to find.
-   * @returns Promise resolving to a Locator for the specific buttonm.
+   * @param action - Action type: 'add' or 'remove'.
+   * @returns Playwright locator for the specific button.
    */
   getButton(product: Product, action: CartButtonAction): Locator {
     const buttonPrefix = action === "add" ? "add-to-cart" : "remove";

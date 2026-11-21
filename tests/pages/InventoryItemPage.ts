@@ -46,11 +46,10 @@ export class InventoryItemPage extends InternalPage {
   }
 
   /**
-   * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
-   * @param product - Product data object.
-   * @param action - action type: 'add', 'remove'.
-   * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
+   * Returns the 'Add to cart' or 'Remove' button locator for a specific product.
+   * @param product - Product data object with the name of the product to find.
+   * @param action - Action type: 'add' or 'remove'.
+   * @returns Playwright locator for the specific button.
    */
   getButton(product: Product, action: CartButtonAction): Locator {
     return this.productActions.getButton(product, action);
@@ -65,21 +64,11 @@ export class InventoryItemPage extends InternalPage {
   }
 
   /**
-   * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
+   * Adds a specified product to the shopping cart.
    * @param product - Product data object to add.
    */
   async addProduct(product: Product) {
     await this.productActions.addProduct(product);
-  }
-
-  /**
-   * Sequentially adds multiple products to the shopping cart.
-   * @param products - Array of product data objects to add.
-   */
-  async addProducts(products: Product[]) {
-    for (const product of products) {
-      await this.productActions.addProduct(product);
-    }
   }
 
   /**
@@ -88,32 +77,5 @@ export class InventoryItemPage extends InternalPage {
    */
   async removeProduct(product: Product) {
     await this.productActions.removeProduct(product);
-  }
-
-  /**
-   * Retrieves the item price locator for specified product.
-     * @param product - Product data object with the name of the product to find.
-     * @returns Locator of the item price.
-   */
-  getItemPrice(product: Product): Locator {
-    return this.productActions.getItemPrice(product);
-  }
-
-  /**
-   * Retrieves the item name locator for specified product.
-     * @param product - Product data object with the name of the product to find.
-     * @returns Locator of the item name.
-   */
-  getItemName(product: Product): Locator {
-    return this.productActions.getItemName(product);
-  }
-
-  /**
-   * Retrieves the item description locator for specified product.
-     * @param product - Product data object with the name of the product to find.
-     * @returns Locator of the item description.
-   */
-  getItemDescription(product: Product): Locator {
-    return this.productActions.getItemDescription(product);
   }
 }

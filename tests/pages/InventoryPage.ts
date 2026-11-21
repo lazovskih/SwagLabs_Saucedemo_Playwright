@@ -38,11 +38,10 @@ export class InventoryPage extends InternalPage {
   }
 
   /**
-   * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
+   * Returns the 'Add to cart' or 'Remove' button locator for a specific product.
    * @param product - Product data object with the name of the product to find.
-   * @param action - action type: 'add', 'remove'.
-   * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
+   * @param action - Action type: 'add' or 'remove'.
+   * @returns Playwright locator for the specific button.
    */
   getButton(product: Product, action: CartButtonAction): Locator {
     return this.productActions.getButton(product, action);
@@ -58,7 +57,7 @@ export class InventoryPage extends InternalPage {
   }
 
   /**
-   * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
+   * Adds a specified product to the shopping cart.
    * @param product - Product data object with the name of the product to find.
    */
   async addProduct(product: Product) {
