@@ -2,7 +2,7 @@ import { Locator, Page } from "@playwright/test";
 import { InternalPage } from "@pages/InternalPage";
 import { parseCurrencyToNumber, sumCurrencyAmounts } from "@utilities/index";
 import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
-import type { Product, CartButtonAction } from "@data-types";
+import type { Product } from "@data-types";
 
 /**
  * Checkout Step Two (overview) page.
