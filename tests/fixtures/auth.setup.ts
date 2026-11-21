@@ -14,7 +14,7 @@ setup("authenticate", async ({ page }) => {
 
     // 2. Auto-wait for navigation; when it fails, extract the on-screen error message
     try {
-        await expect(page).toHaveURL(new RegExp(inventoryPage.pageUrl), { timeout: 5000 })
+        await expect(page).toHaveURL(inventoryPage.pageUrl, { timeout: 5000 });
     } catch {
         const errorBanner = await loginPage.errorMessage.textContent().catch(() => null);
         throw new Error(formatAuthError(env.standardUser, inventoryPage.pageUrl, errorBanner));

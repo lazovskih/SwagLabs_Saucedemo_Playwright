@@ -7,7 +7,7 @@ import { BasePage } from "@pages/BasePage";
  */
 export class LoginPage extends BasePage {
   pageTitleText = "Swag Labs";
-  pageUrl = ""; // Resolves to baseURL, since this is the root (login) page.
+  pageUrl = "/"; // Resolves to baseURL, since this is the root (login) page.
 
   // Page locators
   readonly usernameField: Locator;

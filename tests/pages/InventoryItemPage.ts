@@ -1,8 +1,7 @@
 import { Locator, Page } from "@playwright/test";
-import { InternalPage } from "@pages/InternalPage";
 import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
+import { InternalPage } from "./InternalPage";
 import type { Product, CartButtonAction } from "@data-types";
-
 /**
  * Inventory Item Page.
  * Exposes single item name, image and description.
@@ -14,9 +13,9 @@ export class InventoryItemPage extends InternalPage {
 
   // Page locators
   readonly backToProductsButton: Locator;
-  readonly itemDescription: Locator;
   readonly itemName: Locator;
   readonly itemPrice: Locator;
+  readonly itemDescription: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -33,7 +32,6 @@ export class InventoryItemPage extends InternalPage {
    * @returns Promise resolving to true if both conditions are met.
    */
   async itemPageOpened(): Promise<boolean> {
-    await this.waitForPageMount();
     const currentPathname = new URL(this.page.url()).pathname;
     const isUrlMatch = currentPathname === this.pageUrl;
     const isButtonVisible = await this.backToProductsButton.isVisible();
@@ -48,10 +46,10 @@ export class InventoryItemPage extends InternalPage {
   }
 
   /**
-   * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
-   * @param product - Product data object.
+   * Returns the 'Add to cart' or 'Remove' button locator for a specific product.
+   * @param product - Product data object with the name of the product to find.
    * @param action - Action type: 'add' or 'remove'.
-   * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
+   * @returns Playwright locator for the specific button.
    */
   getButton(product: Product, action: CartButtonAction): Locator {
     return this.productActions.getButton(product, action);
@@ -60,17 +58,16 @@ export class InventoryItemPage extends InternalPage {
   /**
    * Returns the image locator for a specific product on either the Inventory page
    * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
-   * @param product - Product data object.
    */
   getImage(product: Product): Locator {
     return this.productActions.getImage(product);
   }
 
   /**
-   * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
+   * Adds a specified product to the shopping cart.
    * @param product - Product data object to add.
    */
-  async addProductToCart(product: Product) {
+  async addProduct(product: Product) {
     await this.productActions.addProduct(product);
   }
 

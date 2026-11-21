@@ -21,6 +21,9 @@ export class ProductActionsComponent {
 
   /**
    * Returns the 'Add to cart' or 'Remove' button locator for a specific product.
+   * @param product - Product data object with the name of the product to find.
+   * @param action - Action type: 'add' or 'remove'.
+   * @returns Playwright locator for the specific button.
    */
   getButton(product: Product, action: CartButtonAction): Locator {
     const buttonPrefix = action === "add" ? "add-to-cart" : "remove";
@@ -32,6 +35,7 @@ export class ProductActionsComponent {
   /**
    * Returns the image locator for a specific product on either the Inventory page
    * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
+   * @param product - Product data object with the name of the product to find.
    */
   getImage(product: Product): Locator {
     const productId = getProductId(product);
@@ -41,7 +45,8 @@ export class ProductActionsComponent {
   }
 
   /**
-   * Clicks 'Add to cart' for a single product and verifies the 'Remove' button appears.
+   * Clicks 'Add to cart' for a single product.
+   * @param product - Product data object with the name of the product to find.
    */
   async addProduct(product: Product) {
     await this.getButton(product, "add").click();
@@ -49,37 +54,46 @@ export class ProductActionsComponent {
 
   /**
    * Clicks 'Remove' for a single product.
+   * @param product - Product data object with the name of the product to find.
    */
   async removeProduct(product: Product) {
     await this.getButton(product, "remove").click();
   }
 
   /**
-   * Gets the number of occurrences of a product in the cart.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
-   * @param product - Product data object.
-   * @returns Promise resolving to the number of matching cart items.
-   */
-  getProductCount(product: Product): Promise<number> {
-    return this.getProductItem(product).count();
-  }
-
-  /**
-   * Retrieves the total count of item rows currently displayed in the cart.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
-   * @returns Promise resolving to the number of cart items.
-   */
-  getItemCount(): Promise<number> {
-    return this.inventoryItems.count();
-  }
-
-  /**
    * Retrieves a locator for a specific cart item row based on the product name.
    * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object with the name of the product to find.
-   * @returns Promise resolving to a Locator for the specific cart item.
+   * @returns Locator for the specific cart item.
    */
   getProductItem(product: Product): Locator {
     return this.inventoryItems.filter({ hasText: product.name });
+  }
+
+  /**
+   * Retrieves the item name locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item name.
+   */
+  getItemName(product: Product): Locator {
+    return this.getProductItem(product).locator(this.itemName);
+  }
+
+  /**
+   * Retrieves the item price locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item price.
+   */
+  getItemPrice(product: Product): Locator {
+    return this.getProductItem(product).locator(this.itemPrice);
+  }
+
+  /**
+   * Retrieves the item description locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item description.
+   */
+  getItemDescription(product: Product): Locator {
+    return this.getProductItem(product).locator(this.itemDescription);
   }
 }

@@ -1,6 +1,8 @@
 import { Locator, Page } from "@playwright/test";
 import { InternalPage } from "@pages/InternalPage";
 import { parseCurrencyToNumber, sumCurrencyAmounts } from "@utilities/index";
+import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
+import type { Product } from "@data-types";
 
 /**
  * Checkout Step Two (overview) page.
@@ -9,21 +11,35 @@ import { parseCurrencyToNumber, sumCurrencyAmounts } from "@utilities/index";
 export class CheckoutStepTwoPage extends InternalPage {
   pageTitleText = "Checkout: Overview";
   pageUrl = "/checkout-step-two.html";
+  private readonly productActions: ProductActionsComponent;
 
   // Checkout page elements - Step Two (overview)
+  private readonly itemQuantity: Locator;
   private readonly summarySubtotal: Locator;
   private readonly summaryTax: Locator;
   private readonly summaryTotal: Locator;
+  private readonly cancelButton: Locator;
   private readonly finishButton: Locator;
 
   constructor(page: Page) {
     super(page);
+    this.productActions = new ProductActionsComponent(page);
 
     // Step Two locators
+    this.itemQuantity = page.locator('[data-test="item-quantity"]');
     this.summarySubtotal = page.locator('[data-test="subtotal-label"]');
     this.summaryTax = page.locator('[data-test="tax-label"]');
     this.summaryTotal = page.locator('[data-test="total-label"]');
+    this.cancelButton = page.locator('[data-test="cancel"]');
     this.finishButton = page.locator('[data-test="finish"]');
+  }
+
+  /**
+   * Opens the specific product details page
+   * @param product - Product data object with the name of the product to find.
+   */
+  async openItemPage(product: Product) {
+    await this.getItemName(product).click();
   }
 
   /**
@@ -61,6 +77,13 @@ export class CheckoutStepTwoPage extends InternalPage {
   }
 
   /**
+   * Cancels the order by clicking the cancel button and waiting for page load.
+   */
+  async clickCancel() {
+    await this.cancelButton.click();
+  }
+
+  /**
    * Calculates the expected total by summing the subtotal and displayed tax
    * using exact integer cents math.
    * @param subtotal - Optional pre-validated subtotal; if omitted, reads subtotal from the page.
@@ -70,5 +93,32 @@ export class CheckoutStepTwoPage extends InternalPage {
     const resolvedSubtotal = subtotal ?? (await this.getSubtotal());
     const actualTax = await this.getTax();
     return sumCurrencyAmounts([resolvedSubtotal, actualTax]);
+  }
+
+  /**
+   * Retrieves the item price locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item price.
+   */
+  getItemPrice(product: Product): Locator {
+    return this.productActions.getItemPrice(product);
+  }
+
+  /**
+   * Retrieves the item name locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item name.
+   */
+  getItemName(product: Product): Locator {
+    return this.productActions.getItemName(product);
+  }
+
+  /**
+   * Retrieves the item description locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item description.
+   */
+  getItemDescription(product: Product): Locator {
+    return this.productActions.getItemDescription(product);
   }
 }

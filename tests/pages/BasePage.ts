@@ -22,7 +22,7 @@ export abstract class BasePage {
   }
 
   /**
-   * Navigates to the page URL and waits for React mount completion.
+   * Navigates to the page URL.
    */
   async open() {
     await this.page.goto(this.pageUrl);

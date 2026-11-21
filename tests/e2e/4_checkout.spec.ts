@@ -24,7 +24,7 @@ test.describe("4. Checkout flow", () => {
     const productsListCountStr = productsListCount.toString();
 
     // Add product to cart
-    await inventoryPage.addProductsToCart(productsList);
+    await inventoryPage.addProducts(productsList);
 
     // Verify cart badge count on 'Products' page
     await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(
@@ -86,7 +86,7 @@ test.describe("4. Checkout flow", () => {
     const productsListCountStr = productsListCount.toString();
 
     // Add multiple products to cart
-    await inventoryPage.addProductsToCart(productsList);
+    await inventoryPage.addProducts(productsList);
 
     // Verify cart badge count on 'Products' page
     await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid").toHaveText(productsListCountStr);
@@ -155,7 +155,7 @@ test.describe("4. Checkout flow", () => {
     await expect(cartPage.cartBadge).toBeHidden();
 
     // Verify cart link on 'Shopping Cart' page has no numbers when all items are removed
-    await expect(cartPage.cartLink, "Confirm cart link is empty on 'Products' page").toHaveText("");
+    await expect(cartPage.cartLink, "Confirm cart link is empty on 'Shopping Cart' page").toHaveText("");
 
     // Start checkout
     await cartPage.startCheckout();

@@ -19,22 +19,26 @@ test.describe("2. Inventory page: Add items to cart", () => {
 
     // Add products to cart
     const productsList = [products[0], products[2], products[4]];
-    await inventoryPage.addProductsToCart(productsList);
+    await inventoryPage.addProducts(productsList);
 
     // Verify cart badge count on 'Products' page
-    await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText("3");
+    await expect(inventoryPage.cartBadge, "Confirm cart badge is visible on 'Products' page").toBeVisible();
+    await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(
+      productsList.length.toString());
 
     // Open shopping cart
     await inventoryPage.viewCart();
 
     // Verify cart badge count on 'Shopping Cart' page
-    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText("3");
+    await expect(cartPage.cartBadge, "Confirm cart badge is visible on 'Shopping Cart' page").toBeVisible();
+    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(
+      productsList.length.toString());
 
     // Verify cart page title
     await expect(cartPage.pageTitle, "Confirm cart page title is valid").toHaveText(cartPage.pageTitleText);
 
     // Verify total cart items count on the page
-    await expect.poll(() => cartPage.getItemCount(), "Confirm total cart items count").toBe(productsList.length);
+    await expect(cartPage.inventoryItems, "Confirm total cart items count").toHaveCount(productsList.length);
 
     // Verify specific products present on the shopping cart page
     for (const product of productsList) {
@@ -52,8 +56,8 @@ test.describe("2. Inventory page: Add items to cart", () => {
       const removeButton = inventoryPage.getButton(product, "remove");
 
       // Verify initial state
-      await expect(addToCartButton).toBeVisible();
-      await expect(removeButton).toBeHidden();
+      await expect(addToCartButton, "Confirm add to cart button is visible").toBeVisible();
+      await expect(removeButton, "Confirm remove button is hidden").toBeHidden();
 
       // Click add to cart
       await addToCartButton.click();
@@ -90,11 +94,13 @@ test.describe("2. Inventory page: Add items to cart", () => {
 
     // 1. Add all items and verify badge count increments
     for (const product of products) {
-      await inventoryPage.addProductToCart(product);
+      await inventoryPage.addProduct(product);
       expectedCount++;
 
-      await expect(inventoryPage.cartBadge).toBeVisible();
-      await expect(inventoryPage.cartBadge).toHaveText(expectedCount.toString());
+      // Verify cart badge count on 'Products' page
+      await expect(inventoryPage.cartBadge, "Confirm cart badge is visible on 'Products' page").toBeVisible();
+      await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(
+        expectedCount.toString());
     }
 
     // 2. Remove all but the last item and verify badge count decrements (5 -> 1)
@@ -102,12 +108,15 @@ test.describe("2. Inventory page: Add items to cart", () => {
       await inventoryPage.removeProduct(product);
       expectedCount--;
 
-      await expect(inventoryPage.cartBadge).toHaveText(expectedCount.toString());
+      // Verify cart badge count on 'Products' page
+      await expect(inventoryPage.cartBadge, "Confirm cart badge is visible on 'Products' page").toBeVisible();
+      await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(
+        expectedCount.toString());
     }
 
     // 3. Remove the final item and verify the badge disappears completely
     await inventoryPage.removeProduct(products[products.length - 1]);
-    await expect(inventoryPage.cartBadge, "Confirm cart link is hidden on 'Products' page").toBeHidden();
+    await expect(inventoryPage.cartBadge, "Confirm cart badge is hidden on 'Products' page").toBeHidden();
 
     // Verify cart link on 'Products' page has no numbers when all items are removed
     await expect(inventoryPage.cartLink, "Confirm cart link is empty on 'Products' page").toHaveText("");
@@ -119,13 +128,13 @@ test.describe("2. Inventory page: Add items to cart", () => {
   }) => {
     // Add product items
     const productsList = [products[0], products[1], products[2], products[3]];
-    await inventoryPage.addProductsToCart(productsList);
+    await inventoryPage.addProducts(productsList);
 
     // Open shopping cart
     await inventoryPage.viewCart();
 
     // Verify cart page title
-    await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
+    await expect(cartPage.pageTitle, "Confirm cart page title is correct").toHaveText(cartPage.pageTitleText);
 
     // Remove 2 items from the cart
     await cartPage.removeProduct(productsList[0]);
@@ -134,14 +143,10 @@ test.describe("2. Inventory page: Add items to cart", () => {
     // Go back to products list
     await cartPage.continueShopping();
 
-    // Verify that the "Remove" button is NOT present for those removed items
+    // Verify that "Remove" is hidden and "Add to cart" is visible for the removed items
     for (let i = 0; i < 2; i++) {
-      await expect(inventoryPage.getButton(productsList[i], "remove")).toBeHidden();
-    }
-
-    // Verify that the "Add to Cart" button is present for those removed items
-    for (let i = 0; i < 2; i++) {
-      await expect(inventoryPage.getButton(productsList[i], "add")).toBeVisible();
+      await expect(inventoryPage.getButton(productsList[i], "remove"), "Confirm remove button is hidden").toBeHidden();
+      await expect(inventoryPage.getButton(productsList[i], "add"), "Confirm add to cart button is visible").toBeVisible();
     }
   });
 
@@ -151,7 +156,7 @@ test.describe("2. Inventory page: Add items to cart", () => {
   }) => {
     // Add products to cart
     const productsList = [products[2], products[1], products[5]];
-    await inventoryPage.addProductsToCart(productsList);
+    await inventoryPage.addProducts(productsList);
 
     // Loop through selected products
     for (const product of productsList) {
@@ -171,14 +176,18 @@ test.describe("2. Inventory page: Add items to cart", () => {
     }
   });
 
-  test("2.7 Inventory page: Verifies item name, image and details", async ({ inventoryPage }) => {
-    // Loop through selected products
+  test("2.7 Inventory page: Verifies item name, image and description", async ({ inventoryPage }) => {
+    // Loop through all products
     for (const product of products) {
-      await expect(inventoryPage.getItemName(product), `Item name of '${product.name}' is matching the expected name`).toHaveText(
-        product.name,
-      );
+      await expect(
+        inventoryPage.getItemName(product),
+        `Item name '${product.name}' is matching the expected name`,
+      ).toHaveText(product.name);
       await expect
-        .poll(async () => parseCurrencyToNumber(await inventoryPage.getItemPrice(product).textContent()))
+        .poll(
+          async () => parseCurrencyToNumber(await inventoryPage.getItemPrice(product).textContent()),
+          `Item price of '${product.name}' is matching the expected price`,
+        )
         .toBe(product.price);
       await expect(
         inventoryPage.getImage(product),

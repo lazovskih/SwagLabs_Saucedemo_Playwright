@@ -27,9 +27,9 @@ export class CheckoutStepOnePage extends InternalPage {
   }
 
   /**
-    * Fills the shipping information form fields (first name, last name, and postal code).
-    * @param shippingData - Customer shipping information object.
-    */
+   * Fills the shipping information form fields (first name, last name, and postal code).
+   * @param shippingData - Customer shipping information object.
+   */
   async fillShippingInformation(shippingData: ShippingData) {
     await this.waitForPageMount();
     await this.firstNameField.fill(shippingData.firstName);
@@ -38,10 +38,10 @@ export class CheckoutStepOnePage extends InternalPage {
   }
 
   /**
-  * Checks whether all shipping form fields match the expected shipping data.
-  * @param shippingData - Expected customer shipping information.
-  * @returns Promise resolving to true if all fields match.
-  */
+   * Checks whether all shipping form fields match the expected shipping data.
+   * @param shippingData - Expected customer shipping information.
+   * @returns Promise resolving to true if all fields match.
+   */
   async shippingInformationFilled(shippingData: ShippingData): Promise<boolean> {
     const [firstName, lastName, postalCode] = await Promise.all([
       this.firstNameField.inputValue(),
