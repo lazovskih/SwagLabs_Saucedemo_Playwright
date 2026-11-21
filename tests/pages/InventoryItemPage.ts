@@ -1,8 +1,7 @@
 import { Locator, Page } from "@playwright/test";
-import { InternalPage } from "@pages/InternalPage";
 import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
+import { InternalPage } from "./InternalPage";
 import type { Product, CartButtonAction } from "@data-types";
-
 /**
  * Inventory Item Page.
  * Exposes single item name, image and description.
@@ -14,9 +13,9 @@ export class InventoryItemPage extends InternalPage {
 
   // Page locators
   readonly backToProductsButton: Locator;
-  readonly itemDescription: Locator;
   readonly itemName: Locator;
   readonly itemPrice: Locator;
+  readonly itemDescription: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -33,7 +32,6 @@ export class InventoryItemPage extends InternalPage {
    * @returns Promise resolving to true if both conditions are met.
    */
   async itemPageOpened(): Promise<boolean> {
-    await this.waitForPageMount();
     const currentPathname = new URL(this.page.url()).pathname;
     const isUrlMatch = currentPathname === this.pageUrl;
     const isButtonVisible = await this.backToProductsButton.isVisible();
@@ -49,8 +47,9 @@ export class InventoryItemPage extends InternalPage {
 
   /**
    * Gets the 'Add to cart' or 'Remove' button locator for a specified product.
+   * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object.
-   * @param action - Action type: 'add' or 'remove'.
+   * @param action - action type: 'add', 'remove'.
    * @returns Playwright locator for the product's 'Add to cart' or 'Remove' button.
    */
   getButton(product: Product, action: CartButtonAction): Locator {
@@ -60,7 +59,6 @@ export class InventoryItemPage extends InternalPage {
   /**
    * Returns the image locator for a specific product on either the Inventory page
    * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
-   * @param product - Product data object.
    */
   getImage(product: Product): Locator {
     return this.productActions.getImage(product);
@@ -70,8 +68,18 @@ export class InventoryItemPage extends InternalPage {
    * Adds a specified product to the shopping cart and waits for the 'Remove' button to appear.
    * @param product - Product data object to add.
    */
-  async addProductToCart(product: Product) {
+  async addProduct(product: Product) {
     await this.productActions.addProduct(product);
+  }
+
+  /**
+   * Sequentially adds multiple products to the shopping cart.
+   * @param products - Array of product data objects to add.
+   */
+  async addProducts(products: Product[]) {
+    for (const product of products) {
+      await this.productActions.addProduct(product);
+    }
   }
 
   /**
@@ -80,5 +88,32 @@ export class InventoryItemPage extends InternalPage {
    */
   async removeProduct(product: Product) {
     await this.productActions.removeProduct(product);
+  }
+
+  /**
+   * Retrieves the item price locator for specified product.
+     * @param product - Product data object with the name of the product to find.
+     * @returns Locator of the item price.
+   */
+  getItemPrice(product: Product): Locator {
+    return this.productActions.getItemPrice(product);
+  }
+
+  /**
+   * Retrieves the item name locator for specified product.
+     * @param product - Product data object with the name of the product to find.
+     * @returns Locator of the item name.
+   */
+  getItemName(product: Product): Locator {
+    return this.productActions.getItemName(product);
+  }
+
+  /**
+   * Retrieves the item description locator for specified product.
+     * @param product - Product data object with the name of the product to find.
+     * @returns Locator of the item description.
+   */
+  getItemDescription(product: Product): Locator {
+    return this.productActions.getItemDescription(product);
   }
 }

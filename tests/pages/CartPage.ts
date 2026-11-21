@@ -54,25 +54,6 @@ export class CartPage extends InternalPage {
   }
 
   /**
-   * Gets the number of occurrences of a product in the cart.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
-   * @param product - Product data object.
-   * @returns Promise resolving to the number of matching cart items.
-   */
-  getProductCount(product: Product): Promise<number> {
-    return this.productActions.getProductCount(product);
-  }
-
-  /**
-   * Retrieves the total count of item rows currently displayed in the cart.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
-   * @returns Promise resolving to the number of cart items.
-   */
-  getItemCount(): Promise<number> {
-    return this.productActions.getItemCount();
-  }
-
-  /**
    * Retrieves a locator for a specific cart item row based on the product name.
    * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object with the name of the product to find.

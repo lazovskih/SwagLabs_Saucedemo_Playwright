@@ -56,7 +56,7 @@ test.describe("1. Login page", () => {
       await loginPage.login(username, password);
       await expect(loginPage.errorMessage, "Error message should be visible").toBeVisible();
       await expect(loginPage.errorMessage, "Error message text should match").toHaveText(getExpectedError(loginPage));
-      await expect(page, "Should remain on login page").toHaveURL(/.*\/$/);
+      await expect(page, "Should remain on login page").toHaveURL(loginPage.pageUrl);
     });
   }
 
@@ -79,14 +79,14 @@ test.describe("1. Login page", () => {
     await inventoryPage.clickLogoutMenu();
 
     // Verify redirected to login page
-    await expect(page).toHaveURL(/.*\/$/);
+    await expect(page, "Should remain on login page").toHaveURL(loginPage.pageUrl);
 
     for (const internalPage of internalPages) {
       // Try to navigate directly to each internal page
       await internalPage.open();
 
       // Verify redirected back to login page
-      await expect(page).toHaveURL(/.*\/$/);
+      await expect(page, "Should remain on login page").toHaveURL(loginPage.pageUrl);
 
       // Verify error message is displayed with valid reference to page URL
       const noAccessMessageText = loginPage.noAccessMessageText.replace("{pageUrl}", internalPage.pageUrl);

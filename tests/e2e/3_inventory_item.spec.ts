@@ -23,7 +23,7 @@ test.describe("3. Item page: Add items to cart", () => {
       await inventoryPage.openItemPage(product);
       await expect.poll(() => inventoryItemPage.itemPageOpened(), "Confirm Inventory Item page is opened").toBe(true);
       // Add products to cart;
-      await inventoryItemPage.addProductToCart(product);
+      await inventoryItemPage.addProduct(product);
 
       // Navigate to the products page
       await inventoryItemPage.backToProducts();
@@ -42,7 +42,7 @@ test.describe("3. Item page: Add items to cart", () => {
     await expect(cartPage.pageTitle, "Confirm cart page title is valid").toHaveText(cartPage.pageTitleText);
 
     // Verify total cart items count on the page
-    await expect.poll(() => cartPage.getItemCount(), "Confirm total cart items count").toBe(products.length);
+    await expect(cartPage.inventoryItems, "Confirm total cart items count").toHaveCount(products.length);
 
     // Verify specific products present on the shopping cart page
     for (const product of products) {
@@ -123,7 +123,7 @@ test.describe("3. Item page: Add items to cart", () => {
       await inventoryPage.openItemPage(product);
       await expect.poll(() => inventoryItemPage.itemPageOpened(), "Confirm Inventory Item page is opened").toBe(true);
 
-      await inventoryItemPage.addProductToCart(product);
+      await inventoryItemPage.addProduct(product);
       expectedCount++;
 
       await expect(inventoryItemPage.cartBadge).toBeVisible();
@@ -156,7 +156,7 @@ test.describe("3. Item page: Add items to cart", () => {
     await inventoryItemPage.removeProduct(products[products.length - 1]);
     await expect(inventoryItemPage.cartBadge, "Confirm cart link is hidden on 'Item' page").toBeHidden();
 
-    // Verify cart link on 'Products' page has no numbers when all items are removed
+    // Verify cart link on 'Inventory Item' page has no numbers when all items are removed
     await expect(inventoryItemPage.cartLink, "Confirm cart link is empty on 'Item' page").toHaveText("");
   });
 
@@ -167,7 +167,7 @@ test.describe("3. Item page: Add items to cart", () => {
   }) => {
     // Add product items
     const productsList = [products[0], products[1], products[2], products[3]];
-    await inventoryPage.addProductsToCart(productsList);
+    await inventoryPage.addProducts(productsList);
 
     // Open shopping cart
     await inventoryPage.viewCart();
@@ -184,16 +184,16 @@ test.describe("3. Item page: Add items to cart", () => {
 
     // Verify that the "Remove" button is NOT present for those removed items
     for (let i = 0; i < 2; i++) {
-      // Navigate to the products page
-      await inventoryPage.open();
-
       // Open product item page
       await inventoryPage.openItemPage(productsList[i]);
       await expect.poll(() => inventoryItemPage.itemPageOpened(), "Confirm Inventory Item page is opened").toBe(true);
 
       // Verify that the "Add to Cart" button is present for those removed items
-      await expect(inventoryItemPage.getButton(productsList[i], "remove")).toBeHidden();
-      await expect(inventoryItemPage.getButton(productsList[i], "add")).toBeVisible();
+      await expect(inventoryItemPage.getButton(productsList[i], "remove"), "Remove button is not visible for removed product").toBeHidden();
+      await expect(inventoryItemPage.getButton(productsList[i], "add"), "Add button is not visible for removed product").toBeVisible();
+
+      // Navigate back to the products page
+      await inventoryItemPage.backToProducts();
     }
   });
 
@@ -211,7 +211,7 @@ test.describe("3. Item page: Add items to cart", () => {
       await expect.poll(() => inventoryItemPage.itemPageOpened(), "Confirm Inventory Item page is opened").toBe(true);
 
       // Add item on item page
-      await inventoryItemPage.addProductToCart(product);
+      await inventoryItemPage.addProduct(product);
 
       // Navigate to the products page
       await inventoryItemPage.backToProducts();
@@ -225,7 +225,7 @@ test.describe("3. Item page: Add items to cart", () => {
     }
   });
 
-  test("3.7 Item page: Verifies item name, image and details", async ({ inventoryPage, inventoryItemPage }) => {
+  test("3.7 Item page: Verifies item name, image and description", async ({ inventoryPage, inventoryItemPage }) => {
     // Loop through selected products
     for (const product of products) {
       // Open product item page
