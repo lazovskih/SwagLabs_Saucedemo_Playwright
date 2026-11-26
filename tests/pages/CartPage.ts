@@ -33,6 +33,7 @@ export class CartPage extends InternalPage {
   getButton(product: Product, action: CartButtonAction): Locator {
     return this.productActions.getButton(product, action);
   }
+
   /**
    * Removes a specific product from the cart by clicking its remove button.
    * Can be used on both 'Products' and 'Shopping Cart' pages
@@ -40,6 +41,59 @@ export class CartPage extends InternalPage {
    */
   async removeProduct(product: Product) {
     await this.productActions.removeProduct(product);
+  }
+
+  /**
+  * Retrieves the total count of item rows currently displayed on the page.
+  * @param product - Product data object to remove.
+  */
+  async GetItemsCount(product: Product) {
+    await this.productActions.getItemCount();
+  }
+
+  /**
+    * Retrieves a locator for a specific cart item row based on the product name.
+    * Can be used on both 'Products' and 'Shopping Cart' pages
+    * @param product - Product data object with the name of the product to find.
+    * @returns Locator for the specific cart item.
+    */
+  getProductItem(product: Product): Locator {
+    return this.productActions.getProductItem(product);
+  }
+
+  /**
+  * Retrieves the item name locator for specified product.
+  * @param product - Product data object with the name of the product to find.
+  * @returns Locator of the item name.
+  */
+  getItemName(product: Product): Locator {
+    return this.productActions.getItemName(product);
+  }
+
+  /**
+   * Retrieves the item price locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item price.
+   */
+  getItemPrice(product: Product): Locator {
+    return this.productActions.getItemPrice(product);
+  }
+
+  /**
+   * Retrieves the item description locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item description.
+   */
+  getItemDescription(product: Product): Locator {
+    return this.productActions.getItemDescription(product);
+  }
+
+  /**
+   * Opens the selected product's detail page by clicking its item name link.
+   * @param name - Product Target product data object.
+   */
+  openItemPage(product: Product) {
+    this.productActions.getItemName(product).click();
   }
 
   /**
@@ -54,15 +108,5 @@ export class CartPage extends InternalPage {
    */
   async continueShopping() {
     await this.continueShoppingButton.click();
-  }
-
-  /**
-   * Retrieves a locator for a specific cart item row based on the product name.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
-   * @param product - Product data object with the name of the product to find.
-   * @returns Locator for the specific cart item.
-   */
-  getProductItem(product: Product): Locator {
-    return this.productActions.getProductItem(product);
   }
 }

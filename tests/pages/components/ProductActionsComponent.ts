@@ -10,6 +10,8 @@ export class ProductActionsComponent {
   readonly itemName: Locator;
   readonly itemPrice: Locator;
   readonly itemDescription: Locator;
+  readonly itemQuantity: Locator;
+  public itemImageSelector = "[data-test='inventory-item-img']";
 
   constructor(page: Page) {
     this.page = page;
@@ -17,6 +19,7 @@ export class ProductActionsComponent {
     this.itemName = page.locator('[data-test="inventory-item-name"]');
     this.itemPrice = page.locator('[data-test="inventory-item-price"]');
     this.itemDescription = page.locator('[data-test="inventory-item-desc"]');
+    this.itemQuantity = page.locator("[data-test='item-quantity']");
   }
 
   /**
@@ -61,6 +64,11 @@ export class ProductActionsComponent {
   }
 
   /**
+  * Retrieves the total count of item rows currently displayed on the page.
+  */
+  getItemCount(): Promise<Number> { return this.inventoryItems.count() };
+
+  /**
    * Retrieves a locator for a specific cart item row based on the product name.
    * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object with the name of the product to find.
@@ -89,11 +97,29 @@ export class ProductActionsComponent {
   }
 
   /**
+   * Retrieves the item image locator for the specified product, or all item images when <paramref name="product"/> is <see langword="null"/>.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item price.
+   */
+  getItemImage(product: Product) {
+    return this.getProductItem(product).locator(this.itemImageSelector);
+  }
+
+  /**
    * Retrieves the item description locator for specified product.
    * @param product - Product data object with the name of the product to find.
    * @returns Locator of the item description.
    */
   getItemDescription(product: Product): Locator {
     return this.getProductItem(product).locator(this.itemDescription);
+  }
+
+  /**
+   * Retrieves the item quantity locator for the specified product, or all item quantities when <paramref name="product"/> is <see langword="null"/>.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item quantity.
+   */
+  getItemQuantity(product: Product) {
+    return this.getProductItem(product).locator(this.itemQuantity)
   }
 }

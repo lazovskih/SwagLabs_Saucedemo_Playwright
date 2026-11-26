@@ -39,7 +39,7 @@ export class CheckoutStepTwoPage extends InternalPage {
    * @param product - Product data object with the name of the product to find.
    */
   async openItemPage(product: Product) {
-    await this.getItemName(product).click();
+    await this.productActions.getItemName(product).click();
   }
 
   /**
