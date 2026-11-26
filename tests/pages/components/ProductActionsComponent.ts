@@ -36,18 +36,6 @@ export class ProductActionsComponent {
   }
 
   /**
-   * Returns the image locator for a specific product on either the Inventory page
-   * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
-   * @param product - Product data object with the name of the product to find.
-   */
-  getImage(product: Product): Locator {
-    const productId = getProductId(product);
-    return this.page
-      .locator(`[data-test="inventory-item-${productId}-img"]`)
-      .or(this.page.locator(`[data-test="item-${productId}-img"]`));
-  }
-
-  /**
    * Clicks 'Add to cart' for a single product.
    * @param product - Product data object with the name of the product to find.
    */
@@ -97,12 +85,15 @@ export class ProductActionsComponent {
   }
 
   /**
-   * Retrieves the item image locator for the specified product, or all item images when <paramref name="product"/> is <see langword="null"/>.
+   * Returns the image locator for a specific product on either the Inventory page
+   * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
    * @param product - Product data object with the name of the product to find.
-   * @returns Locator of the item price.
    */
-  getItemImage(product: Product) {
-    return this.getProductItem(product).locator(this.itemImageSelector);
+  getItemImage(product: Product): Locator {
+    const productId = getProductId(product);
+    return this.page
+      .locator(`[data-test="inventory-item-${productId}-img"]`)
+      .or(this.page.locator(`[data-test="item-${productId}-img"]`));
   }
 
   /**
@@ -115,7 +106,7 @@ export class ProductActionsComponent {
   }
 
   /**
-   * Retrieves the item quantity locator for the specified product, or all item quantities when <paramref name="product"/> is <see langword="null"/>.
+   * Retrieves the item quantity locator for the specified product
    * @param product - Product data object with the name of the product to find.
    * @returns Locator of the item quantity.
    */

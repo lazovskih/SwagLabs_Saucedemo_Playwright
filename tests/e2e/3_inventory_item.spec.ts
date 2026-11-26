@@ -241,10 +241,12 @@ test.describe("3. Item page: Add items to cart", () => {
           `Item price of '${product.name}' is matching the expected price`,
         )
         .toBe(product.price);
+
       await expect(
-        inventoryItemPage.getImage(product),
+        inventoryItemPage.getItemImage(product),
         `Item image of '${product.name}' is matching the expected image URL`,
       ).toHaveAttribute("src", product.imageUrl);
+
       await expect(
         inventoryItemPage.itemDescription,
         `Item description of '${product.name}' is matching the expected description`,

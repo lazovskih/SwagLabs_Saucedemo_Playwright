@@ -121,8 +121,10 @@ npm run test:ui
 npx playwright test tests/e2e/1_login.spec.ts
 npx playwright test tests/e2e/2_inventory.spec.ts
 npx playwright test tests/e2e/3_inventory_item.spec.ts
-npx playwright test tests/e2e/4_checkout.spec.ts
+npx playwright test tests/e2e/4_checkoutFlow.spec.ts
 npx playwright test tests/e2e/5_inventory_sort.spec.ts
+npx playwright test tests/e2e/6_cartPage.spec.ts
+npx playwright test tests/e2e/7_checkoutPage.spec.ts
 ```
 
 ### Run tests on a specific browser

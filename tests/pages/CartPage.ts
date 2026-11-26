@@ -92,7 +92,7 @@ export class CartPage extends InternalPage {
    * Opens the selected product's detail page by clicking its item name link.
    * @param name - Product Target product data object.
    */
-  openItemPage(product: Product) {
+  async openItemPage(product: Product) {
     this.productActions.getItemName(product).click();
   }
 

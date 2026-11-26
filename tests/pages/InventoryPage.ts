@@ -52,8 +52,8 @@ export class InventoryPage extends InternalPage {
    * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
    * @param product - Product data object with the name of the product to find.
    */
-  getImage(product: Product): Locator {
-    return this.productActions.getImage(product);
+  getItemImage(product: Product): Locator {
+    return this.productActions.getItemImage(product);
   }
 
   /**

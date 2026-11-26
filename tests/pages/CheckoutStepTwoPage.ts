@@ -114,11 +114,29 @@ export class CheckoutStepTwoPage extends InternalPage {
   }
 
   /**
+   * Returns the image locator for a specific product on either the Inventory page
+   * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
+   * @param product - Product data object with the name of the product to find.
+   */
+  getItemImage(product: Product) {
+    return this.productActions.getItemImage(product);
+  }
+
+  /**
    * Retrieves the item description locator for specified product.
    * @param product - Product data object with the name of the product to find.
    * @returns Locator of the item description.
    */
   getItemDescription(product: Product): Locator {
     return this.productActions.getItemDescription(product);
+  }
+
+  /**
+   * Retrieves the item quantity locator for the specified product
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item quantity.
+   */
+  getItemQuantity(product: Product) {
+    return this.productActions.getItemQuantity(product)
   }
 }
