@@ -118,11 +118,13 @@ npm run test:ui
 ### Run a specific test file
 
 ```bash
-npx playwright test tests/e2e/1_login.spec.ts
-npx playwright test tests/e2e/2_inventory.spec.ts
-npx playwright test tests/e2e/3_inventory_item.spec.ts
-npx playwright test tests/e2e/4_checkout.spec.ts
-npx playwright test tests/e2e/5_inventory_sort.spec.ts
+npx playwright test tests/e2e/1_LoginPage.spec.ts
+npx playwright test tests/e2e/2_InventoryPage.spec.ts
+npx playwright test tests/e2e/3_InventoryItemPage.spec.ts
+npx playwright test tests/e2e/4_CheckoutFlow.spec.ts
+npx playwright test tests/e2e/5_InventoryPageSort.spec.ts
+npx playwright test tests/e2e/6_CartPage.spec.ts
+npx playwright test tests/e2e/7_CheckoutPage.spec.ts
 ```
 
 ### Run tests on a specific browser
@@ -165,47 +167,49 @@ npx playwright show-report
 SwagLabs_Saucedemo_Playwright/
 ├── .github/
 │   └── workflows/
-│       └── playwright.yml                       # GitHub Actions CI workflow
+│       └── playwright.yml                  # GitHub Actions CI workflow
 ├── .husky/
-│   └── pre-commit                               # Pre-commit hook running lint-staged
+│   └── pre-commit                          # Pre-commit hook running lint-staged
 ├── data/
-│   ├── locale.json                              # Store currency & tax rate test data
-│   ├── products.json                            # Product catalog test data
-│   └── shipping.json                            # Customer checkout test data
+│   ├── locale.json                         # Store currency & tax rate test data
+│   ├── products.json                       # Product catalog test data
+│   └── shipping.json                       # Customer checkout test data
 ├── tests/
-│   ├── e2e/                                     # End-to-end test suites
-│   │   ├── 1_login.spec.ts                      # Authentication, logout & access control tests
-│   │   ├── 2_inventory.spec.ts                  # Inventory page cart, badge & product detail tests
-│   │   ├── 3_inventory_item.spec.ts             # Item details page cart, badge & item detail tests
-│   │   ├── 4_checkout.spec.ts                   # Checkout flow & order total calculation tests
-│   │   └── 5_inventory_sort.spec.ts             # Product catalog sorting tests
-│   ├── fixtures/                                # Playwright setup & custom fixtures
-│   │   ├── auth.setup.ts                        # Global authentication setup project
-│   │   └── pages.fixture.ts                     # Custom page object fixtures
-│   ├── pages/                                   # Page Object Model (POM) classes
+│   ├── e2e/                                # End-to-end test suites
+│   │   ├── 1_LoginPage.spec.ts             # Authentication, logout & access control tests
+│   │   ├── 2_InventoryPage.spec.ts         # Inventory page cart, badge & product detail tests
+│   │   ├── 3_InventoryItemPage.spec.ts     # Item details page cart, badge & item detail tests
+│   │   ├── 4_CheckoutFlow.spec.ts          # Checkout flow test
+│   │   ├── 5_InventoryPageSort.spec.ts     # Product catalog sorting tests
+│   │   ├── 6_CartPage.spec.ts              # Cart page tests
+│   │   └── 7_CheckoutPage.spec.ts          # Checkout page tests
+│   ├── fixtures/                           # Playwright setup & custom fixtures
+│   │   ├── auth.setup.ts                   # Global authentication setup project
+│   │   └── pages.fixture.ts                # Custom page object fixtures
+│   ├── pages/                              # Page Object Model (POM) classes
 │   │   ├── components/
-│   │   │   └── ProductActionsComponent.ts       # Shared product/cart item actions component
-│   │   ├── BasePage.ts                          # Abstract base page with navigation & mount sync
-│   │   ├── InternalPage.ts                      # Abstract base for authenticated pages (header/menu)
-│   │   ├── CartPage.ts                          # Shopping cart page object
-│   │   ├── CheckoutCompletePage.ts              # Order completion confirmation page object
-│   │   ├── CheckoutStepOnePage.ts               # Checkout customer info page object
-│   │   ├── CheckoutStepTwoPage.ts               # Checkout overview & calculation page object
-│   │   ├── InventoryItemPage.ts                 # Single product item detail page object
-│   │   ├── InventoryPage.ts                     # Products catalog & inventory page object
-│   │   └── LoginPage.ts                         # Login page object
-│   ├── types/                                   # TypeScript type declarations
-│   │   └── index.ts                             # Product, PricingConfig, ShippingData & CartButtonAction
-│   └── utilities/                               # Helper utilities
-│       ├── env.ts                               # Environment variable validation & config
-│       └── index.ts                             # Currency parsing, cents math, and product helpers
-├── eslint.config.mjs                            # ESLint flat configuration (TS + Playwright)
-├── playwright.config.ts                         # Multi-browser & project dependency config
-├── tsconfig.json                                # TypeScript configuration & path aliases
-├── package.json                                 # Project dependencies and npm scripts
-├── .env                                         # Local environment variables (not committed)
-├── .env.example                                 # Environment variable template
-└── README.md                                    # Project documentation
+│   │   │   └── ProductActionsComponent.ts  # Shared product/cart item actions component
+│   │   ├── BasePage.ts                     # Abstract base page with navigation & mount sync
+│   │   ├── InternalPage.ts                 # Abstract base for authenticated pages (header/menu)
+│   │   ├── CartPage.ts                     # Shopping cart page object
+│   │   ├── CheckoutCompletePage.ts         # Order completion confirmation page object
+│   │   ├── CheckoutStepOnePage.ts          # Checkout customer info page object
+│   │   ├── CheckoutStepTwoPage.ts          # Checkout overview & calculation page object
+│   │   ├── InventoryItemPage.ts            # Single product item detail page object
+│   │   ├── InventoryPage.ts                # Products catalog & inventory page object
+│   │   └── LoginPage.ts                    # Login page object
+│   ├── types/                              # TypeScript type declarations
+│   │   └── index.ts                        # Product, PricingConfig, ShippingData & CartButtonAction
+│   └── utilities/                          # Helper utilities
+│       ├── env.ts                          # Environment variable validation & config
+│       └── index.ts                        # Currency parsing, cents math, and product helpers
+├── eslint.config.mjs                       # ESLint flat configuration (TS + Playwright)
+├── playwright.config.ts                    # Multi-browser & project dependency config
+├── tsconfig.json                           # TypeScript configuration & path aliases
+├── package.json                            # Project dependencies and npm scripts
+├── .env                                    # Local environment variables (not committed)
+├── .env.example                            # Environment variable template
+└── README.md                               # Project documentation
 ```
 
 ---

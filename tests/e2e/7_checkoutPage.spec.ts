@@ -1,81 +1,18 @@
 import { test, expect } from "@fixtures/pages.fixture";
-import { sumCurrencyAmounts, calculateTax } from "@utilities/index";
+import { sumCurrencyAmounts, calculateTax, parseCurrencyToNumber } from "@utilities/index";
 
 // Import test data
 import products from "@data/products.json";
 import shippingInfo from "@data/shipping.json";
 import pricing from "@data/locale.json";
 
-test.describe("4. Checkout flow", () => {
+test.describe("7. Checkout page", () => {
   test.beforeEach(async ({ inventoryPage }) => {
     // Navigate directly to the products page using the pre-authenticated state
     await inventoryPage.open();
   });
 
-  test("4.1 Completes checkout for a selected product", async ({
-    inventoryPage,
-    cartPage,
-    checkoutStepOnePage,
-    checkoutStepTwoPage,
-    checkoutCompletePage,
-  }) => {
-    const productsList = [products[2]];
-    const productsListCount = productsList.length;
-    const productsListCountStr = productsListCount.toString();
-
-    // Add product to cart
-    await inventoryPage.addProducts(productsList);
-
-    // Verify cart badge count on 'Products' page
-    await expect(inventoryPage.cartBadge, "Confirm cart badge count is valid on 'Products' page").toHaveText(
-      productsListCountStr,
-    );
-
-    // Open shopping cart
-    await inventoryPage.viewCart();
-
-    // Verify cart page title
-    await expect(cartPage.pageTitle).toHaveText(cartPage.pageTitleText);
-
-    // Verify cart badge count on 'Shopping Cart' page
-    await expect(cartPage.cartBadge, "Confirm cart badge count is valid on 'Shopping Cart' page").toHaveText(
-      productsListCountStr,
-    );
-
-    // Verify list of cart items count
-    await expect(cartPage.inventoryItems, "Confirm list of cart items count is valid").toHaveCount(productsListCount);
-
-    // Start checkout
-    await cartPage.startCheckout();
-
-    // Verify checkout step one page title
-    await expect(checkoutStepOnePage.pageTitle, "Confirm page title is valid").toHaveText(checkoutStepOnePage.pageTitleText);
-
-    // Fill shipping information and continue to overview page
-    await checkoutStepOnePage.fillShippingInformation(shippingInfo[0]);
-    await expect
-      .poll(() => checkoutStepOnePage.shippingInformationFilled(shippingInfo[0]), "Confirm shipping info is filled")
-      .toBe(true);
-
-    // Click continue checkout
-    await checkoutStepOnePage.continueCheckout();
-
-    // Verify checkout step two page title
-    await expect(checkoutStepTwoPage.pageTitle, "Confirm page title is valid").toHaveText(checkoutStepTwoPage.pageTitleText);
-
-    // Finish order
-    await checkoutStepTwoPage.finishOrder();
-
-    // Verify checkout complete header and text
-    await expect(checkoutCompletePage.completeHeader, "Confirm complete header is valid").toHaveText(
-      checkoutCompletePage.completeHeaderText,
-    );
-    await expect(checkoutCompletePage.completeTextElement, "Confirm complete text is valid").toHaveText(
-      checkoutCompletePage.completeText,
-    );
-  });
-
-  test("4.2 Completes checkout and verifies totals for multiple selected products", async ({
+  test("7.1 Completes checkout and verifies totals for multiple selected products", async ({
     inventoryPage,
     cartPage,
     checkoutStepOnePage,
@@ -124,8 +61,6 @@ test.describe("4. Checkout flow", () => {
     await expect(checkoutStepTwoPage.pageTitle, "Confirm page title is valid").toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Verify subtotal, tax, and total amounts
-    // Calculate expected total based on subtotal and tax, then verify total
-
     // 1. Verify Subtotal matches sum of product prices
     const expectedSubtotal = sumCurrencyAmounts(productsList.map((p) => p.price));
     await expect.poll(() => checkoutStepTwoPage.getSubtotal(), "Subtotal is not correct").toBe(expectedSubtotal);
@@ -139,7 +74,7 @@ test.describe("4. Checkout flow", () => {
     await expect.poll(() => checkoutStepTwoPage.getTotal(), "Total is not correct").toBe(expectedTotal);
   });
 
-  test("4.3 Completes checkout and verifies totals for no selected products", async ({
+  test("7.2 Completes checkout and verifies totals for no selected products", async ({
     inventoryPage,
     cartPage,
     checkoutStepOnePage,
@@ -176,7 +111,6 @@ test.describe("4. Checkout flow", () => {
     await expect(checkoutStepTwoPage.pageTitle, "Confirm page title is valid").toHaveText(checkoutStepTwoPage.pageTitleText);
 
     // Verify subtotal, tax, and total amounts
-
     // 1. Verify Subtotal is 0.00
     const expectedSubtotal = 0;
     await expect.poll(() => checkoutStepTwoPage.getSubtotal(), "Subtotal is not correct").toBe(expectedSubtotal);
@@ -188,5 +122,64 @@ test.describe("4. Checkout flow", () => {
     // 3. Verify Total is 0.00
     const expectedTotal = 0;
     await expect.poll(() => checkoutStepTwoPage.getTotal(), "Total is not correct").toBe(expectedTotal);
+  });
+
+  test("7.3 Completes checkout and verifies item name, price, quantity and description", async ({
+    inventoryPage,
+    cartPage,
+    checkoutStepOnePage,
+    checkoutStepTwoPage
+  }) => {
+    // Add multiple products to cart
+    await inventoryPage.addProducts(products);
+
+    // Open shopping cart
+    await inventoryPage.viewCart();
+
+    // Verify cart page title
+    await expect(cartPage.pageTitle, "Confirm page title is valid").toHaveText(cartPage.pageTitleText);
+
+    // Start checkout
+    await cartPage.startCheckout();
+
+    // Verify checkout step one page title
+    await expect(checkoutStepOnePage.pageTitle, "Confirm page title is valid").toHaveText(checkoutStepOnePage.pageTitleText);
+
+    // Fill shipping information and continue to overview page
+    await checkoutStepOnePage.fillShippingInformation(shippingInfo[1]);
+    await expect
+      .poll(() => checkoutStepOnePage.shippingInformationFilled(shippingInfo[1]), "Confirm shipping info is filled")
+      .toBe(true);
+
+    // Click continue checkout
+    await checkoutStepOnePage.continueCheckout();
+
+    // Verify checkout step two page title
+    await expect(checkoutStepTwoPage.pageTitle, "Confirm page title is valid").toHaveText(checkoutStepTwoPage.pageTitleText);
+
+    // Loop through all products
+    for (const product of products) {
+      await expect(
+        checkoutStepTwoPage.getItemName(product),
+        `Item name '${product.name}' is matching the expected name`,
+      ).toHaveText(product.name);
+
+      await expect
+        .poll(
+          async () => parseCurrencyToNumber(await checkoutStepTwoPage.getItemPrice(product).textContent()),
+          `Item price of '${product.name}' is matching the expected price`,
+        )
+        .toBe(product.price);
+
+      await expect(
+        checkoutStepTwoPage.getItemQuantity(product),
+        `Item quantity of '${product.name}' is matching the expected quantity`,
+      ).toHaveText("1");
+
+      await expect(
+        checkoutStepTwoPage.getItemDescription(product),
+        `Item description of '${product.name}' is matching the expected description`,
+      ).toHaveText(product.description);
+    }
   });
 });

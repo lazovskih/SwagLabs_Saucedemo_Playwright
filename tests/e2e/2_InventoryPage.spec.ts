@@ -183,16 +183,19 @@ test.describe("2. Inventory page: Add items to cart", () => {
         inventoryPage.getItemName(product),
         `Item name '${product.name}' is matching the expected name`,
       ).toHaveText(product.name);
+
       await expect
         .poll(
           async () => parseCurrencyToNumber(await inventoryPage.getItemPrice(product).textContent()),
           `Item price of '${product.name}' is matching the expected price`,
         )
         .toBe(product.price);
+
       await expect(
-        inventoryPage.getImage(product),
+        inventoryPage.getItemImage(product),
         `Item image of '${product.name}' is matching the expected image URL`,
       ).toHaveAttribute("src", product.imageUrl);
+
       await expect(
         inventoryPage.getItemDescription(product),
         `Item description of '${product.name}' is matching the expected description`,

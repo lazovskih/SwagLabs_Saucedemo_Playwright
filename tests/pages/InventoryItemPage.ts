@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
-import { InternalPage } from "./InternalPage";
+import { InternalPage } from "@pages/InternalPage";
 import type { Product, CartButtonAction } from "@data-types";
 /**
  * Inventory Item Page.
@@ -58,9 +58,10 @@ export class InventoryItemPage extends InternalPage {
   /**
    * Returns the image locator for a specific product on either the Inventory page
    * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
+   * @param product - Product data object with the name of the product to find.
    */
-  getImage(product: Product): Locator {
-    return this.productActions.getImage(product);
+  getItemImage(product: Product): Locator {
+    return this.productActions.getItemImage(product);
   }
 
   /**

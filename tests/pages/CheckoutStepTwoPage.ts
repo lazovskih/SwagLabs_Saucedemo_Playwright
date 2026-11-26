@@ -14,7 +14,6 @@ export class CheckoutStepTwoPage extends InternalPage {
   private readonly productActions: ProductActionsComponent;
 
   // Checkout page elements - Step Two (overview)
-  private readonly itemQuantity: Locator;
   private readonly summarySubtotal: Locator;
   private readonly summaryTax: Locator;
   private readonly summaryTotal: Locator;
@@ -26,7 +25,6 @@ export class CheckoutStepTwoPage extends InternalPage {
     this.productActions = new ProductActionsComponent(page);
 
     // Step Two locators
-    this.itemQuantity = page.locator('[data-test="item-quantity"]');
     this.summarySubtotal = page.locator('[data-test="subtotal-label"]');
     this.summaryTax = page.locator('[data-test="tax-label"]');
     this.summaryTotal = page.locator('[data-test="total-label"]');
@@ -39,7 +37,7 @@ export class CheckoutStepTwoPage extends InternalPage {
    * @param product - Product data object with the name of the product to find.
    */
   async openItemPage(product: Product) {
-    await this.getItemName(product).click();
+    await this.productActions.getItemName(product).click();
   }
 
   /**
@@ -120,5 +118,14 @@ export class CheckoutStepTwoPage extends InternalPage {
    */
   getItemDescription(product: Product): Locator {
     return this.productActions.getItemDescription(product);
+  }
+
+  /**
+   * Retrieves the item quantity locator for the specified product
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item quantity.
+   */
+  getItemQuantity(product: Product): Locator {
+    return this.productActions.getItemQuantity(product);
   }
 }

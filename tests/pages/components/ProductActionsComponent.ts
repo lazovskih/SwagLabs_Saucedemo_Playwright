@@ -10,6 +10,7 @@ export class ProductActionsComponent {
   readonly itemName: Locator;
   readonly itemPrice: Locator;
   readonly itemDescription: Locator;
+  readonly itemQuantity: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,6 +18,7 @@ export class ProductActionsComponent {
     this.itemName = page.locator('[data-test="inventory-item-name"]');
     this.itemPrice = page.locator('[data-test="inventory-item-price"]');
     this.itemDescription = page.locator('[data-test="inventory-item-desc"]');
+    this.itemQuantity = page.locator("[data-test='item-quantity']");
   }
 
   /**
@@ -30,18 +32,6 @@ export class ProductActionsComponent {
     return this.page
       .locator(`[data-test="${buttonPrefix}-${getProductId(product)}"]`)
       .or(this.page.locator(`[data-test="${buttonPrefix}"]`));
-  }
-
-  /**
-   * Returns the image locator for a specific product on either the Inventory page
-   * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
-   * @param product - Product data object with the name of the product to find.
-   */
-  getImage(product: Product): Locator {
-    const productId = getProductId(product);
-    return this.page
-      .locator(`[data-test="inventory-item-${productId}-img"]`)
-      .or(this.page.locator(`[data-test="item-${productId}-img"]`));
   }
 
   /**
@@ -62,7 +52,6 @@ export class ProductActionsComponent {
 
   /**
    * Retrieves a locator for a specific cart item row based on the product name.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object with the name of the product to find.
    * @returns Locator for the specific cart item.
    */
@@ -89,11 +78,32 @@ export class ProductActionsComponent {
   }
 
   /**
+   * Returns the image locator for a specific product on either the Inventory page
+   * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
+   * @param product - Product data object with the name of the product to find.
+   */
+  getItemImage(product: Product): Locator {
+    const productId = getProductId(product);
+    return this.page
+      .locator(`[data-test="inventory-item-${productId}-img"]`)
+      .or(this.page.locator(`[data-test="item-${productId}-img"]`));
+  }
+
+  /**
    * Retrieves the item description locator for specified product.
    * @param product - Product data object with the name of the product to find.
    * @returns Locator of the item description.
    */
   getItemDescription(product: Product): Locator {
     return this.getProductItem(product).locator(this.itemDescription);
+  }
+
+  /**
+   * Retrieves the item quantity locator for the specified product
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item quantity.
+   */
+  getItemQuantity(product: Product): Locator {
+    return this.getProductItem(product).locator(this.itemQuantity);
   }
 }
