@@ -66,16 +66,4 @@ export abstract class InternalPage extends BasePage {
   async viewCart() {
     await this.cartLink.click();
   }
-
-  /**
-   * Gets the numeric count displayed on the header shopping cart badge (returns 0 when hidden).
-   */
-  async getCartBadgeCount(): Promise<number> {
-    if (await this.cartBadge.count() == 0) {
-      return 0;
-    }
-
-    const badgeText = await this.cartBadge.textContent();
-    return parseInt(badgeText ?? "0");
-  }
 }

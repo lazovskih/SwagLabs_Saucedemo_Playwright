@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { ProductActionsComponent } from "@pages/components/ProductActionsComponent";
-import { InternalPage } from "./InternalPage";
+import { InternalPage } from "@pages/InternalPage";
 import type { Product, CartButtonAction } from "@data-types";
 /**
  * Inventory Item Page.

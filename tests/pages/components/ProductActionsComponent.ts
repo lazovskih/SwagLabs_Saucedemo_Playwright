@@ -11,7 +11,6 @@ export class ProductActionsComponent {
   readonly itemPrice: Locator;
   readonly itemDescription: Locator;
   readonly itemQuantity: Locator;
-  public itemImageSelector = "[data-test='inventory-item-img']";
 
   constructor(page: Page) {
     this.page = page;
@@ -52,13 +51,7 @@ export class ProductActionsComponent {
   }
 
   /**
-  * Retrieves the total count of item rows currently displayed on the page.
-  */
-  getItemCount(): Promise<number> { return this.inventoryItems.count() };
-
-  /**
    * Retrieves a locator for a specific cart item row based on the product name.
-   * Can be used on both 'Products' and 'Shopping Cart' pages
    * @param product - Product data object with the name of the product to find.
    * @returns Locator for the specific cart item.
    */
@@ -110,7 +103,7 @@ export class ProductActionsComponent {
    * @param product - Product data object with the name of the product to find.
    * @returns Locator of the item quantity.
    */
-  getItemQuantity(product: Product) {
-    return this.getProductItem(product).locator(this.itemQuantity)
+  getItemQuantity(product: Product): Locator {
+    return this.getProductItem(product).locator(this.itemQuantity);
   }
 }

@@ -189,7 +189,7 @@ test.describe("3. Item page: Add items to cart", () => {
       await expect.poll(() => inventoryItemPage.itemPageOpened(), "Confirm Inventory Item page is opened").toBe(true);
 
       // Verify that the "Add to Cart" button is present for those removed items
-      await expect(inventoryItemPage.getButton(productsList[i], "remove"), "Confirm Remove button button is not visible for removed product").toBeHidden();
+      await expect(inventoryItemPage.getButton(productsList[i], "remove"), "Confirm Remove button is not visible for removed product").toBeHidden();
       await expect(inventoryItemPage.getButton(productsList[i], "add"), "Confirm add to cart button is visible for removed product").toBeVisible();
 
       // Navigate back to the products page

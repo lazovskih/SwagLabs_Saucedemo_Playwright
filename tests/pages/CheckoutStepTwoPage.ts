@@ -14,7 +14,6 @@ export class CheckoutStepTwoPage extends InternalPage {
   private readonly productActions: ProductActionsComponent;
 
   // Checkout page elements - Step Two (overview)
-  private readonly itemQuantity: Locator;
   private readonly summarySubtotal: Locator;
   private readonly summaryTax: Locator;
   private readonly summaryTotal: Locator;
@@ -26,7 +25,6 @@ export class CheckoutStepTwoPage extends InternalPage {
     this.productActions = new ProductActionsComponent(page);
 
     // Step Two locators
-    this.itemQuantity = page.locator('[data-test="item-quantity"]');
     this.summarySubtotal = page.locator('[data-test="subtotal-label"]');
     this.summaryTax = page.locator('[data-test="tax-label"]');
     this.summaryTotal = page.locator('[data-test="total-label"]');
@@ -114,15 +112,6 @@ export class CheckoutStepTwoPage extends InternalPage {
   }
 
   /**
-   * Returns the image locator for a specific product on either the Inventory page
-   * ('inventory-item-<id>-img') or the Inventory Item detail page ('item-<id>-img').
-   * @param product - Product data object with the name of the product to find.
-   */
-  getItemImage(product: Product) {
-    return this.productActions.getItemImage(product);
-  }
-
-  /**
    * Retrieves the item description locator for specified product.
    * @param product - Product data object with the name of the product to find.
    * @returns Locator of the item description.
@@ -136,7 +125,7 @@ export class CheckoutStepTwoPage extends InternalPage {
    * @param product - Product data object with the name of the product to find.
    * @returns Locator of the item quantity.
    */
-  getItemQuantity(product: Product) {
-    return this.productActions.getItemQuantity(product)
+  getItemQuantity(product: Product): Locator {
+    return this.productActions.getItemQuantity(product);
   }
 }
