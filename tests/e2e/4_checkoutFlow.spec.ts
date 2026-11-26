@@ -1,10 +1,8 @@
 import { test, expect } from "@fixtures/pages.fixture";
-import { sumCurrencyAmounts, calculateTax } from "@utilities/index";
 
 // Import test data
 import products from "@data/products.json";
 import shippingInfo from "@data/shipping.json";
-import pricing from "@data/locale.json";
 
 test.describe("4. Checkout flow", () => {
   test.beforeEach(async ({ inventoryPage }) => {

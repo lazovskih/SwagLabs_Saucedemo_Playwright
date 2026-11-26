@@ -45,10 +45,9 @@ export class CartPage extends InternalPage {
 
   /**
   * Retrieves the total count of item rows currently displayed on the page.
-  * @param product - Product data object to remove.
   */
-  async GetItemsCount(product: Product) {
-    await this.productActions.getItemCount();
+  async GetItemsCount() {
+    return await this.productActions.getItemCount();
   }
 
   /**
@@ -93,7 +92,7 @@ export class CartPage extends InternalPage {
    * @param name - Product Target product data object.
    */
   async openItemPage(product: Product) {
-    this.productActions.getItemName(product).click();
+    await this.productActions.getItemName(product).click();
   }
 
   /**

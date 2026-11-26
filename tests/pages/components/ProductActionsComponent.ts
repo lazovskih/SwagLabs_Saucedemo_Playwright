@@ -54,7 +54,7 @@ export class ProductActionsComponent {
   /**
   * Retrieves the total count of item rows currently displayed on the page.
   */
-  getItemCount(): Promise<Number> { return this.inventoryItems.count() };
+  getItemCount(): Promise<number> { return this.inventoryItems.count() };
 
   /**
    * Retrieves a locator for a specific cart item row based on the product name.

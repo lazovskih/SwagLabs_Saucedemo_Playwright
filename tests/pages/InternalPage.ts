@@ -75,7 +75,7 @@ export abstract class InternalPage extends BasePage {
       return 0;
     }
 
-    var badgeText = await this.cartBadge.textContent();
+    const badgeText = await this.cartBadge.textContent();
     return parseInt(badgeText ?? "0");
   }
 }

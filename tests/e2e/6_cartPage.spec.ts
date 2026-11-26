@@ -1,11 +1,8 @@
 import { test, expect } from "@fixtures/pages.fixture";
-import { sumCurrencyAmounts, calculateTax } from "@utilities/index";
 import { parseCurrencyToNumber } from "@utilities/index";
 
 // Import test data
 import products from "@data/products.json";
-import shippingInfo from "@data/shipping.json";
-import pricing from "@data/locale.json";
 
 test.describe("6. Checkout page", () => {
     test.beforeEach(async ({ inventoryPage }) => {
@@ -18,8 +15,6 @@ test.describe("6. Checkout page", () => {
         cartPage
     }) => {
         const productsList = [products[2], products[1], products[0]];
-        const productsListCount = productsList.length;
-        const productsListCountStr = productsListCount.toString();
 
         // Add multiple products to cart
         await inventoryPage.addProducts(productsList);
@@ -75,8 +70,7 @@ test.describe("6. Checkout page", () => {
 
     test("6.3 Cart page: Verifies item name, quantity and description", async ({
         inventoryPage,
-        cartPage,
-        inventoryItemPage
+        cartPage
     }) => {
         const productsList = [products[2], products[1], products[0]];
 
