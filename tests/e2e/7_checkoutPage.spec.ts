@@ -183,7 +183,7 @@ test.describe("7. Checkout page", () => {
     }
   });
 
-  test("7.4 Completes checkout and verify item page shows correct status of selected items", async ({
+  test("7.4 Complete checkout, open selected item and verify item page shows correct status of selected items", async ({
     inventoryPage,
     cartPage,
     checkoutStepOnePage,
@@ -236,7 +236,7 @@ test.describe("7. Checkout page", () => {
     }
   });
 
-  test("7.5 Checkout page: Open selected item verifies item name, price and description", async ({
+  test("7.5 Completes checkout, open selected item and verify item name, price and description", async ({
     inventoryPage,
     cartPage,
     checkoutStepOnePage,
