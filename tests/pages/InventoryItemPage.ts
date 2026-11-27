@@ -79,4 +79,31 @@ export class InventoryItemPage extends InternalPage {
   async removeProduct(product: Product) {
     await this.productActions.removeProduct(product);
   }
+
+  /**
+  * Retrieves the item price locator for specified product.
+  * @param product - Product data object with the name of the product to find.
+  * @returns Locator of the item price.
+  */
+  getItemPrice(product: Product): Locator {
+    return this.productActions.getItemPrice(product);
+  }
+
+  /**
+   * Retrieves the item name locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item name.
+   */
+  getItemName(product: Product): Locator {
+    return this.productActions.getItemName(product);
+  }
+
+  /**
+   * Retrieves the item description locator for specified product.
+   * @param product - Product data object with the name of the product to find.
+   * @returns Locator of the item description.
+   */
+  getItemDescription(product: Product): Locator {
+    return this.productActions.getItemDescription(product);
+  }
 }

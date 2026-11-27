@@ -225,7 +225,7 @@ test.describe("3. Item page: Add items to cart", () => {
     }
   });
 
-  test("3.7 Item page: Verifies item name, image and description", async ({ inventoryPage, inventoryItemPage }) => {
+  test("3.7 Item page: Verifies item name, price, image and description", async ({ inventoryPage, inventoryItemPage }) => {
     // Loop through selected products
     for (const product of products) {
       // Open product item page

@@ -33,9 +33,9 @@ export class CheckoutStepTwoPage extends InternalPage {
   }
 
   /**
-   * Opens the specific product details page
-   * @param product - Product data object with the name of the product to find.
-   */
+* Opens the specific product details page
+* @param product - Product data object with the name of the product to find.
+*/
   async openItemPage(product: Product) {
     await this.productActions.getItemName(product).click();
   }

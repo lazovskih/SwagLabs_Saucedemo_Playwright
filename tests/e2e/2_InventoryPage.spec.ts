@@ -176,7 +176,7 @@ test.describe("2. Inventory page: Add items to cart", () => {
     }
   });
 
-  test("2.7 Inventory page: Verifies item name, image and description", async ({ inventoryPage }) => {
+  test("2.7 Inventory page: Verifies item name, price, image and description", async ({ inventoryPage }) => {
     // Loop through all products
     for (const product of products) {
       await expect(
